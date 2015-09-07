@@ -16,13 +16,13 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 
 ## Screenshots
 
-<a href="doc/img/elec - timeseries.png"><img src="doc/img/elec - timeseries.png" alt="Timeseries plot of 7 days of electricity generation and consumption in 15 minute resolution" style="width:400px"></a>
+<a href="doc/img/elec-timeseries.png"><img src="doc/img/elec - timeseries.png" alt="Timeseries plot of 7 days of electricity generation and consumption in 15 minute resolution" style="width:400px"></a>
 
-<a href="doc/img/heat - timeseries.png"><img src="doc/img/heat - timeseries.png" alt="Timeseries plot of 7 days of heat generation and consumption and heat storage use in 15 minute resolution" style="width:400px"></a>
+<a href="doc/img/heat-timeseries.png"><img src="doc/img/heat - timeseries.png" alt="Timeseries plot of 7 days of heat generation and consumption and heat storage use in 15 minute resolution" style="width:400px"></a>
 
-<a href="doc/img/elec - energy.png"><img src="doc/img/elec - energy.png" alt="Bar chart of cumulated electricity of the 7 days." style="width:400px"></a>
+<a href="doc/img/elec-energy.png"><img src="doc/img/elec - energy.png" alt="Bar chart of cumulated electricity of the 7 days." style="width:400px"></a>
 
-<a href="doc/img/heat - energy.png"><img src="doc/img/heat - energy.png" alt="Bar chart of cumulated heat of the 7 days." style="width:400px"></a>
+<a href="doc/img/heat-energy.png"><img src="doc/img/heat - energy.png" alt="Bar chart of cumulated heat of the 7 days." style="width:400px"></a>
 
 <a href="doc/img/capacities.png"><img src="doc/img/capacities.png" alt="Intsalled and new process and storage capacities." style="width:400px"></a>
 
