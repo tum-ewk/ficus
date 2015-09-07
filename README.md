@@ -71,7 +71,7 @@ About a minute later the result figures should show up and the subfolder `result
 
 ### Run from IPython or Spyder
 1. Fire up IPython or Spyder 
-2. Open and run `ficus.py` (Spyder: `F5`. Ipython: type `run runficus`). Continue with `y`. This will copy the `ficus.py` to "..\Anaconda\Lib\site-package" folder so python can find it and install pyomo if not yet installed.
+2. Open and run `ficus.py` (Spyder: `F5`. Ipython: type `run runficus`). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 3. Open and run the `runficus.py` script.
 
 About a minute later the result figures should show up and the subfolder `result` should contain plots and a result file.
