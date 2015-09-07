@@ -64,7 +64,7 @@ Then, in a directory of your choice, clone this repository by executing the foll
 Once installation is complete, download or clone this repository to a diurcetory of your choice.
 
 ### Run from Excel
-1. Run `ficus.py` (by double clicking or within ipython). Continue with "y". This will copy the `ficus.py` to "..\Anaconda\Lib\site-package" folder so python can find it and install pyomo if not yet installed.
+1. Run `ficus.py` (by double clicking or within ipython). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 2. Open the `example_fromexcel.xlsm` and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
 
 About a minute later the result figures should show up and the subfolder `result` should contain plots and a result file.
