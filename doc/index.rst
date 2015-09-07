@@ -54,7 +54,7 @@ Screenshots
 This is a typical result plot created by :func:`ficus.plot_timeseries`, showing electricity
 generation, consumption and storage levels over 7 days:
 
-.. image:: img/elec-timeseries.png
+.. image:: img/elec-timeseries.*
    :width: 95%
    :align: center
    
