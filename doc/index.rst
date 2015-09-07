@@ -58,16 +58,13 @@ generation, consumption and storage levels over 7 days:
 Dependencies
 ------------
 
-* `pyomo`_ interface to optimisation solvers (CPLEX, GLPK, Gurobi, ...).
 * `matplotlib`_ for plotting
 * `pandas`_ for input and result data handling, report generation 
-* `pyomo`_ for the model equations
+* `pyomo`_ for the model equations and interface to optimisation solvers (CPLEX, GLPK, Gurobi, ...).
 
    
-.. _pyomo: https://pyomo.org
 .. _Institute for Energy Economy and Application Technology: http://www.ewk.ei.tum.de/
 .. _matplotlib: http://matplotlib.org
 .. _pandas: https://pandas.pydata.org
 .. _pyomo: https://software.sandia.gov/trac/coopr/wiki/Pyomo
 .. _ficus: https://github.com/yabata/ficus
-
