@@ -42,10 +42,9 @@ Features
 * It finds the minimum cost energy system to satisfy given demand timeseries for possibly multiple commodities (e.g. electricity, heat)
 * It considers given cost timeseries for external obtained commodities as well as peak demand charges with configurable timebase for each commodity
 * It allows to deactivate specific equations, so the model becomes a linear programming model without integer variables
-  * It supports multiple-input and multiple-output energy conversion technologies with load dependent efficiencies
+* It supports multiple-input and multiple-output energy conversion technologies with load dependent efficiencies
 * Thanks to `pandas`_, complex data analysis code is short and extensible.
-* The model itself is quite small thanks to relying on the `Pyomo`_
-  packages.
+* The model itself is quite small thanks to relying on the `Pyomo`_ packages.
 * ficus includes reporting and plotting functions
 
 
@@ -55,7 +54,7 @@ Screenshots
 This is a typical result plot created by :func:`ficus.plot_timeseries`, showing electricity
 generation, consumption and storage levels over 7 days:
 
-.. image:: img/elec - timeseries.png
+.. image:: img/elec-timeseries.png
    :width: 95%
    :align: center
    
