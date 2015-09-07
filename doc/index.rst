@@ -30,16 +30,8 @@ This documentation contains the following pages:
 
    overview
    tutorial
-   workflow
+   input_data
    
-More technical documents deal with the internal workings:   
-   
-.. toctree::
-   :maxdepth: 1
-   
-   report
-   api
-
 
 Features
 --------
