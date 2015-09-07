@@ -2,7 +2,7 @@
 
 ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) [linear programming](https://en.wikipedia.org/wiki/Linear_programming) optimisation model for capacity expansion planning and unit commitment for local energy systems. Referring to [URBS](https://github.com/tum-ens/urbs) and [VICUS](https://github.com/ojdo/vicus) it was developed as a model for optimisation energy systems of factories, but it can also be used for other energy consumers (e.g. households)
 
-[![Documentation Status](https://readthedocs.org/projects/urbs/badge/?version=latest)](https://urbs.readthedocs.org/en/latest/)
+[![Documentation Status](https://readthedocs.org/projects/ficus/badge/?version=latest)](https://ficus.readthedocs.org/en/latest/)
 
 ## Features
 
