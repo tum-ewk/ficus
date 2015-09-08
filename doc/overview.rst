@@ -11,7 +11,7 @@ External imported/exported commodities
 ^^^^^^^^^
 
 External imported/exported commodities are goods that can be imported or exported from/to "external sources", e.g. the elctric grid. The prices for buying/selling for every timestep are given by a timeseries.
-Additional a demand rate with an extra time interval can be given, to  consider `peak demand charges`_. A ``Demand-Rate-Factor`` Timeseries allows to raise, reduce or turn off the demand rate for specific timesteps to consider special tariff systems.
+Additional a demand rate with an extra time interval can be given, to  consider `peak demand charges`_.  A ``Demand-Rate-Factor`` Timeseries allows to raise, reduce or turn off the demand rate for specific timesteps to consider special tariff systems.
 
 Exterrnal imported/exported commodities are defined over the commodity itself ``(commodity)``, for example
 ``(elec)``  or ``(heat)``.
