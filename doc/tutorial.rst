@@ -136,9 +136,11 @@ First make a copy of `example.xlsx`_ or `example_fromexcel.xlsm`_ depending on h
 
 Time-Settings
 ^^^^^^^^
-* timebase: time-interval between timesteps of all given timeseries data.
-* start: First timestep to use for the optimisation
-* end: Last timestep to use for the optimisation
+Set timebase of time dependent Data and timesteps to be optimized
+
+* **timebase**: time-interval between timesteps of all given timeseries data.
+* **start**: First timestep to use for the optimisation
+* **end**: Last timestep to use for the optimisation
 
 Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end timestep at 672 (optimise the whole 7 days)
 
@@ -152,6 +154,24 @@ Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end tim
 
 MIP-Settings
 ^^^^^^^^
+Activate/deactivate specific equations.
+If all settimgs are set to ``no``, the problem will be a linear optimisation problem without integer variables. This will result and faster solving of the problem.
+Activating one/more of the settings will activate special equations, that allow additional restriction but may lead to longer claculation of the model.
+
+* **Storage In-Out**: Prevents storages from charging and discharging one commodity at the same time, if activated. This can happen, when dumping energy of one commodity will lead to lower total costs. The model then uses the efficiency of the storage to dump the energy with no dumping costs.
+* **Partload**: Consider minimum partload settings, partload efficiencies as well as start-up costs of processes.
+* **Min-Cap**: Consider minimal installed capacities of processes and storages. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
+
+Keep all settings deactivated.
+
+.. csv-table:: Sheet **MIP-Settings**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Settings,Active
+    Storage In-Out, no
+    Partload, no
+    Min-Cap, no
 
 Ext-Commodities
 ^^^^^^^^
