@@ -175,6 +175,15 @@ Keep all settings deactivated.
 
 Ext-Commodities
 ^^^^^^^^
+List of all commodities than can be imported/exported. Set demand charge, time interval for demand charge, import/export limits and minimum operating hours.
+
+For every commodity that can be imported/exported:
+* **demand rate**: demand rate (in Euro/kW/a) to calculate the 'peak demand charge'_ of one commodity. The highest imported power during a specific time period (``time-interval-demand-rate``) of highest use in the year is used to calculate the demand charges by multiplication with the demand rate
+* **time-interval-demand-rate**: time period or time interval used to determine the highest imported power use in the year for calculating the peak demnd charge
+* **p-max-initial**: Initial value of highest imported power use in the year. Sets the minimum for demand charges to ``demand-rate`` * ``p-max-initial``
+* **import-max**: maximum power of commodity that can be imported per timestep
+* **export-max**: maximum power of commodity that can be exported per timestep
+* **operating-hours-min**: maximum power of commodity that can be exported per timestep
 
 .. csv-table:: Sheet **Ext-Commodities**
    :header-rows: 1
