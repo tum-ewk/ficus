@@ -10,8 +10,8 @@ The timebase of the model can be configured depending on the timebase of the giv
 Exterrnal imported/exported commodities
 ^^^^^^^^^
 
-Exterrnal imported/exported commodities are goods that can be imported or exported from/to "external sources", e.g. the elctric grid.
-The prices for buying/selling for every timestep are given by a timeseries. Additional a demand rate with an extra time interval can be given, to  consider `peak demand charges`_. 
+Exterrnal imported/exported commodities are goods that can be imported or exported from/to "external sources", e.g. the elctric grid. The prices for buying/selling for every timestep are given by a timeseries.
+Additional a demand rate with an extra time interval can be given, to  consider `peak demand charges`_. A ``Demand-Rate-Factor`` Timeseries allows to raise, reduce or turn off the demand rate for specific timesteps to consider special tariff systems.
 
 Exterrnal imported/exported commodities are defined over the commodity itself ``(commodity)``, for example
 ``(elec)``  or ``(heat)``.
@@ -34,19 +34,16 @@ Storage
 ^^^^^^^
 Storage describes the possibility to deposit a deliberate amount of energy in
 form of one commodity at one time step, and later retrieving it. Efficiencies
-for charging/discharging depict losses during input/output. A self-discharge
-term is **not** included at the moment, but could be added trivially (one
-column, one modification of the storage state equation). Storage is
-characterised by capcities both for energy content (in MWh) and
-charge/discharge power (in MW). Both capacities have independent sets of
+for charging/discharging and self discharge depict losses during input/output. Storage is
+characterised by capcities both for energy content (in kWh) and
+charge/discharge power (in kW). Both capacities have independent sets of
 investment, fixed and variable cost parameters to allow for a very flexible
 parametrization of various storage technologies from batteries to hot water
-tanks.
+tanks. 
 
-Storage is defined over the tuple ``(site, storage, stored commodity)``. For
-example, ``(Norway, pump storage, electricity)`` represents a pump storage
-power plant in Norway that can store and retrieve energy in form of
-electricity.
+Storage is defined over the tuple ``(storage, number, stored commodity)``. For
+example, ``(Li-Ion Battery, 1, electricity)`` represents a Li-Ion Battery that can 
+store and retrieve energy in form of electricity.
 
 
 Timeseries
@@ -54,15 +51,14 @@ Timeseries
 
 Demand
 """"""
-Each combination ``(site, demand commidty)`` may have one timeseries,
-describing the (average) power demand (MWh/h) per timestep. They are a crucial
+Each commodity ``(demand commidty)`` may have one timeseries,
+describing the (average) power demand (kW) per timestep. They are a crucial
 input parameter, as the whole optimisation aims to satisfy these demands with
-minimal costs from the given technologies (process, storage, transmission).
+minimal costs from the given technologies (process, storage, external import/export).
 
 Intermittent Supply
 """""""""""""""""""
-Each combination ``(site, supim commodity)`` must be supplied with one
-timeseries, normalised to a maximum value of 1 relative to the installed
+A timeseries normalised to a maximum value of 1 relative to the installed
 capacity of a process using this commodity as input. For eample, a wind power
 timeseries should reach value 1, when the wind speed exceeds the modelled wind
 turbine's design wind speed is exceeded. This implies that any non-linear
