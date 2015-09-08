@@ -118,6 +118,74 @@ Reads and plots the results from the object ``prob`` and saves them in the direc
 Can also be used to plot data from a given resultfile with the Paraneter ``resultfile=PATH\TO\RESULTFILE.xlsx`` instead of giving ``prob``.
 ``show`` turns on/off showing the plots.
 
+
+Create Input File
+--------------
+In the following ist a steo by step explanation of how to create your own input file.
+
+For the sake of an example, assume you want to build a new factory named *NewFactory* and cover its energy demand cost optimal. You have the (predicted) demand timeseries in 15 minute resolution for electricity (``elec``) and heat (``heat``) for 7 days (672 timesteps). 
+You can import electricty and gas through the given infrastructure and export electricity back to the grid.
+You consider following processes/storages for converting/storing energy:
+* A combined heat and power plant (``chp``) to convert gas to electricity and heat, unlimited in size
+* Two different wind turbines (``wind_1`` and ``wind_2``), limited to 2000 kW total
+* A gas boiler (``boiler``) to convert gas to heat, unlimited in size
+* A heat storages (``heat_storage``) to store heat, limited to XXX kWh
+* A battery storage (``battery``) to store electricity, unlimited in size
+
+First make a copy of `example.xlsx`_ or `example_fromexcel.xlsm`_ depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the file step by step foloowing the instruction.
+
+Time-Settings
+^^^^^^^^
+* timebase: time-interval between timesteps of all given timeseries data.
+* start: First timestep to use for the optimisation
+* end: Last timestep to use for the optimisation
+
+Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end timestep at 672 (optimise the whole 7 days)
+
+.. csv-table:: Sheet **Time-Settings**;
+   :header-rows: 1
+   :stub-columns: 1
+
+    Info,timebase,start,end
+    Time,900,1,672
+
+
+MIP-Settings
+^^^^^^^^
+
+Ext-Commodities
+^^^^^^^^
+
+Ext-Import
+^^^^^^^^
+
+Ext-Export
+^^^^^^^^
+
+Demand-Rate-Factor
+^^^^^^^^
+
+Process
+^^^^^^^^
+
+Process-Commodity
+^^^^^^^^
+
+Process Class
+^^^^^^^^
+
+Storage
+^^^^^^^^
+
+Demand
+^^^^^^^^
+
+SupIm
+^^^^^^^^
+
+
+
+
 .. _NEOS Server for Optimization:
     http://www.neos-server.org/neos/
 .. _gurobi: https://en.wikipedia.org/wiki/Gurobi
@@ -129,12 +197,17 @@ Can also be used to plot data from a given resultfile with the Paraneter ``resul
 .. _example.xlsx https://github.com/yabata/ficus/blob/master/example.xlsx
 
 
-Create Input File
+
+
+
+
+
+
+
+
+
+URBS
 --------------
-
-
-
-
 
 
 
