@@ -121,9 +121,9 @@ Can also be used to plot data from a given resultfile with the Paraneter ``resul
 
 Create Input File
 --------------
-In the following ist a steo by step explanation of how to create your own input file.
+The following tutorial is a step by step explanation of how to create your own input file.
 
-For the sake of an example, assume you want to build a new factory named *NewFactory* and cover its energy demand cost optimal. You have the (predicted) demand timeseries in 15 minute resolution for electricity (``elec``) and heat (``heat``) for 7 days (672 timesteps). 
+For the sake of an example, assume you want to build a new factory named *NewFactory* and cover its energy demand cost optimal. You have the (predicted) demand timeseries in 15 minute time resolution for electricity (``elec``) and heat (``heat``) for 7 days (672 timesteps). 
 You can import electricty and gas through the given infrastructure and export electricity back to the grid.
 You consider following processes/storages for converting/storing energy:
 * A combined heat and power plant (``chp``) to convert gas to electricity and heat, unlimited in size
@@ -132,7 +132,7 @@ You consider following processes/storages for converting/storing energy:
 * A heat storages (``heat_storage``) to store heat, limited to XXX kWh
 * A battery storage (``battery``) to store electricity, unlimited in size
 
-First make a copy of `example.xlsx`_ or `example_fromexcel.xlsm`_ depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the file step by step foloowing the instruction.
+First make a copy of `example.xlsx`_ or `example_fromexcel.xlsm`_ depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the new file step by step following the instructions.
 
 Time-Settings
 ^^^^^^^^
@@ -155,8 +155,8 @@ Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end tim
 MIP-Settings
 ^^^^^^^^
 Activate/deactivate specific equations.
-If all settimgs are set to ``no``, the problem will be a linear optimisation problem without integer variables. This will result and faster solving of the problem.
-Activating one/more of the settings will activate special equations, that allow additional restriction but may lead to longer claculation of the model.
+If all settings are set to ``no``, the problem will be a linear optimisation problem without integer variables. This will result and less computation time for solving of the problem.
+Activating one/more of the settings will activate equations, that allow additional restriction but may lead to longer claculation of the model because integer variable have to be used. The problem will then become a mixed integer linear optimisation problem.
 
 * **Storage In-Out**: Prevents storages from charging and discharging one commodity at the same time, if activated. This can happen, when dumping energy of one commodity will lead to lower total costs. The model then uses the efficiency of the storage to dump the energy with no dumping costs.
 * **Partload**: Consider minimum partload settings, partload efficiencies as well as start-up costs of processes.
@@ -175,6 +175,14 @@ Keep all settings deactivated.
 
 Ext-Commodities
 ^^^^^^^^
+
+.. csv-table:: Sheet **Ext-Commodities**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Commodity, demand-rate,time-interval-demand-rate,p-max-initial,import-max,export-max,operating-hours-min
+    elec, **100**, 900, 0, inf, inf, 0
+    heat, 0, 900, 0, inf, 0,0
 
 Ext-Import
 ^^^^^^^^
