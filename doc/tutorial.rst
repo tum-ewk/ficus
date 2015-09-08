@@ -144,7 +144,6 @@ Set timebase of time dependent Data and timesteps to be optimized
 * **end**: Last timestep to use for the optimisation
 
 *Edit Example*:
-
 Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end timestep at 672 (optimise the whole 7 days)
 
 .. csv-table:: Sheet **Time-Settings**;
@@ -166,7 +165,6 @@ Activating one/more of the settings will activate equations, that allow addition
 * **Min-Cap**: Consider minimal installed capacities of processes and storages. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
 
 *Edit Example*:
-
 Keep all settings deactivated.
 
 .. csv-table:: Sheet **MIP-Settings**
@@ -192,7 +190,6 @@ For every commodity that can be imported/exported:
 * **operating-hours-min**: Minimum value for "operating hours" of import. Operating hours are calculated by dividing the total energy imported during one year by the highest imported power during a specific time period (``time-interval-demand-rate``) in the year. The highest possible value is the number of hours of one year (8760), which would lead to a constant import over the whole year (smooth load). This parameter can be used to model special demand charge tariffs, that require a minimum value for the operatimg hours for energy import. Set the value to zero to ignore this constraint.
 
 *Edit Example*:
-
 The commodities ``gas`` and ``elec`` that can be imported/exported are already defined. 
 Change the Value for the demand rate of the commodity ``elec`` to 100. Keep the other inputs as they are.
 
@@ -206,12 +203,72 @@ Change the Value for the demand rate of the commodity ``elec`` to 100. Keep the 
 
 Ext-Import
 ^^^^^^^^
+Timeseries: Costs for every commodity that can be imported for every timestep (in Euro/kWh). 
+
+**Note**: Postive values mean, that you have to **PAY** for imported energy 
+
+*Edit Example*:
+Set the costs for electricty import to 0.15 Euro/kWh and for gas import to 0.05 Euro/kWh for very timestep
+
+.. csv-table:: Sheet **Ext-Import**
+   :header-rows: 1
+   :stub-columns: 1
+
+    elec, heat
+    **0.15**, **0.05**
+    **0.15**, **0.05**
+    **0.15**, **0.05**
+    **0.15**, **0.05**
+    **0.15**, **0.05**
+    **0.15**, **0.05**
+    ...,...
 
 Ext-Export
 ^^^^^^^^
+Timeseries: Revenues for every commodity that can be exported for every timestep (in Euro/kWh). 
 
+**Note**: Postive values mean, that you **RECEIVE MONEY** for exported energy.
+
+*Edit Example*:
+Set the revenues for electricty export to 0.01 Euro/kWh. Gas can not be exported because we limited the maximal power export to zero. So no timeseries is needed.
+
+.. csv-table:: Sheet **Ext-Export**
+   :header-rows: 1
+   :stub-columns: 1
+
+    elec
+    **0.01**
+    **0.01**
+    **0.01**
+    **0.01**
+    **0.01**
+    **0.01**
+    ...
+    
+    
 Demand-Rate-Factor
 ^^^^^^^^
+
+Timeseries: Factor to be multiplied with the demand rate to calculate demand charges for every timestep.
+
+This allows to raise, reduce or turn off the demand rate for specific timesteps to consider special tariff systems.
+Set all values to ``1``, for a constant demand rate
+
+*Edit Example*:
+Keep all values at ``1`` for constant demand rates.
+
+.. csv-table:: Sheet **Demand-Rate-Factor**
+   :header-rows: 1
+   :stub-columns: 1
+
+    elec
+    1
+    1
+    1
+    1
+    1
+    1
+    ...
 
 Process
 ^^^^^^^^
