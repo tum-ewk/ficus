@@ -8,17 +8,33 @@ Tutorial
 The README file contains `installation notes`__. This tutorial
 expands on the steps that follow this installation.
 
-.. __: https://github.com/tum-ens/urbs/blob/master/README.md#installation
+.. __: https://github.com/yabata/ficus/blob/master/README.md#installation
 
-This tutorial is a commented walk-through through the script ``runme.py``,
+This tutorial is a commented walk-through through the script ``runficus.py``,
 which is a demonstration user script that can serve as a good basis for one's 
 own script.
 
-Initialisation
+Run Model
 --------------
 
-Imports
+Run from Excel
 ^^^^^^^
+
+For an easy first run of ficus without using any python enviroment a small macro in VBA allows running the 
+optimization directly from Excel.
+
+*1. Open the file ``example_fromexcel.xlsm`` 
+*2. Go to the ``RUN`` sheet and choose a solver. If you chosse any other than the ``neos`` solver, the solver hast to be installed locally on your computer. Choosing ``neos`` uses the ``cbc`` solver from the `NEOS Server for Optimization`_ (no installation required)
+*3. Rush the ``RUN OPTIMIZATION`` button. 
+
+A cmd window should appear showing the actual status and about one minute later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
+
+`TEST`
+
+.. _NEOS Server for Optimization:
+    http://www.neos-server.org/neos/
+
+
 
 ::
 
