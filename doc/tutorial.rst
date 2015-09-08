@@ -126,6 +126,7 @@ The following tutorial is a step by step explanation of how to create your own i
 For the sake of an example, assume you want to build a new factory named *NewFactory* and cover its energy demand cost optimal. You have the (predicted) demand timeseries in 15 minute time resolution for electricity (``elec``) and heat (``heat``) for 7 days (672 timesteps). 
 You can import electricty and gas through the given infrastructure and export electricity back to the grid.
 You consider following processes/storages for converting/storing energy:
+
 * A combined heat and power plant (``chp``) to convert gas to electricity and heat, unlimited in size
 * Two different wind turbines (``wind_1`` and ``wind_2``), limited to 2000 kW total
 * A gas boiler (``boiler``) to convert gas to heat, unlimited in size
@@ -141,6 +142,8 @@ Set timebase of time dependent Data and timesteps to be optimized
 * **timebase**: time-interval between timesteps of all given timeseries data.
 * **start**: First timestep to use for the optimisation
 * **end**: Last timestep to use for the optimisation
+
+*Edit Example*:
 
 Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end timestep at 672 (optimise the whole 7 days)
 
@@ -162,6 +165,8 @@ Activating one/more of the settings will activate equations, that allow addition
 * **Partload**: Consider minimum partload settings, partload efficiencies as well as start-up costs of processes.
 * **Min-Cap**: Consider minimal installed capacities of processes and storages. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
 
+*Edit Example*:
+
 Keep all settings deactivated.
 
 .. csv-table:: Sheet **MIP-Settings**
@@ -178,12 +183,18 @@ Ext-Commodities
 List of all commodities than can be imported/exported. Set demand charge, time interval for demand charge, import/export limits and minimum operating hours.
 
 For every commodity that can be imported/exported:
+
 * **demand rate**: demand rate (in Euro/kW/a) to calculate the 'peak demand charge'_ of one commodity. The highest imported power during a specific time period (``time-interval-demand-rate``) of highest use in the year is used to calculate the demand charges by multiplication with the demand rate
 * **time-interval-demand-rate**: time period or time interval used to determine the highest imported power use in the year for calculating the peak demnd charge
 * **p-max-initial**: Initial value of highest imported power use in the year. Sets the minimum for demand charges to ``demand-rate`` * ``p-max-initial``
 * **import-max**: maximum power of commodity that can be imported per timestep
 * **export-max**: maximum power of commodity that can be exported per timestep
-* **operating-hours-min**: maximum power of commodity that can be exported per timestep
+* **operating-hours-min**: Minimum value for "operating hours" of import. Operating hours are calculated by dividing the total energy imported during one year by the highest imported power during a specific time period (``time-interval-demand-rate``) in the year. The highest possible value is the number of hours of one year (8760), which would lead to a constant import over the whole year (smooth load). This parameter can be used to model special demand charge tariffs, that require a minimum value for the operatimg hours for energy import. Set the value to zero to ignore this constraint.
+
+*Edit Example*:
+
+The commodities ``gas`` and ``elec`` that can be imported/exported are already defined. 
+Change the Value for the demand rate of the commodity ``elec`` to 100. Keep the other inputs as they are.
 
 .. csv-table:: Sheet **Ext-Commodities**
    :header-rows: 1
