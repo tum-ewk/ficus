@@ -212,16 +212,16 @@ Set the costs for electricty import to 0.15 Euro/kWh and for gas import to 0.05 
 
 .. csv-table:: Sheet **Ext-Import**
    :header-rows: 1
-   :stub-columns: 0
+   :stub-columns: 1
 
-    elec, heat
-    **0.15**, **0.05**
-    **0.15**, **0.05**
-    **0.15**, **0.05**
-    **0.15**, **0.05**
-    **0.15**, **0.05**
-    **0.15**, **0.05**
-    ...,...
+    Time,elec, heat
+    1, **0.15**, **0.05**
+    2, **0.15**, **0.05**
+    3, **0.15**, **0.05**
+    4, **0.15**, **0.05**
+    5, **0.15**, **0.05**
+    6, **0.15**, **0.05**
+    7, ...,...
 
 Ext-Export
 ^^^^^^^^
@@ -234,16 +234,16 @@ Set the revenues for electricty export to 0.01 Euro/kWh. Gas can not be exported
 
 .. csv-table:: Sheet **Ext-Export**
    :header-rows: 1
-   :stub-columns: 0
+   :stub-columns: 1
 
-    elec
-    **0.01**
-    **0.01**
-    **0.01**
-    **0.01**
-    **0.01**
-    **0.01**
-    ...
+    Time, elec
+    1, **0.01**
+    2, **0.01**
+    3, **0.01**
+    4, **0.01**
+    5, **0.01**
+    6, **0.01**
+    7, ...
     
     
 Demand-Rate-Factor
@@ -259,16 +259,16 @@ Keep all values at ``1`` for constant demand rates.
 
 .. csv-table:: Sheet **Demand-Rate-Factor**
    :header-rows: 1
-   :stub-columns: 0
+   :stub-columns: 1
 
-    elec
-    1
-    1
-    1
-    1
-    1
-    1
-    ...
+    Time, elec
+    1, 1
+    2, 1
+    3, 1
+    4, 1
+    5, 1
+    6, 1
+    7, ...
 
 
 Process
