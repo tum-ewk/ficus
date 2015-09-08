@@ -7,10 +7,10 @@ The objective of the model is to supply the given demand with minimal costs. The
 
 The timebase of the model can be configured depending on the timebase of the given data (demand). For all commodities and entities then the same timebase is used.
 
-Exterrnal imported/exported commodities
+External imported/exported commodities
 ^^^^^^^^^
 
-Exterrnal imported/exported commodities are goods that can be imported or exported from/to "external sources", e.g. the elctric grid. The prices for buying/selling for every timestep are given by a timeseries.
+External imported/exported commodities are goods that can be imported or exported from/to "external sources", e.g. the elctric grid. The prices for buying/selling for every timestep are given by a timeseries.
 Additional a demand rate with an extra time interval can be given, to  consider `peak demand charges`_. A ``Demand-Rate-Factor`` Timeseries allows to raise, reduce or turn off the demand rate for specific timesteps to consider special tariff systems.
 
 Exterrnal imported/exported commodities are defined over the commodity itself ``(commodity)``, for example
