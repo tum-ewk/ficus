@@ -1,4 +1,4 @@
-.. currentmodule:: urbs
+.. currentmodule:: ficus
 
 .. _tutorial:
 
