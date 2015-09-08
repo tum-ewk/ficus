@@ -189,8 +189,8 @@ For every commodity that can be imported/exported:
 * **export-max**: maximum power of commodity that can be exported per timestep
 * **operating-hours-min**: Minimum value for "operating hours" of import. Operating hours are calculated by dividing the total energy imported during one year by the highest imported power during a specific time period (``time-interval-demand-rate``) in the year. The highest possible value is the number of hours of one year (8760), which would lead to a constant import over the whole year (smooth load). This parameter can be used to model special demand charge tariffs, that require a minimum value for the operatimg hours for energy import. Set the value to zero to ignore this constraint.
 
-*Edit Example*:\n
-The commodities ``gas`` and ``elec`` that can be imported/exported are already defined. 
+*Edit Example*:
+|The commodities ``gas`` and ``elec`` that can be imported/exported are already defined. 
 Change the Value for the demand rate of the commodity ``elec`` to 100. Keep the other inputs as they are.
 
 .. csv-table:: Sheet **Ext-Commodities**
