@@ -261,18 +261,59 @@ Keep all values at ``1`` for constant demand rates.
    :header-rows: 1
    :stub-columns: 1
 
-    Time, elec
-    1, 1
-    2, 1
-    3, 1
-    4, 1
-    5, 1
-    6, 1
-    7, ...
+    Time,elec,gas
+    1,1,1
+    2,1,1
+    3,1,1
+    4,1,1
+    5,1,1
+    6,1,1
+    7,...,...
 
 
 Process
 ^^^^^^^^
+
+* **Process**: Name of the process
+* **Num**: Number of identical processes
+* **class**: assign process to a Process Class, which allows to consider addtitional fees/subsidies for inputs or outputs of this class and total power/energy limits for the whole class
+* **cost-inv**: Specicfic investment costs for new capacities (in Euro/kW)
+* **cost-fix**: Specific annual fix costs (in Euro/kW/a)
+* **cost-var**: Specific variable costs per energy throughput (in Euro/kWh)
+* **cap-installed**: Already installed capacity of process (no additional investment costs)
+* **cap-new-min**: Minimum capacity of process to be build, if process is built. It is allways possible that the process isn't built at all. (in kW) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
+* **cap-new-max**: Maximum new process capacity
+* **partload-min**: Specific minimum partload of process (normalized to 1 = max). (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True``)
+* **start-up-energy**: Specific additional energy consumed by the process for strat-up (in kWh/kW). For each input commodity this value is multiplied by the ``ratio`` in ``Process-Commodity`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True``)
+* **initial-power**: Initial Power throughput of process for timestep t=0 (in kW)
+* **depreciation**: Depreciation period. Economic lifetime (more conservative than technical lifetime) of a process investment in years (a). Used to calculate annuity factor for investment costs.
+* **wacc**: Weighted average cost of capital. Percentage (%/100) of costs for capital after taxes. Used to calculate annuity factor for investment costs.
+
+**Note**: All specific costs refer to the commoditis with input or output ratios of ``1``! For a process *Turbine* defined by the following table, all specific costs (e.g. Specific Investment Costs) corespond to the installed electric power. So if specific investment costs of 10 Euro/kW are given and a turbine with 10 kW electric output power is built, the investment costs are 100 Euro. The maximum input power of the commodity gas though is 300 kW!
+
+.. csv-table:: Example for input/output ratios of a process
+   :header-rows: 1
+   :stub-columns: 2
+
+    Process,Commodity,Direction,ratio
+    Turbine,gas,In,3
+    Turbine,elec,Out,1
+
+
+
+*Edit Example*:
+Keep all values at ``1`` for constant demand rates.
+
+.. csv-table:: Sheet **Demand-Rate-Factor**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Process,Num,class,cost-inv,cost-fix,cost-var,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy,initial-power,depreciation,wacc
+    chp,1,CHP,700,0,0.01,0,0,inf,0,0.0,0,10,0.05
+    wind_1,1,WIND,1000,0,0.005,0,0,inf,0,0.0,0,10,0.05
+    wind_2,1,WIND,1000,0,0.005,0,0,inf,0,0.0,0,10,0.05
+    boiler,1,,100,0,,0.001,0,0,inf,0,0.0,0,10,0.05
+
 
 Process-Commodity
 ^^^^^^^^
