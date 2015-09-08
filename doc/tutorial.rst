@@ -102,15 +102,6 @@ Give FULL PATH for ``result_folder``, if it should not be in the same directory,
 The :func:`run_ficus` function, is the "work horse", where most computation and time is spent. The
 optimization problem is first defined and filled with values from the ``input_file``. Then the solver ``opt`` is called to solve the model.  If ``neos`` is set to ``True``, the problem is sent to the 'NEOS Server for Optimization'_ to solve the problem (Note, that using some solvers on NEOS require a license). If ``neos`` is set to false, the locally installed solver is used (if installed). After solving the problem the results are read back to  the ``prob`` object.
 
-::
-
-    import coopr.environ
-    import os
-    import urbs
-    from coopr.opt.base import SolverFactory
-    from datetime import datetime
-    
-
 If locally installed solver `gurobi`_ or `cplex`_ are used, the parameter ``Threads`` allows to set the maximal number of simultaneous CPU threads.
 
 ::
@@ -138,7 +129,8 @@ Can also be used to plot data from a given resultfile with the Paraneter ``resul
 .. _example.xlsx https://github.com/yabata/ficus/blob/master/example.xlsx
 
 
-
+Create Input File
+--------------
 
 
 
