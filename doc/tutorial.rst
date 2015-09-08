@@ -37,11 +37,15 @@ Run from Ipython
 ^^^^^^^^
 * Open Ipython 
 * Change the working directory to the folder where the `runficus.py`_ script is: 
+
 ::
+
     import os
     os.chdir("C:\YOUR\FOLDER")
 * Run the script:
+
 ::
+
     run runficus
     
 The shell should show the actual status and a few minutes later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
