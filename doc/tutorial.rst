@@ -23,11 +23,13 @@ Run from Excel
 For an easy first run of ficus without using any python enviroment a small macro in VBA allows running the 
 optimization directly from Excel.
 
-*1. Open the file ``example_fromexcel.xlsm`` 
-*2. Go to the ``RUN`` sheet and choose a solver. If you chosse any other than the ``neos`` solver, the solver hast to be installed locally on your computer. Choosing ``neos`` uses the ``cbc`` solver from the `NEOS Server for Optimization`_ (no installation required)
-*3. Rush the ``RUN OPTIMIZATION`` button. 
+* Open the file ``example_fromexcel.xlsm`` 
+* Go to the ``RUN`` sheet and choose a solver. If you chosse any other than the ``neos`` solver, the solver hast to be installed locally on your computer. Choosing ``neos`` uses the ``cbc`` solver from the `NEOS Server for Optimization`_ (no installation required)
+* Push the ``RUN OPTIMIZATION`` button. 
 
 A cmd window should appear showing the actual status and about one minute later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
+
+
 
 `TEST`
 
