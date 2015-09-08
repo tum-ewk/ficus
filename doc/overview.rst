@@ -25,6 +25,8 @@ can be visualised like a black box with multiple inputs (commodities) and multip
 technical parameter. Fixed costs for investment and maintenance (per capacity)
 and variable costs for operation (per output) are the economic parameters.
 
+Processes can be assigned to a ``Process Class``, which allows to consider addtitional fees/subsidies for inputs or outputs of this class (e.g. subsidies for pv generation).
+
 Processes are defined over the tuple  ``(process , number, commodity, direction)`` that specifies the inputs and outputs for that process. The ``number`` variable is needed, if more than one identical process is given
 For example, ``(chp, 1, gas, In)``, ``(chp, 1, electricity, Out)`` and ``(chp, 1, heat, Out)``
 describes that the process named ``chp`` (combined heat and power) has a single input ``gas``
