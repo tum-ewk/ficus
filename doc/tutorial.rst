@@ -18,7 +18,7 @@ Run from Excel
 For an easy first run of ficus without using any python enviroment a small macro in VBA allows running the 
 optimization directly from Excel.
 
-* Open the file ``example_fromexcel.xlsm`` 
+* Open the file `example_fromexcel.xlsm`_
 * Go to the ``RUN`` sheet and choose a solver. If you chosse any other than the ``neos`` solver, the solver hast to be installed locally on your computer. Choosing ``neos`` uses the ``cbc`` solver from the `NEOS Server for Optimization`_ (no installation required)
 * Push the ``RUN OPTIMIZATION`` button. 
 
@@ -36,7 +36,7 @@ Running the model from python (e.g. Ipython or Spyder) gives you more options fo
 Run from Ipython
 ^^^^^^^^
 * Open Ipython 
-* Change the working directory to the folder where the ``runficus.py`` script is: 
+* Change the working directory to the folder where the `runficus.py`_ script is: 
 ::
     import os
     os.chdir("C:\YOUR\FOLDER")
@@ -49,7 +49,7 @@ The shell should show the actual status and a few minutes later six result figur
 Run from Spyder
 ^^^^^^^^
 * Open Spyder 
-* Open the ``runficus.py`` script within Spyder
+* Open the `runficus.py`_ script within Spyder
 * Run the script with ``F5``
 
 The shell should show the actual status and a few minutes later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
@@ -57,9 +57,10 @@ The shell should show the actual status and a few minutes later six result figur
 runficus.py
 ^^^^^^^^
 
-Here the runficus.py script is explained step by step, so you can change it and use it for your own model.
+Here the `runficus.py`_ script is explained step by step, so you can change it and use it for your own model.
 
 ::
+
     import os
     import ficus
 
@@ -72,23 +73,26 @@ Two packages are included.
   are :func:`prepare_result_directory`, :func:`run_ficus`, :func:`report` and
   :func:`result_figures`.
   
-To import ficus, ``ficus.py`` hast to be either in the same directory than ``runficus.py`` or in any directory, that is searched by python.  To copy ``ficus.py`` to the ``\Lib\site-packages`` folder of python, use the :func:`install` function, by just running ``ficus.py`` ones ans continue with ``y``.
+To import ficus, `ficus.py`_ hast to be either in the same directory than `runficus.py`_ or in any directory, that is searched by python.  To copy `ficus.py`_` to the ``\Lib\site-packages`` folder of python, use the :func:`install` function, by just running `ficus.py`_ ones and continue with ``y``.
 
 ::
+
     input_file = 'example.xlsx'
 
 
-Gives the path to the ``input_file`` used for model creation. If the file is not in the same folder than ``ficus.py``, give the FULL PATH (e.g. C:\YOUR\INPUT\FILE.xlsx)
+Gives the path to the ``input_file`` used for model creation. If the file is not in the same folder than `ficus.py`_, give the FULL PATH (e.g. C:\YOUR\INPUT\FILE.xlsx)
 
 ::
+
     result_folder = 'result'
     result_name = os.path.splitext(os.path.split(input_file)[1])[0]
     result_dir = ficus.prepare_result_directory(result_folder,result_name)
 
 Creates a time stamped folder ``result_name-TIME`` within the ``result_folder`` directory and saves the full path to ``result_dir``.
-Give FULL PATH for ``result_folder``, if it should not be in the same directory, than ``runficus.py``
+Give FULL PATH for ``result_folder``, if it should not be in the same directory, than `runficus.py`_`
 
 ::
+
     prob = ficus.run_ficus(input_file, opt = 'cbc', neos=True)
 
 The :func:`run_ficus` function, is the "work horse", where most computation and time is spent. The
@@ -97,11 +101,13 @@ optimization problem is first defined and filled with values from the ``input_fi
 If locally installed solver `gurobi`_ or `cplex`_ are used, the parameter ``Threads`` allows to set the maximal number of simultaneous CPU threads.
 
 ::
+
     ficus.report(prob, result_dir)
     
 Saves the reults from the object ``prob`` to an excel file in the directory ``result_dir``.
 
 ::
+
     ficus.result_figures(result_dir,prob=prob, show=True)
     
 Reads and plots the results from the object ``prob`` and saves them in the directory ``result_dir``.
@@ -112,8 +118,18 @@ Can also be used to plot data from a given resultfile with the Paraneter ``resul
     http://www.neos-server.org/neos/
 .. _gurobi: https://en.wikipedia.org/wiki/Gurobi
 .. _cplex.py: https://en.wikipedia.org/wiki/CPLEX
+.. _ficus: https://github.com/yabata/ficus
 .. _ficus.py: https://github.com/yabata/ficus/blob/master/ficus.py
 .. _runficus.py.py: https://github.com/yabata/ficus/blob/master/runficus.py
+.. _example_fromexcel.xlsm https://github.com/yabata/ficus/blob/master/example_fromexcel.xlsm
+.. _example.xlsx https://github.com/yabata/ficus/blob/master/example.xlsx
+
+
+
+
+
+
+
 
 
 
