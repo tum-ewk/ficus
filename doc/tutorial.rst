@@ -499,18 +499,18 @@ Intermittent Supply: A timeseries normalised to a maximum value of 1 relative to
 *Edit Example*:
 Copy the intermittent supply timeseries **wind1** and **wind2** from `intermittent_supply_wind.xlsx`_ 
 
-.. csv-table:: Sheet **Demand**
+.. csv-table:: Sheet **SupIm**
    :header-rows: 1
    :stub-columns: 1
 
-    Time,elec, heat
+    Time,wind1,wind2
     1,0.91,1.00
     2,1.00,1.00
     3,1.00,1.00
     4,1.00,1.00
     5,1.00,1.00
     6,0.88,1.00
-    7,0.71,1.00
+    7,...,...
 
 
 
