@@ -464,9 +464,9 @@ Change the parameters of the storage **battery** and **heat storage** as shown i
    :header-rows: 1
    :stub-columns: 3
    
-Storage,Commodity,Num,eff-in,eff-out,self-discharge,cycles-max,DOD,initial-soc,depreciation,wacc
-battery,elec,1,0.900,0.900,0.0001,10000,1,0,10,0.05
-heat storage,heat,1,0.950,0.950,0.0001,1000000,1,0,10,0.05
+    Storage,Commodity,Num,eff-in,eff-out,self-discharge,cycles-max,DOD,initial-soc,depreciation,wacc
+    battery,elec,1,0.900,0.900,0.0001,10000,1,0,10,0.05
+    heat storage,heat,1,0.950,0.950,0.0001,1000000,1,0,10,0.05
 
 Demand
 ^^^^^^^^
