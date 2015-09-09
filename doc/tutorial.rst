@@ -273,7 +273,7 @@ Keep all values at ``1`` for constant demand rates.
     7,...,...
 
 
-.. _Process_ref:
+.. _Process-ref:
 Process
 ^^^^^^^^
 
@@ -329,7 +329,7 @@ Define input and output commodities and the conversion efficiencies between them
 * **partload-ratio**: input/output ratios for the commodities of the process at minimum partload (``partload-min``) given in sheet ``Process`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True`` and ``partload-min`` is between 0 and 1)
 
 
-Let's assume we defined a **chp** (combined heat and power) unit and set the minimum partload to 50% (``partload-min=0.5``) in the :ref:`Process_ref`_ sheet:
+Let's assume we defined a **chp** (combined heat and power) unit and set the minimum partload to 50% (``partload-min=0.5``) in the :ref:`Process-ref`_ sheet:
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
@@ -342,7 +342,7 @@ Now we want to define, that the chp unit consumes ``gas`` and produces elecricit
 generating heat should be **50%** at full load and **55%** at partload.
 
 Because specific costs and power outputs for chp units are usually given refered to the electric power output, we set the ``ratio`` **ans** ``ratio-partload`` of ``(chp,elec,Out)`` to **1**.
-(**Note**: All specific costs and capacities given in the ``Process`` sheet refer to the commoditis with input or output ratios of ``1``! See :ref:`Process_ref`)
+(**Note**: All specific costs and capacities given in the ``Process`` sheet refer to the commoditis with input or output ratios of ``1``! See :ref:`Process-ref`)
 
 Now we can calculate the ratios of the other commodities based on the efficiencies, so we get:
 
