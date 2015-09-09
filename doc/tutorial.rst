@@ -570,7 +570,8 @@ Th obtained results should look like this:
 .. _example_fromexcel.xlsm: https://github.com/yabata/ficus/blob/master/example_fromexcel.xlsm
 .. _example.xlsx: https://github.com/yabata/ficus/blob/master/example.xlsx
 .. _intermittent_supply_wind.xlsx: https://github.com/yabata/ficus/blob/master/doc/NewFactory/intermittent_supply_wind.xlsx
-
+.. _os: https://docs.python.org/2/library/os.html
+.. _os.path: https://docs.python.org/2/library/os.path.html
 
 
 
