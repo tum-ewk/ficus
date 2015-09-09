@@ -12,6 +12,7 @@ expands on the steps that follow this installation.
 
 This tutorial describes how to create the data input and run your own model based on an example.
 
+.. _run_excel_ref:
 Run from Excel
 --------------
 
@@ -26,6 +27,7 @@ A cmd window should appear showing the actual status and a few minutes later six
 
 Using this way of running the model, the function :func:`run_from_excel` from the `ficus.py`_  script is within VBA. This requires, that `ficus.py`_ can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on `ficus.py`_  or run it with python. Then continue with ``y``.  
 
+.. _run_python_ref:
 Run from Python
 --------------
 
@@ -497,7 +499,7 @@ Intermittent Supply: A timeseries normalised to a maximum value of 1 relative to
 
 
 *Edit Example*:
-Copy the intermittent supply timeseries **wind1** and **wind2** from `intermittent_supply_wind.xlsx`_ 
+Copy the intermittent supply timeseries **wind1** and **wind2** from :download:`intermittent_supply_wind.xlsx <NewFactory/intermittent_supply_wind.xlsx>` to the ``SupIm`` sheet.
 
 .. csv-table:: Sheet **SupIm**
    :header-rows: 1
@@ -512,10 +514,50 @@ Copy the intermittent supply timeseries **wind1** and **wind2** from `intermitte
     6,0.88,1.00
     7,...,...
 
+.. note::
 
+    For reference, this is how 
+    :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` 
+    and  :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`
+    look for me
+    having performed the above steps.
 
+Test-drive the input
+^^^^^^^^
 
+Now that ``NewFactory.xlsx`` or ``NewFactory.xlsm`` is ready to go, run the model.
 
+:ref:`run_excel_ref`
+
+:ref:`run_python_ref`
+
+Th obtained results should look like this:
+
+.. image:: NewFactory/elec-timeseries.*
+   :width: 95%
+   :align: center
+   
+.. image:: NewFactory/elec-energy.*
+   :width: 95%
+   :align: center
+
+.. image:: NewFactory/heat-timeseries.*
+   :width: 95%
+   :align: center
+
+.. image:: NewFactory/heat-energy.*
+   :width: 95%
+   :align: center
+
+.. image:: NewFactory/capacities.*
+   :width: 95%
+   :align: center
+
+.. image:: NewFactory/costs.*
+   :width: 95%
+   :align: center
+   
+   
 .. _NEOS Server for Optimization:
     http://www.neos-server.org/neos/
 .. _gurobi: https://en.wikipedia.org/wiki/Gurobi
