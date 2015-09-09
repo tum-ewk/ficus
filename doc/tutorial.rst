@@ -561,13 +561,13 @@ Th obtained results should look like this:
 .. _NEOS Server for Optimization:
     http://www.neos-server.org/neos/
 .. _gurobi: https://en.wikipedia.org/wiki/Gurobi
-.. _cplex.py: https://en.wikipedia.org/wiki/CPLEX
+.. _cplex: https://en.wikipedia.org/wiki/CPLEX
 .. _ficus: https://github.com/yabata/ficus
 .. _ficus.py: https://github.com/yabata/ficus/blob/master/ficus.py
 .. _runficus.py.py: https://github.com/yabata/ficus/blob/master/runficus.py
-.. _example_fromexcel.xlsm https://github.com/yabata/ficus/blob/master/example_fromexcel.xlsm
-.. _example.xlsx https://github.com/yabata/ficus/blob/master/example.xlsx
-.. _intermittent_supply_wind.xlsx https://github.com/yabata/ficus/blob/master/doc/NewFactory/intermittent_supply_wind.xlsx
+.. _example_fromexcel.xlsm: https://github.com/yabata/ficus/blob/master/example_fromexcel.xlsm
+.. _example.xlsx: https://github.com/yabata/ficus/blob/master/example.xlsx
+.. _intermittent_supply_wind.xlsx: https://github.com/yabata/ficus/blob/master/doc/NewFactory/intermittent_supply_wind.xlsx
 
 
 
