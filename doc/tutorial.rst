@@ -412,7 +412,38 @@ This sets a maximum of **20000 kW** for the total capacity of wind turbines, a s
 Storage
 ^^^^^^^^
 
-.. csv-table:: Sheet **Process-Class**
+Define storages for a commodity with technical parameters and specific costs.
+
+*   **Storage**: Name of storage
+*   **Commodity**: Commodity that can be stored
+*   **Num**: Number of identical storages
+*   **cost-inv-p**: Specific investment costs for new charge/discharge power capacities of storage (in Euro/kW)
+*   **cost-inv-e**: Specific investment costs for new energy capacities of storage (in Euro/kWh).
+*   **cost-fix-p**: Specific annual fix costs per installed charge/discharge power (in Euro/kW/a)
+*   **cost-fix-e**: Specific annual fix costs per installed energy (in Euro/kWh/a)
+*   **cost-var**: Specific variable costs per energy throughput (in Euro/kWh)
+*   **cap-installed-p**: Already installed charge/discharge power capacity of storage (no additional investment costs) (in kW)
+*   **cap-new-min-p**: Minimum charge/discharge power capacity of stotage to be build, if process is built. It is allways possible that the storage isn't built at all. (in kW) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
+*   **cap-new-max-p**:  Maximum new charge/discharge power capacity of storage (in kW)
+*   **cap-installed-e**:Already installed energy capacity of storage (no additional investment costs) (in kWh)
+*   **cap-new-min-e**: Minimum power capacity of stotage to be build, if process is built. It is allways possible that the storage isn't built at all. (in kWh) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
+*   **cap-new-max-e**: Maximum new energy capacity of storage (in kWh)
+*   **max-p-e-ratio**: Maximum relation of charge-dischrage power to storage energy (in kW/kWh). power <= energy * ratio
+*   **eff-in**: Charge efficiency (in %/100)
+*   **eff-out**: Discharge efficiency (in %/100)
+*   **self-discharge**: Self discharge of storage (in %/h/100)
+*   **cycles-max**: Maximum number of full cycles before end of life of storage
+*   **DOD**: Depth of discharge. Usable share of energy of storage (in %/100)
+*   **initial-soc**: Initial state of charge of the storage (in %/100). 
+*   **depreciation**: Depreciation period. Economic lifetime (more conservative than technical lifetime) of a process investment in years (a). Used to calculate annuity factor for investment costs.
+*   **wacc**: Weighted average cost of capital. Percentage (%/100) of costs for capital after taxes. Used to calculate annuity factor for investment costs.
+
+**Note**: All values for the storage energy capacities and energy specific costs are relasted to the energy that can be **stored in the storage** with 100 % depth of discharge (DOD). The energy that can be used out of the storage might be less, depending on the ``DOD`` and the discharge efficiency ``eff-out``. 
+
+*Edit Example*:
+Change the parameters of the storage **battery** and **heat storage** as shown in the table.
+
+.. csv-table:: Sheet **Storage** (1/3)
    :header-rows: 1
    :stub-columns: 3
    
@@ -420,7 +451,7 @@ Storage
     battery	elec,1,0,1000,0,0,0
     heat storage,heat,1,0,10,0,0,0
 
-.. csv-table:: Sheet **Process-Class**
+.. csv-table:: Sheet **Storage** (2/3)
    :header-rows: 1
    :stub-columns: 3
    
@@ -429,24 +460,57 @@ Storage
     heat storage,heat,1,0,0,inf,0,0,20000,1
 
 
-.. csv-table:: Sheet **Process-Class**
+.. csv-table:: Sheet **Storage** (3/3)
    :header-rows: 1
    :stub-columns: 3
    
-Storage	Commodity	Num	eff-in	eff-out	self-discharge	cycles-max	DOD	initial-soc	depreciation	wacc
-battery	elec	1,0.900	0.900	0.0001	10000	1	0	10	0.05
-heat storage	heat,0.950	0.950	0.0001	1000000	1	0	10	0.05
-
-
-
-
-
+Storage,Commodity,Num,eff-in,eff-out,self-discharge,cycles-max,DOD,initial-soc,depreciation,wacc
+battery,elec,1,0.900,0.900,0.0001,10000,1,0,10,0.05
+heat,storage,heat,0.950,0.950,0.0001,1000000,1,0,10,0.05
 
 Demand
 ^^^^^^^^
 
+Timeseries: (average) power demand for every commodity to be satisfied for every timestep (in kW). 
+
+*Edit Example*:
+Keep the demand timeseries for ``elec`` and ``heat`` as they are
+
+.. csv-table:: Sheet **Demand**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Time,elec, heat
+    1,28749.52,8856
+    2,29383.66,8676
+    3,29496.09,9104
+    4,29592.54,8892
+    5,30346.42,8764
+    6,31300.91,8560
+    7,...,...
+
+
 SupIm
 ^^^^^^^^
+
+Intermittent Supply: A timeseries normalised to a maximum value of 1 relative to the installed capacity of a process using this commodity as input. For example, a wind power timeseries should reach value 1, when the wind speed exceeds the modelled wind turbine’s design wind speed is exceeded. This implies that any non-linear behaviour of intermittent processes can already be incorporated while preparing this timeseries.
+
+
+*Edit Example*:
+Copy the intermittent supply timeseries **wind1** and **wind2** from `intermittent_supply_wind.xlsx`_ 
+
+.. csv-table:: Sheet **Demand**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Time,elec, heat
+    1,28749.52,8856
+    2,29383.66,8676
+    3,29496.09,9104
+    4,29592.54,8892
+    5,30346.42,8764
+    6,31300.91,8560
+    7,...,...
 
 
 
@@ -460,7 +524,7 @@ SupIm
 .. _runficus.py.py: https://github.com/yabata/ficus/blob/master/runficus.py
 .. _example_fromexcel.xlsm https://github.com/yabata/ficus/blob/master/example_fromexcel.xlsm
 .. _example.xlsx https://github.com/yabata/ficus/blob/master/example.xlsx
-
+.. _intermittent_supply_wind.xlsx https://github.com/yabata/ficus/blob/master/doc/intermittent_supply_wind.xlsx
 
 
 
