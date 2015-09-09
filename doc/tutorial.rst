@@ -271,6 +271,7 @@ Keep all values at ``1`` for constant demand rates.
     7,...,...
 
 
+.. _Process_ref:
 Process
 ^^^^^^^^
 
@@ -317,28 +318,65 @@ Delete all existing processes and add the new processes **chp**, **wind_1**, **w
 
 Process-Commodity
 ^^^^^^^^
+Define input and output commodities and the conversion efficiencies between them for eacht process. Each commodities can have multiple inputs and outputs.
 
 * ***Process***: Name of the Process. Make sure that you use exactly the same name, than in sheet ``Process``
-* ***Commodity***: Name of commodity that is used/produced by the process
-* ***Direction***: *In* id the commodity is used by the process, *Out* if the commodity is produced. (**Note**: All specific costs and capacities given in the ``Process`` sheet refer to the commoditis with input or output ratios of ``1``! See :ref:`Process`
-* **cap-new-max**: Maximum new process capacity
-* **partload-min**: Specific minimum partload of process (normalized to 1 = max). (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True``)
+* ***Commodity***: Name of commodity that is used/produced by the process.
+* ***Direction***: *In* if the commodity is used by the process, *Out* if the commodity is produced. 
+* **ratio**: input/output ratios for the commodities of the process at full load.
+* **partload-ratio**: input/output ratios for the commodities of the process at minimum partload (``partload-min``) given in sheet ``Process`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True`` and ``partload-min`` is between 0 and 1)
 
+|**Example**
+|Let's assume we defined a :ref:`Process_ref` **chp** (combined heat and power) and set the minimum partload to 50% (``partload-min=0.5``):
+
+.. csv-table:: Sheet **Process**
+   :header-rows: 1
+   :stub-columns: 3
+
+    Process,Num,class,...,partload-min,...
+    chp,1,CHP,...,0.5,...
+
+Now we want to define, that the chp unit consumes ``gas`` and produces elecricity (``elec``) and ``heat``. We want to set the electric efficiency to **40%** at full load and to **30%** at minimmum partload. The efficinecy for 
+generating heat should be **50%** at full load and **55%** at partload.
+
+Because specific costs and power outputs for chp units are usually given refered to the electric power output, we set the ``ratio`` **ans** ``ratio-partload`` of ``(chp,elec,Out)`` to **1**.
+(**Note**: All specific costs and capacities given in the ``Process`` sheet refer to the commoditis with input or output ratios of ``1``! See :ref:`Process_ref`)
+
+Now we can calculate the ratios of the other commodities based on the efficiencies, so we get:
 
 .. csv-table:: Sheet **Process-Commodity**
    :header-rows: 1
    :stub-columns: 3
    
-    Process	Commodity	Direction	ratio	ratio-partload
-    chp	gas	In	2.00	
-    chp	elec	Out	1.00	
-    chp	heat	Out	1.00	
-    wind_1	wind1	In	1.00	
-    wind_1	elec	Out	1.00	
-    wind_2	wind2	In	1.00	
-    wind_2	elec	Out	1.00	
-    boiler	gas	In	1.10	
-    boiler	heat	Out	1.00	
+    Process,Commodity,Direction,ratio,ratio-partload
+    chp,gas,In,2.50,4.00
+    chp,elec,Out,**1.00**,**1.00**
+    chp,heat,Out,1.25,2.20
+
+So with setting the ratios for full load and minimum partload we defined the partload performance curve of our process. Points between full load and minimum partload are approximated as a linear function between them. (**Note**: If ``Partload`` in ``MIP-Settings`` is set to ``False``, partload behaviour is not considered and the efficiencies defined by ``ratio`` are constant for all operating points. The values in ``ratio-partload`` are ignored).
+
+The following figures show the power inputs/outputs and eiffiencies of a 10 kW (elec!) chp unit with the parameters used in this example with and without considering partload behaviour.
+
+
+ 
+ 
+*Edit Example*:
+Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the ratios as shown in the table. Because partload behaviour is not considered in this example, we can leave the ``ratio-partload`` column empty or set to any abritary value.
+
+.. csv-table:: Sheet **Process-Commodity**
+   :header-rows: 1
+   :stub-columns: 3
+   
+    Process,Commodity,Direction,ratio,ratio-partload
+    chp,gas,In,2.00,
+    chp,elec,Out,1.00,	
+    chp,heat,Out,1.00,	
+    wind_1,wind1,In,1.00,	
+    wind_1,elec,Out,1.00,	
+    wind_2,wind2,In,1.00,	
+    wind_2,elec,Out,1.00,	
+    boiler,gas,In,1.10,
+    boiler,heat,Out,1.00,	
 
 
 
