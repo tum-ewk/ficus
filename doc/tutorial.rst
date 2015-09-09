@@ -568,7 +568,18 @@ Th obtained results should look like this:
 MIP-Equations
 --------------
 
+This sections shows the influence of the equations that can be activated/deactivated in the sheet ``MIP-Equations`` with the help of an example.
 
+See :ref:`MIP-Equations-ref` for a short Description.
+
+Storage In-Out
+^^^^^^^^
+
+Partload
+^^^^^^^^
+
+Min-Cap
+^^^^^^^^
 
 
    
@@ -584,10 +595,3 @@ MIP-Equations
 .. _intermittent_supply_wind.xlsx: https://github.com/yabata/ficus/blob/master/doc/NewFactory/intermittent_supply_wind.xlsx
 .. _os: https://docs.python.org/2/library/os.html
 .. _os.path: https://docs.python.org/2/library/os.path.html
-
-
-
-
-
-
-
