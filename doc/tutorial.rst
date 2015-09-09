@@ -19,7 +19,7 @@ Run from Excel
 For an easy first run of ficus without using any python enviroment a small macro in VBA allows running the 
 optimization directly from Excel.
 
-* Open the file `example_fromexcel.xlsm`_
+* Open the file ``example_fromexcel.xlsm``
 * Go to the ``RUN`` sheet and choose a solver. If you chosse any other than the ``neos`` solver, the solver hast to be installed locally on your computer. Choosing ``neos`` uses the ``cbc`` solver from the `NEOS Server for Optimization`_ (no installation required)
 * Push the ``RUN OPTIMIZATION`` button. 
 
@@ -38,7 +38,7 @@ Running the model from python (e.g. Ipython or Spyder) gives you more options fo
 Run from Ipython
 ^^^^^^^^
 * Open Ipython 
-* Change the working directory to the folder where the `runficus.py`_ script is: 
+* Change the working directory to the folder where the ``runficus.py`` script is: 
 
 ::
 
@@ -55,7 +55,7 @@ The shell should show the actual status and a few minutes later six result figur
 Run from Spyder
 ^^^^^^^^
 * Open Spyder 
-* Open the `runficus.py`_ script within Spyder
+* Open the ``runficus.py``script within Spyder
 * Run the script with ``F5``
 
 The shell should show the actual status and a few minutes later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
@@ -63,7 +63,7 @@ The shell should show the actual status and a few minutes later six result figur
 runficus.py
 ^^^^^^^^
 
-Here the `runficus.py`_ script is explained step by step, so you can change it and use it for your own model.
+Here the ``runficus.py`` script is explained step by step, so you can change it and use it for your own model.
 
 ::
 
@@ -79,14 +79,14 @@ Two packages are included.
   are :func:`prepare_result_directory`, :func:`run_ficus`, :func:`report` and
   :func:`result_figures`.
   
-To import ficus, `ficus.py`_ hast to be either in the same directory than `runficus.py`_ or in any directory, that is searched by python.  To copy `ficus.py`_` to the ``\Lib\site-packages`` folder of python, use the :func:`install` function, by just running `ficus.py`_ ones and continue with ``y``.
+To import ficus, ``ficus.py`` hast to be either in the same directory than ``runficus.py`` or in any directory, that is searched by python.  To copy ``ficus.py`` to the ``\Lib\site-packages`` folder of python, use the :func:`install` function, by just running ``ficus.py`` ones and continue with ``y``.
 
 ::
 
     input_file = 'example.xlsx'
 
 
-Gives the path to the ``input_file`` used for model creation. If the file is not in the same folder than `ficus.py`_, give the FULL PATH (e.g. C:\YOUR\INPUT\FILE.xlsx)
+Gives the path to the ``input_file`` used for model creation. If the file is not in the same folder than ``ficus.py``, give the FULL PATH (e.g. C:\YOUR\INPUT\FILE.xlsx)
 
 ::
 
@@ -95,7 +95,7 @@ Gives the path to the ``input_file`` used for model creation. If the file is not
     result_dir = ficus.prepare_result_directory(result_folder,result_name)
 
 Creates a time stamped folder ``result_name-TIME`` within the ``result_folder`` directory and saves the full path to ``result_dir``.
-Give FULL PATH for ``result_folder``, if it should not be in the same directory, than `runficus.py`_`
+Give FULL PATH for ``result_folder``, if it should not be in the same directory, than ``runficus.py``
 
 ::
 
@@ -135,7 +135,7 @@ You consider following processes/storages for converting/storing energy:
 * A heat storages (``heat_storage``) to store heat, limited to 30,000 kWh
 * A battery storage (``battery``) to store electricity, unlimited in size
 
-First make a copy of `example.xlsx`_ or `example_fromexcel.xlsm`_ depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the new file step by step following the instructions.
+First make a copy of ``example.xlsx`` or ``example_fromexcel.xlsm`` depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the new file step by step following the instructions.
 
 Time-Settings
 ^^^^^^^^
@@ -329,7 +329,7 @@ Define input and output commodities and the conversion efficiencies between them
 * **partload-ratio**: input/output ratios for the commodities of the process at minimum partload (``partload-min``) given in sheet ``Process`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True`` and ``partload-min`` is between 0 and 1)
 
 
-Let's assume we defined a :ref:`Process_ref` **chp** (combined heat and power) and set the minimum partload to 50% (``partload-min=0.5``):
+Let's assume we defined a **chp** (combined heat and power) unit and set the minimum partload to 50% (``partload-min=0.5``) in the :ref:`Process_ref`_ sheet:
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
