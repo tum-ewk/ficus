@@ -274,7 +274,6 @@ Keep all values at ``1`` for constant demand rates.
 
 
 .. _Process-ref:
-
 Process
 ^^^^^^^^
 
@@ -318,6 +317,7 @@ Delete all existing processes and add the new processes **chp**, **wind_1**, **w
     wind_2,1,WIND,1000,0,0.005,0,0,1e10,0,0.0,0,10,0.05
     boiler,1,,100,0,0.001,0,0,1e10,0,0.0,0,10,0.05
 
+.. _Process-Co-ref:
 
 Process-Commodity
 ^^^^^^^^
@@ -331,6 +331,12 @@ Define input and output commodities and the conversion efficiencies between them
 
 
 Let's assume we defined a **chp** (combined heat and power) unit and set the minimum partload to 50% (``partload-min=0.5``) in the :ref:`Process-ref`_ sheet:
+
+:ref:`Process-ref`_
+`Process-ref`_
+:ref:`Process-Co-ref`_
+`Process-Co-ref`_
+
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
