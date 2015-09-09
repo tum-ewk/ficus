@@ -130,9 +130,9 @@ You can import electricty and gas through the given infrastructure and export el
 You consider following processes/storages for converting/storing energy:
 
 * A combined heat and power plant (``chp``) to convert gas to electricity and heat, unlimited in size
-* Two different wind turbines (``wind_1`` and ``wind_2``), limited to 2000 kW total
+* Two different wind turbines (``wind_1`` and ``wind_2``), limited to 20,000 kW total
 * A gas boiler (``boiler``) to convert gas to heat, unlimited in size
-* A heat storages (``heat_storage``) to store heat, limited to XXX kWh
+* A heat storages (``heat_storage``) to store heat, limited to 30,000 kWh
 * A battery storage (``battery``) to store electricity, unlimited in size
 
 First make a copy of `example.xlsx`_ or `example_fromexcel.xlsm`_ depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the new file step by step following the instructions.
@@ -200,7 +200,7 @@ Change the Value for the demand rate of the commodity ``elec`` to 100. Keep the 
    :stub-columns: 1
 
     Commodity, demand-rate,time-interval-demand-rate,p-max-initial,import-max,export-max,operating-hours-min
-    elec, **100**, 900, 0, inf, inf, 0
+    elec, **10**, 900, 0, inf, inf, 0
     heat, 0, 900, 0, inf, 0,0
 
 Ext-Import
@@ -312,10 +312,10 @@ Delete all existing processes and add the new processes **chp**, **wind_1**, **w
    :stub-columns: 3
 
     Process,Num,class,cost-inv,cost-fix,cost-var,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy,initial-power,depreciation,wacc
-    chp,1,CHP,700,0,0.01,0,0,inf,0,0.0,0,10,0.05
-    wind_1,1,WIND,1000,0,0.005,0,0,inf,0,0.0,0,10,0.05
-    wind_2,1,WIND,1000,0,0.005,0,0,inf,0,0.0,0,10,0.05
-    boiler,1,,100,0,0.001,0,0,inf,0,0.0,0,10,0.05
+    chp,1,CHP,700,0,0.01,0,0,1e10,0,0.0,0,10,0.05
+    wind_1,1,WIND,1000,0,0.005,0,0,1e10,0,0.0,0,10,0.05
+    wind_2,1,WIND,1000,0,0.005,0,0,1e10,0,0.0,0,10,0.05
+    boiler,1,,100,0,0.001,0,0,1e10,0,0.0,0,10,0.05
 
 
 Process-Commodity
@@ -458,8 +458,8 @@ Change the parameters of the storage **battery** and **heat storage** as shown i
    :stub-columns: 3
    
     Storage,Commodity,Num,cap-installed-p,cap-new-min-p,cap-new-max-p,cap-installed-e,cap-new-min-e,cap-new-max-e,max-p-e-ratio
-    battery,elec,1,0,0,inf,0,0,100000,2
-    heat storage,heat,1,0,0,inf,0,0,20000,1
+    battery,elec,1,0,0,1e10,0,0,100000,2
+    heat storage,heat,1,0,0,1e10,0,0,30000,1
 
 
 .. csv-table:: Sheet **Storage** (3/3)
