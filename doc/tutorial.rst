@@ -320,14 +320,14 @@ Process-Commodity
 ^^^^^^^^
 Define input and output commodities and the conversion efficiencies between them for eacht process. Each commodities can have multiple inputs and outputs.
 
-* ***Process***: Name of the Process. Make sure that you use exactly the same name, than in sheet ``Process``
-* ***Commodity***: Name of commodity that is used/produced by the process.
-* ***Direction***: *In* if the commodity is used by the process, *Out* if the commodity is produced. 
+* **Process**: Name of the Process. Make sure that you use exactly the same name, than in sheet ``Process``
+* **Commodity**: Name of commodity that is used/produced by the process.
+* **Direction**:  *In* if the commodity is used by the process, *Out* if the commodity is produced. 
 * **ratio**: input/output ratios for the commodities of the process at full load.
 * **partload-ratio**: input/output ratios for the commodities of the process at minimum partload (``partload-min``) given in sheet ``Process`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True`` and ``partload-min`` is between 0 and 1)
 
-|**Example**
-|Let's assume we defined a :ref:`Process_ref` **chp** (combined heat and power) and set the minimum partload to 50% (``partload-min=0.5``):
+
+Let's assume we defined a :ref:`Process_ref` **chp** (combined heat and power) and set the minimum partload to 50% (``partload-min=0.5``):
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
@@ -384,6 +384,30 @@ Delete all existing processes and add the new processes **chp**, **wind_1**, **w
 
 Process Class
 ^^^^^^^^
+Define a Process Class and add fees/subsidies for a produced/consumed commodity or capacity and energy limits for this class.
+
+Processes can be assigned to a process class in the columns ``class`` in the ``Process`` sheet (See :ref:`Process_ref`). Make sure you use exactly the same names. 
+
+*   **Class**: Name of the Process Class
+*   **Commodity**: Commodity of the processes within the class
+*   **Direction**: Direction of the commodity within the processes of this class (*In* or  *Out*)
+*   **fee**: additional fee for produced/consumed energy in this class. (Postive values: Pay Money; Negative Values: Receive Money)
+*   **cap-max**: Maximum value for the sum of all process capacities of this class (Independent from ``Commodity``)
+*   **energy-max**: Maximum value for the sum of energy of the specified commodity that can be produced/consumed by the class within one year
+
+
+*Edit Example*:
+Delete all existing processes classes and add the new classes **CHP** and **WIND** with Commodity ``elec`` and Direction ``Out``. Set the ratios as shown in the table.
+This sets a maximum of **20000 kW** for the total capacity of wind turbines, a subsidy of **0.05 Euro/kWh** for produced electricity of the wind turbines (weather sold to the grid or used to cover the demand) and a fee of **0.02 Euro/kWh** for produced electricity out of our chp unit.
+
+.. csv-table:: Sheet **Process-Class**
+   :header-rows: 1
+   :stub-columns: 2
+   
+    Class,Commodity	Direction	fee	cap-max	energy-max
+    CHP,elec,Out,0.02,inf,inf
+    WIND,elec,Out,-0.05,20000,inf
+
 
 Storage
 ^^^^^^^^
