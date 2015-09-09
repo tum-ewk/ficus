@@ -12,7 +12,8 @@ expands on the steps that follow this installation.
 
 This tutorial describes how to create the data input and run your own model based on an example.
 
-.. _run_excel_ref:
+.. _run-excel-ref:
+
 Run from Excel
 --------------
 
@@ -27,7 +28,8 @@ A cmd window should appear showing the actual status and a few minutes later six
 
 Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on ``ficus.py``  or run it with python. Then continue with ``y``.  
 
-.. _run_python_ref:
+.. _run-python-ref:
+
 Run from Python
 --------------
 
@@ -274,6 +276,7 @@ Keep all values at ``1`` for constant demand rates.
 
 
 .. _Process-ref:
+
 Process
 ^^^^^^^^
 
@@ -331,16 +334,6 @@ Define input and output commodities and the conversion efficiencies between them
 
 
 Let's assume we defined a **chp** (combined heat and power) unit and set the minimum partload to 50% (``partload-min=0.5``) in the :ref:`Process-ref` sheet:
-
-EINS :ref:`Process-ref`
-
-ZWEI `Process-ref`_
-
-DREI :ref:`Process-Co-ref`
-
-VIER `Process-Co-ref`_
-
-
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
@@ -536,11 +529,9 @@ Copy the intermittent supply timeseries **wind1** and **wind2** from :download:`
 Test-drive the input
 ^^^^^^^^
 
-Now that ``NewFactory.xlsx`` or ``NewFactory.xlsm`` is ready to go, run the model.
+Now that ``NewFactory.xlsx`` or ``NewFactory.xlsm`` is ready to go, run the model:
 
-:ref:`run_excel_ref`
-
-:ref:`run_python_ref`
+:ref:`run-excel-ref` or :ref:`run-python-ref`
 
 Th obtained results should look like this:
 
