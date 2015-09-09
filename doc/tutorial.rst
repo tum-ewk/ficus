@@ -158,7 +158,9 @@ Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end tim
     Time,900,1,672
 
 
-MIP-Settings
+.. _MIP-Equations-ref:
+
+MIP-Equations
 ^^^^^^^^
 Activate/deactivate specific equations.
 If all settings are set to ``no``, the problem will be a linear optimisation problem without integer variables. This will result and less computation time for solving of the problem.
@@ -168,14 +170,16 @@ Activating one/more of the settings will activate equations, that allow addition
 * **Partload**: Consider minimum partload settings, partload efficiencies as well as start-up costs of processes.
 * **Min-Cap**: Consider minimal installed capacities of processes and storages. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
 
+See :ref:`MIP-Equations-main-ref` for a more detailed description on the effects of activating one of the equations with examples.
+
 *Edit Example*:
 Keep all settings deactivated.
 
-.. csv-table:: Sheet **MIP-Settings**
+.. csv-table:: Sheet **MIP-Equations**
    :header-rows: 1
    :stub-columns: 1
 
-    Settings,Active
+    Equation,Active
     Storage In-Out, no
     Partload, no
     Min-Cap, no
@@ -559,6 +563,14 @@ Th obtained results should look like this:
    :width: 95%
    :align: center
    
+.. _MIP-Equations-main-ref:
+
+MIP-Equations
+--------------
+
+
+
+
    
 .. _NEOS Server for Optimization:
     http://www.neos-server.org/neos/
