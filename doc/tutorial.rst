@@ -355,9 +355,11 @@ Now we can calculate the ratios of the other commodities based on the efficienci
 
 So with setting the ratios for full load and minimum partload we defined the partload performance curve of our process. Points between full load and minimum partload are approximated as a linear function between them. (**Note**: If ``Partload`` in ``MIP-Settings`` is set to ``False``, partload behaviour is not considered and the efficiencies defined by ``ratio`` are constant for all operating points. The values in ``ratio-partload`` are ignored).
 
-The following figures show the power inputs/outputs and eiffiencies of a 10 kW (elec!) chp unit with the parameters used in this example with and without considering partload behaviour.
+The following figure shows the power inputs/outputs and eiffiencies of a 10 kW (elec!) chp unit with the parameters used in this example with and without considering partload behaviour.
 
-
+.. image:: img/process_commodity_partload_example.*
+   :width: 95%
+   :align: center
  
  
 *Edit Example*:
