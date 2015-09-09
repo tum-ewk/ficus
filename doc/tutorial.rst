@@ -304,7 +304,7 @@ Process
 *Edit Example*:
 Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the parameters as shown in the table.
 
-.. csv-table:: Sheet **Demand-Rate-Factor**
+.. csv-table:: Sheet **Process**
    :header-rows: 1
    :stub-columns: 3
 
@@ -317,6 +317,30 @@ Delete all existing processes and add the new processes **chp**, **wind_1**, **w
 
 Process-Commodity
 ^^^^^^^^
+
+* ***Process***: Name of the Process. Make sure that you use exactly the same name, than in sheet ``Process``
+* ***Commodity***: Name of commodity that is used/produced by the process
+* ***Direction***: *In* id the commodity is used by the process, *Out* if the commodity is produced. (**Note**: All specific costs and capacities given in the ``Process`` sheet refer to the commoditis with input or output ratios of ``1``! See :ref:`Process`
+* **cap-new-max**: Maximum new process capacity
+* **partload-min**: Specific minimum partload of process (normalized to 1 = max). (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True``)
+
+
+.. csv-table:: Sheet **Process-Commodity**
+   :header-rows: 1
+   :stub-columns: 3
+   
+    Process	Commodity	Direction	ratio	ratio-partload
+    chp	gas	In	2.00	
+    chp	elec	Out	1.00	
+    chp	heat	Out	1.00	
+    wind_1	wind1	In	1.00	
+    wind_1	elec	Out	1.00	
+    wind_2	wind2	In	1.00	
+    wind_2	elec	Out	1.00	
+    boiler	gas	In	1.10	
+    boiler	heat	Out	1.00	
+
+
 
 Process Class
 ^^^^^^^^
