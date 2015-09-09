@@ -25,7 +25,7 @@ optimization directly from Excel.
 
 A cmd window should appear showing the actual status and a few minutes later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
 
-Using this way of running the model, the function :func:`run_from_excel` from the `ficus.py`_  script is within VBA. This requires, that `ficus.py`_ can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on `ficus.py`_  or run it with python. Then continue with ``y``.  
+Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on ``ficus.py``  or run it with python. Then continue with ``y``.  
 
 .. _run_python_ref:
 Run from Python
