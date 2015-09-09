@@ -404,13 +404,43 @@ This sets a maximum of **20000 kW** for the total capacity of wind turbines, a s
    :header-rows: 1
    :stub-columns: 2
    
-    Class,Commodity	Direction	fee	cap-max	energy-max
+    Class,Commodity	Direction,fee,cap-max,energy-max
     CHP,elec,Out,0.02,inf,inf
     WIND,elec,Out,-0.05,20000,inf
 
 
 Storage
 ^^^^^^^^
+
+.. csv-table:: Sheet **Process-Class**
+   :header-rows: 1
+   :stub-columns: 3
+   
+    Storage,Commodity,Num,cost-inv-p,cost-inv-e,cost-fix-p,cost-fix-e,cost-var
+    battery	elec,1,0,1000,0,0,0
+    heat storage,heat,1,0,10,0,0,0
+
+.. csv-table:: Sheet **Process-Class**
+   :header-rows: 1
+   :stub-columns: 3
+   
+    Storage,Commodity,Num,cap-installed-p,cap-new-min-p,cap-new-max-p,cap-installed-e,cap-new-min-e,cap-new-max-e,max-p-e-ratio
+    battery,elec,1,0,0,inf,0,0,100000,2
+    heat storage,heat,1,0,0,inf,0,0,20000,1
+
+
+.. csv-table:: Sheet **Process-Class**
+   :header-rows: 1
+   :stub-columns: 3
+   
+Storage	Commodity	Num	eff-in	eff-out	self-discharge	cycles-max	DOD	initial-soc	depreciation	wacc
+battery	elec	1,0.900	0.900	0.0001	10000	1	0	10	0.05
+heat storage	heat,0.950	0.950	0.0001	1000000	1	0	10	0.05
+
+
+
+
+
 
 Demand
 ^^^^^^^^
