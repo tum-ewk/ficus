@@ -524,7 +524,7 @@ Copy the intermittent supply timeseries **wind1** and **wind2** from `intermitte
 .. _runficus.py.py: https://github.com/yabata/ficus/blob/master/runficus.py
 .. _example_fromexcel.xlsm https://github.com/yabata/ficus/blob/master/example_fromexcel.xlsm
 .. _example.xlsx https://github.com/yabata/ficus/blob/master/example.xlsx
-.. _intermittent_supply_wind.xlsx https://github.com/yabata/ficus/blob/master/doc/intermittent_supply_wind.xlsx
+.. _intermittent_supply_wind.xlsx https://github.com/yabata/ficus/blob/master/doc/NewFactory/intermittent_supply_wind.xlsx
 
 
 
