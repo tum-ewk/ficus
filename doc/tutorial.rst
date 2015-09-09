@@ -330,12 +330,16 @@ Define input and output commodities and the conversion efficiencies between them
 * **partload-ratio**: input/output ratios for the commodities of the process at minimum partload (``partload-min``) given in sheet ``Process`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True`` and ``partload-min`` is between 0 and 1)
 
 
-Let's assume we defined a **chp** (combined heat and power) unit and set the minimum partload to 50% (``partload-min=0.5``) in the :ref:`Process-ref`_ sheet:
+Let's assume we defined a **chp** (combined heat and power) unit and set the minimum partload to 50% (``partload-min=0.5``) in the :ref:`Process-ref` sheet:
 
-:ref:`Process-ref`_
-`Process-ref`_
-:ref:`Process-Co-ref`_
-`Process-Co-ref`_
+EINS :ref:`Process-ref`
+
+ZWEI `Process-ref`_
+
+DREI :ref:`Process-Co-ref`
+
+VIER `Process-Co-ref`_
+
 
 
 .. csv-table:: Sheet **Process**
