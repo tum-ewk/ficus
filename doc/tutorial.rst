@@ -696,6 +696,9 @@ In the next step we want to see the influence of considering partload efficiency
     
 Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the model tries to run the chp unit at full load as much as possible to benefit from it's better electric efficiency at full load and reduce costs for gas import.
 
+.. image:: NewFactory/MIP_Partload/partload-eff/elec-timeseries.*
+   :width: 95%
+   :align: center
 
 In the last step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh *  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. (**Note:**Start-up costs only occure, if ``partload-min`` is greater than zero.
 
@@ -711,7 +714,7 @@ In the last step we add start-up costs for the chp unit, by setting the paramete
 
 Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the number of start-up's is reduced to minimize start-up costs.
 
-.. image:: NewFactory/MIP_Partload/start-up-compare/elec-timeseries.*
+.. image:: NewFactory/MIP_Partload/start-up/elec-timeseries.*
    :width: 95%
    :align: center
 
