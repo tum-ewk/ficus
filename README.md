@@ -4,15 +4,15 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 
 [![Documentation Status](https://readthedocs.org/projects/ficus/badge/?version=latest)](https://ficus.readthedocs.org/en/latest/)
 
-[Features](#features)
+[Features](#features)  
 
-[Screenshots](#screenshots)
+[Screenshots](#screenshots)  
 
-[Installation](#installation)
+[Installation](#installation)  
 
-[Get started](#get-started)
+[Get started](#get-started)  
 
-[Next Steps](#next-steps)
+[Next Steps](#next-steps)  
 
 [Further reading](#further-reading)
 
