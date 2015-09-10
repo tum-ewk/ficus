@@ -131,11 +131,11 @@ For the sake of an example, assume you want to build a new factory named *NewFac
 You can import electricty and gas through the given infrastructure and export electricity back to the grid.
 You consider following processes/storages for converting/storing energy:
 
-* A combined heat and power plant (``chp``) to convert gas to electricity and heat, unlimited in size
+* A combined heat and power plant (``chp``) to convert gas to electricity and heat, limited to 1,000,000 kW
 * Two different wind turbines (``wind_1`` and ``wind_2``), limited to 20,000 kW total
-* A gas boiler (``boiler``) to convert gas to heat, unlimited in size
+* A gas boiler (``boiler``) to convert gas to heat, limited to  1,000,000 kW
 * A heat storages (``heat_storage``) to store heat, limited to 30,000 kWh
-* A battery storage (``battery``) to store electricity, unlimited in size
+* A battery storage (``battery``) to store electricity, imited to 100,000 kWh
 
 First make a copy of ``example.xlsx`` or ``example_fromexcel.xlsm`` depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the new file step by step following the instructions.
 
@@ -319,10 +319,10 @@ Delete all existing processes and add the new processes **chp**, **wind_1**, **w
    :stub-columns: 3
 
     Process,Num,class,cost-inv,cost-fix,cost-var,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy,initial-power,depreciation,wacc
-    chp,1,CHP,700,0,0.01,0,0,1e10,0,0.0,0,10,0.05
-    wind_1,1,WIND,1000,0,0.005,0,0,1e10,0,0.0,0,10,0.05
-    wind_2,1,WIND,1000,0,0.005,0,0,1e10,0,0.0,0,10,0.05
-    boiler,1,,100,0,0.001,0,0,1e10,0,0.0,0,10,0.05
+    chp,1,CHP,700,0,0.01,0,0,1e6,0,0.0,0,10,0.05
+    wind_1,1,WIND,1000,0,0.005,0,0,1e6,0,0.0,0,10,0.05
+    wind_2,1,WIND,1000,0,0.005,0,0,1e6,0,0.0,0,10,0.05
+    boiler,1,,100,0,0.001,0,0,1e6,0,0.0,0,10,0.05
 
 .. _Process-Co-ref:
 
@@ -373,22 +373,22 @@ The following figure shows the power inputs/outputs and eiffiencies of a 10 kW (
  
  
 *Edit Example*:
-Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the ratios as shown in the table. Because partload behaviour is not considered in this example, we can leave the ``ratio-partload`` column empty or set to any abritary value.
+Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the ratios as shown in the table. Because partload behaviour is not considered in this example, we just use the same values for ``ratio-partload`` (we could leave the ``ratio-partload`` column empty or set to any abritary value as long as ``Partload`` in ``MIP-Equations`` is deactivated)
 
 .. csv-table:: Sheet **Process-Commodity**
    :header-rows: 1
    :stub-columns: 3
    
     Process,Commodity,Direction,ratio,ratio-partload
-    chp,gas,In,2.00,
-    chp,elec,Out,1.00,	
-    chp,heat,Out,1.00,	
-    wind_1,wind1,In,1.00,	
-    wind_1,elec,Out,1.00,	
-    wind_2,wind2,In,1.00,	
-    wind_2,elec,Out,1.00,	
-    boiler,gas,In,1.10,
-    boiler,heat,Out,1.00,	
+    chp,gas,In,2.00,2.00
+    chp,elec,Out,1.00,1.00
+    chp,heat,Out,1.00,1.00
+    wind_1,wind1,In,1.00,1.00	
+    wind_1,elec,Out,1.00,1.00
+    wind_2,wind2,In,1.00,1.00
+    wind_2,elec,Out,1.00,1.00
+    boiler,gas,In,1.10,1.10
+    boiler,heat,Out,1.00,1.00	
 
 
 
@@ -466,8 +466,8 @@ Change the parameters of the storage **battery** and **heat storage** as shown i
    :stub-columns: 3
    
     Storage,Commodity,Num,cap-installed-p,cap-new-min-p,cap-new-max-p,cap-installed-e,cap-new-min-e,cap-new-max-e,max-p-e-ratio
-    battery,elec,1,0,0,1e10,0,0,100000,2
-    heat storage,heat,1,0,0,1e10,0,0,30000,1
+    battery,elec,1,0,0,1e6,0,0,100000,2
+    heat storage,heat,1,0,0,1e6,0,0,30000,1
 
 
 .. csv-table:: Sheet **Storage** (3/3)
@@ -607,7 +607,7 @@ To avoid this, activate ``Storage In-Out`` in the sheet ``MIP-Equations``:
    :stub-columns: 1
 
     Equation,Active
-    Storage In-Out, no
+    Storage In-Out, **yes**
     Partload, no
     Min-Cap, no
     
@@ -619,6 +619,40 @@ Run the model again. This will take a little more time than befor, because the e
 
 Partload
 ^^^^^^^^
+
+If activated, minimum partload settings, partload efficiencies as well as start-up costs of processes are considered.
+
+Open :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`, and run the model without changes. Take a look at the ``elec`` timeseries result figure.
+
+.. image:: NewFactory/MIP-deactivated/elec-timeseries.*
+   :width: 95%
+   :align: center
+   
+Now we want to implement a minimum partload for the chp unit. Therefore we set the parameter ``partload-min`` for the chp unit in the ``Process`` sheet to **0.5**. That means, if the chp unit is running, it has to run at minimum 50% of its rated (installed) power.
+
+
+.. csv-table:: Sheet **Process**
+   :header-rows: 1
+   :stub-columns: 3
+
+    Process,Num,...,partload-min,...
+    chp,1,...,**0.5**,...
+    wind_1,1,...,0,...
+    wind_2,1,...,0,...
+    boiler,1,...,0,...
+
+To set this constrained active, we have to activate ``Partload`` in the sheet ``MIP-Equations``.
+
+.. csv-table:: Sheet **MIP-Equations**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Equation,Active
+    Storage In-Out, no
+    Partload, **yes**
+    Min-Cap, no
+    
+
 
 Min-Cap
 ^^^^^^^^
