@@ -47,7 +47,7 @@ I recommend using the Python distribution Anaconda. If you don't want to use it 
   1. **[Anaconda (Python 2.7)](http://continuum.io/downloads)**. Choose the 64-bit installer if possible.
        1. During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
 
-Install a [solver](#solver-(optional)) or continue at [Get Started](#get-started).
+Install a [solver](#solver) or continue at [Get Started](#get-started).
 
 ### Linux
 
@@ -58,7 +58,7 @@ Use your Linux distribution's package manager to get all the packages listed in 
 
 Continue at [Get Started](#get-started).
 
-### Solver (optional)
+### Solver
 
 Pyomo allows using the [NEOS Server for Optimisation](http://www.neos-server.org/neos/) for solving, so it is not necessary to install a solver (with me only `mosek` and `cbc` from neos are working).
 
