@@ -26,7 +26,7 @@ optimization directly from Excel.
 
 A cmd window should appear showing the actual status and a few minutes later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
 
-Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on ``ficus.py``  or run it with python. Then continue with ``y``.  
+Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is called within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on ``ficus.py``  or run it with python. Then continue with ``y``.  
 
 .. _run-python-ref:
 
@@ -34,8 +34,6 @@ Run from Python
 --------------
 
 Running the model from python (e.g. Ipython or Spyder) gives you more options for running the optimisation and plotting the results. 
-
-
 
 Run from Ipython
 ^^^^^^^^
@@ -743,7 +741,7 @@ Now we want to know, if a chp unit with exactly 10,000 kW is cost-efficient for 
     wind_2,1,...,0,0,1e6,...
     boiler,1,...,0,0,1e6,...
 
-To activate this constrained , we have to activate ``Min-Cap`` in the sheet ``MIP-Equations``.
+To activate this constraint , we have to activate ``Min-Cap`` in the sheet ``MIP-Equations``.
 
 .. csv-table:: Sheet **MIP-Equations**
    :header-rows: 1
