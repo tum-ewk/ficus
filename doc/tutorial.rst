@@ -150,12 +150,12 @@ Set timebase of time dependent Data and timesteps to be optimized
 *Edit Example:*
     Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end timestep at 672 (optimise the whole 7 days)
 
-.. csv-table:: Sheet **Time-Settings**;
-   :header-rows: 1
-   :stub-columns: 1
-
-    Info,timebase,start,end
-    Time,900,1,672
+    .. csv-table:: Sheet **Time-Settings**;
+       :header-rows: 1
+       :stub-columns: 1
+    
+        Info,timebase,start,end
+        Time,900,1,672
 
 
 .. _MIP-Equations-ref:
@@ -172,17 +172,17 @@ Activating one/more of the settings will activate equations, that allow addition
 
 See :ref:`MIP-Equations-main-ref` for a more detailed description on the effects of activating one of the equations with examples.
 
-*Edit Example*:
-Keep all settings deactivated.
+*Edit Example:*
+    Keep all settings deactivated.
 
-.. csv-table:: Sheet **MIP-Equations**
-   :header-rows: 1
-   :stub-columns: 1
-
-    Equation,Active
-    Storage In-Out, no
-    Partload, no
-    Min-Cap, no
+    .. csv-table:: Sheet **MIP-Equations**
+       :header-rows: 1
+       :stub-columns: 1
+    
+        Equation,Active
+        Storage In-Out, no
+        Partload, no
+        Min-Cap, no
 
 Ext-Commodities
 ^^^^^^^^
