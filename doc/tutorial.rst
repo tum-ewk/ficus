@@ -539,27 +539,27 @@ Now that ``NewFactory.xlsx`` or ``NewFactory.xlsm`` is ready to go, run the mode
 
 Th obtained results should look like this:
 
-.. image:: NewFactory/elec-timeseries.*
+.. image:: NewFactory/MIP-deactivated/elec-timeseries.*
    :width: 95%
    :align: center
    
-.. image:: NewFactory/elec-energy.*
+.. image:: NewFactory/MIP-deactivated/elec-energy.*
    :width: 95%
    :align: center
 
-.. image:: NewFactory/heat-timeseries.*
+.. image:: NewFactory/MIP-deactivated/heat-timeseries.*
    :width: 95%
    :align: center
 
-.. image:: NewFactory/heat-energy.*
+.. image:: NewFactory/MIP-deactivated/heat-energy.*
    :width: 95%
    :align: center
 
-.. image:: NewFactory/capacities.*
+.. image:: NewFactory/MIP-deactivated/capacities.*
    :width: 95%
    :align: center
 
-.. image:: NewFactory/costs.*
+.. image:: NewFactory/MIP-deactivated/costs.*
    :width: 95%
    :align: center
    
