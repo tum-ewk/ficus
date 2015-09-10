@@ -67,8 +67,10 @@ Pyomo supports using solvers from the [NEOS Server for Optimisation](http://www.
        2. Extract the contents to a folder, e.g. `C:\GLPK`
        3. Add the subfolder `w64` to your system path, e.g. `C:\GLPK\w64` ([how](http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx)).
   2. **CPLEX** (commercial)
+  
        Download and install IBM's [CPLEX](http://www-01.ibm.com/software/commerce/optimization/cplex-optimizer/) solver. [Free for academics](https://www.ibm.com/developerworks/community/blogs/jfp/entry/cplex_studio_in_ibm_academic_initiative?lang=en)
   3. **Gurobi** (commercial)
+
        Download and install [Gurobi](http://www.gurobi.com/) solver. [Free for academics](http://www.gurobi.com/academia/for-universities)
 
 ### Git (optional)
@@ -81,11 +83,11 @@ Then, in a directory of your choice, clone this repository by executing the foll
 
 ## Get started
 
-Once installation is complete, download or clone this repository to a diurcetory of your choice.
+Once installation is complete, download or clone this repository to a dircetory of your choice.
 
 ### Run from Excel
 1. Run `ficus.py` (by double clicking or within ipython). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
-2. Open the `example_fromexcel.xlsm` and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
+2. Open the `example_fromexcel.xlsm`, choose a solver and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
 
 About a minute later the result figures should show up and the subfolder `result` should contain plots and a result file.
 
