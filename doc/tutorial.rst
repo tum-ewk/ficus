@@ -380,9 +380,9 @@ The following figure shows the power inputs/outputs and eiffiencies of a 10 kW (
        :stub-columns: 3
        
         Process,Commodity,Direction,ratio,ratio-partload
-        chp,gas,In,2.00,2.00
+        chp,gas,In,2.50,2.50
         chp,elec,Out,1.00,1.00
-        chp,heat,Out,1.00,1.00
+        chp,heat,Out,1.25,1.25
         wind_1,wind1,In,1.00,1.00	
         wind_1,elec,Out,1.00,1.00
         wind_2,wind2,In,1.00,1.00
@@ -662,20 +662,64 @@ Now run the model and take a look at the ``elec`` timeseries result figure again
    :width: 95%
    :align: center
    
-In the next step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. Start-up costs only occure, if ``partload-min`` is greater than zero.
-To reduce computation time we set ``partload-min`` for the chp unit in the ``Process`` sheet to **0.1**
+
+To reduce computation time we set ``partload-min`` for the chp unit in the ``Process`` sheet to **0.2** and run it for comparison 
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
    :stub-columns: 3
 
     Process,Num,...,partload-min,start-up-energy...
-    chp,1,...,**0.1**,**0.1**,...
+    chp,1,...,**0.2**,0,...
+    wind_1,1,...,0,0,...
+    wind_2,1,...,0,0,...
+    boiler,1,...,0,0,...
+    
+.. image:: NewFactory/MIP-Partload/start-up-compare/elec-timeseries.*
+   :width: 95%
+   :align: center
+
+In the next step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. Start-up costs only occure, if ``partload-min`` is greater than zero.
+
+.. csv-table:: Sheet **Process**
+   :header-rows: 1
+   :stub-columns: 3
+
+    Process,Num,...,partload-min,start-up-energy...
+    chp,1,...,**0.2**,**0.1**,...
     wind_1,1,...,0,0,...
     wind_2,1,...,0,0,...
     boiler,1,...,0,0,...
 
 Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the number of start-up's is reduced to minimize start-up costs.
+
+.. image:: NewFactory/MIP-Partload/start-up-compare/elec-timeseries.*
+   :width: 95%
+   :align: center
+
+In the last step we want to see the influence of considering partload efficiency. Therefore we change the ``ratio-partload`` values in the ``Process-Commodity`` sheet as shown below (see :ref:`Process-Co-ref` for explanation), without changing the values in ``Process`` sheet. 
+
+.. csv-table:: Sheet **Process**
+   :header-rows: 1
+   :stub-columns: 3
+
+    Process,Num,...,partload-min,start-up-energy...
+    chp,1,...,0.2,0.1,...
+    wind_1,1,...,0,0,...
+    wind_2,1,...,0,0,...
+    boiler,1,...,0,0,...
+
+
+.. csv-table:: Sheet **Process-Commodity**
+   :header-rows: 1
+   :stub-columns: 3
+   
+    Process,Commodity,Direction,ratio,ratio-partload
+    chp,gas,In,2.50,**5.00**
+    chp,elec,Out,1.00,1.00
+    chp,heat,Out,1.25,1.25
+    
+
 
 Min-Cap
 ^^^^^^^^
