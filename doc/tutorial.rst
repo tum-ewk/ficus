@@ -679,7 +679,7 @@ To reduce computation time we set ``partload-min`` for the chp unit in the ``Pro
    :width: 95%
    :align: center
 
-In the next step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. Start-up costs only occure, if ``partload-min`` is greater than zero.
+In the next step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. (**Note:**Start-up costs only occure, if ``partload-min`` is greater than zero.
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
@@ -697,7 +697,7 @@ Run the model and take a look at the ``elec`` timeseries result figure again. Yo
    :width: 95%
    :align: center
 
-In the last step we want to see the influence of considering partload efficiency. Therefore we change the ``ratio-partload`` values in the ``Process-Commodity`` sheet as shown below (see :ref:`Process-Co-ref` for explanation), without changing the values in ``Process`` sheet. 
+In the last step we want to see the influence of considering partload efficiency. Therefore we change the ``ratio-partload`` values in the ``Process-Commodity`` sheet as shown below (see :ref:`Process-Co-ref` for explanation), without changing the values in ``Process`` sheet. With this changes the chp unit has an electric efficiency of **40%** at full load and **20%** at minimum load (20% of max power). (**Note:** partload efficiency can onlx be considere if ``partload-min`` is greater than zero.)
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
@@ -719,14 +719,21 @@ In the last step we want to see the influence of considering partload efficiency
     chp,elec,Out,1.00,1.00
     chp,heat,Out,1.25,1.25
     
-
+Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the model tries to run the chp unit at full load as much as possible to benefit from it's better efficiency at full load and reduce costs for gas import.
 
 Min-Cap
 ^^^^^^^^
 
-* **Storage In-Out**: Prevents storages from charging and discharging one commodity at the same time, if activated. This can happen, when dumping energy of one commodity will lead to lower total costs. The model then uses the efficiency of the storage to dump the energy with no dumping costs.
-* **Partload**: Consider minimum partload settings, partload efficiencies as well as start-up costs of processes.
-* **Min-Cap**: Consider minimal installed capacities of processes and storages. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
+Consider minimal installed capacities of processes and storages if activated. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
+
+Open and run :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`, and take a look at the ``capacities`` result figure:
+
+.. image:: NewFactory/MIP_Min-Cap/deactivated/capacities.*
+   :width: 95%
+   :align: center
+   
+Now we want to know, if a chp unit with exactly 10,000 kW is cost-efficient for our factory. Therefore we change the ``
+   
    
 .. _NEOS Server for Optimization:
     http://www.neos-server.org/neos/
