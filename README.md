@@ -5,10 +5,15 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 [![Documentation Status](https://readthedocs.org/projects/ficus/badge/?version=latest)](https://ficus.readthedocs.org/en/latest/)
 
 [Features](#features)
+
 [Screenshots](#screenshots)
+
 [Installation](#installation)
+
 [Get started](#get-started)
+
 [Next Steps](#next-steps)
+
 [Further reading](#further-reading)
 
 ## Features
@@ -46,12 +51,8 @@ I recommend using the Python distribution Anaconda. If you don't want to use it 
 
   1. **[Anaconda (Python 2.7)](http://continuum.io/downloads)**. Choose the 64-bit installer if possible.
        1. During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
-  3. **GLPK** (optional)
-       
-       1. Download the latest version (e.g. GLPK-4.55) of [WinGLPK](http://sourceforge.net/projects/winglpk/files/winglpk/)
-       2. Extract the contents to a folder, e.g. `C:\GLPK`
-       3. Add the subfolder `w64` to your system path, e.g. `C:\GLPK\w64` ([how](http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx)).
-Continue at [Get Started](#get-started).
+
+Install a [solver](#installation) or continue at [Get Started](#get-started).
 
 ### Linux
 
@@ -61,6 +62,19 @@ Use your Linux distribution's package manager to get all the packages listed in 
   - **Coopr & Excel I/O** `sudo pip install pyomo xlwt xlrd openpyxl==1.8.6`
 
 Continue at [Get Started](#get-started).
+
+### Solver (optional)
+
+Pyomo supports using solvers from the [NEOS Server for Optimisation](http://www.neos-server.org/neos/), so it is not necessary to install a solver. I still recommend to install and use one of the following solvers.
+
+  1. **GLPK** (open source)
+       1. Download the latest version (e.g. GLPK-4.55) of [WinGLPK](http://sourceforge.net/projects/winglpk/files/winglpk/)
+       2. Extract the contents to a folder, e.g. `C:\GLPK`
+       3. Add the subfolder `w64` to your system path, e.g. `C:\GLPK\w64` ([how](http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx)).
+  2. **CPLEX** (commercial)
+       Download and install IBM's [CPLEX](http://www-01.ibm.com/software/commerce/optimization/cplex-optimizer/) solver. [Free for academics](https://www.ibm.com/developerworks/community/blogs/jfp/entry/cplex_studio_in_ibm_academic_initiative?lang=en)
+  3. **Gurobi** (commercial)
+       Download and install [Gurobi](http://www.gurobi.com/) solver. [Free for academics](http://www.gurobi.com/academia/for-universities)
 
 ### Git (optional)
 
