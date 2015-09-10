@@ -594,7 +594,7 @@ Open :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewF
 
 Save the new file and run the model. Take a look at the ``heat`` timeseries result figure:
 
-.. image:: NewFactory/MIP_Storage_In-Out/heat-timeseries-deactivated.*
+.. image:: NewFactory/MIP_Storage_In-Out/deactivated/heat-timeseries.*
    :width: 95%
    :align: center
 
@@ -613,7 +613,7 @@ To avoid this, activate ``Storage In-Out`` in the sheet ``MIP-Equations``:
     
 Run the model again. This will take a little more time than befor, because the equation uses an integer variable and the model becomes a mixed integer linear optimisation problem. Looking at the ``heat`` timeseries result figure again, you can see that charging/dischraging of the storage at the same time is avoided now.
 
-.. image:: NewFactory/MIP_Storage_In-Out/heat-timeseries-deactivated.*
+.. image:: NewFactory/MIP_Storage_In-Out/activated/heat-timeseries.*
    :width: 95%
    :align: center
 
@@ -622,9 +622,23 @@ Partload
 
 If activated, minimum partload settings, partload efficiencies as well as start-up costs of processes are considered.
 
-Open :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`, and run the model without changes. Take a look at the ``elec`` timeseries result figure.
+Open :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`.
 
-.. image:: NewFactory/MIP-deactivated/elec-timeseries.*
+To reduce computation time, we assume that we already have a chp unit with a capacity of 7,000 kW in our factory and do not allow to build more capacity for this process. Therefore we change the parameters ``cap-installed`` and ``cap-new-max`` in the ``Process`` sheet as shown in the table below.
+
+.. csv-table:: Sheet **Process**
+   :header-rows: 1
+   :stub-columns: 3
+
+    Process,Num,...,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy...
+    chp,1,...,**7000**,0,0,0,0...
+    wind_1,1,...,0,0,1e6,0,0...
+    wind_2,1,...,0,0,1e6,0,0...
+    boiler,1,...,0,0,1e6,0,0...
+
+Save the input file, run the model and take a look at the ``elec`` timeseries result figure.
+
+.. image:: NewFactory/MIP-Partload/reference/elec-timeseries.*
    :width: 95%
    :align: center
    
@@ -635,13 +649,13 @@ Now we want to implement a minimum partload for the chp unit. Therefore we set t
    :header-rows: 1
    :stub-columns: 3
 
-    Process,Num,...,partload-min,...
-    chp,1,...,**0.5**,...
-    wind_1,1,...,0,...
-    wind_2,1,...,0,...
-    boiler,1,...,0,...
+    Process,Num,...,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy...
+    chp,1,...,7000,0,0,**0.5**,0...
+    wind_1,1,...,0,0,1e6,0,0...
+    wind_2,1,...,0,0,1e6,0,0...
+    boiler,1,...,0,0,1e6,0,0...
 
-To set this constrained active, we have to activate ``Partload`` in the sheet ``MIP-Equations``.
+To activate this constrained , we have to activate ``Partload`` in the sheet ``MIP-Equations``.
 
 .. csv-table:: Sheet **MIP-Equations**
    :header-rows: 1
@@ -652,7 +666,7 @@ To set this constrained active, we have to activate ``Partload`` in the sheet ``
     Partload, **yes**
     Min-Cap, no
     
-Now run the model and take a look at the ``elec`` timeseries result figure again. You can see that the electric power output of th chp now is allways greater than 50% of the installed capacity (6616 kW), when the chp unit is running.
+Now run the model and take a look at the ``elec`` timeseries result figure again. You can see that the electric power output of th chp now is allways greater than 50% of the installed capacity (7000 kW), when the chp unit is running.
 
 .. note::
 
@@ -662,52 +676,17 @@ Now run the model and take a look at the ``elec`` timeseries result figure again
    :width: 95%
    :align: center
    
-
-To reduce computation time we set ``partload-min`` for the chp unit in the ``Process`` sheet to **0.2** and run it for comparison 
-
-.. csv-table:: Sheet **Process**
-   :header-rows: 1
-   :stub-columns: 3
-
-    Process,Num,...,partload-min,start-up-energy...
-    chp,1,...,**0.2**,0,...
-    wind_1,1,...,0,0,...
-    wind_2,1,...,0,0,...
-    boiler,1,...,0,0,...
-    
-.. image:: NewFactory/MIP-Partload/start-up-compare/elec-timeseries.*
-   :width: 95%
-   :align: center
-
-In the next step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. (**Note:**Start-up costs only occure, if ``partload-min`` is greater than zero.
+In the next step we want to see the influence of considering partload efficiency. Therefore we change the ``ratio-partload`` values in the ``Process-Commodity`` sheet as shown below , without changing the values in ``Process`` sheet. With this changes the chp unit has an electric (thermal) efficiency of **40% (50%)** at full load and **30% (55%)** at minimum partload (50% of max power). See :ref:`Process-Co-ref` for detailed information. (**Note:** partload efficiency can only be considere if ``partload-min`` is greater than zero.)
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
    :stub-columns: 3
 
-    Process,Num,...,partload-min,start-up-energy...
-    chp,1,...,**0.2**,**0.1**,...
-    wind_1,1,...,0,0,...
-    wind_2,1,...,0,0,...
-    boiler,1,...,0,0,...
-
-Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the number of start-up's is reduced to minimize start-up costs.
-
-.. image:: NewFactory/MIP-Partload/start-up-compare/elec-timeseries.*
-   :width: 95%
-   :align: center
-
-In the last step we want to see the influence of considering partload efficiency. Therefore we change the ``ratio-partload`` values in the ``Process-Commodity`` sheet as shown below (see :ref:`Process-Co-ref` for explanation), without changing the values in ``Process`` sheet. With this changes the chp unit has an electric efficiency of **40%** at full load and **20%** at minimum load (20% of max power). (**Note:** partload efficiency can onlx be considere if ``partload-min`` is greater than zero.)
-
-.. csv-table:: Sheet **Process**
-   :header-rows: 1
-   :stub-columns: 3
-
-    Process,Num,...,partload-min,start-up-energy...
-    chp,1,...,0.2,0.1,...
-    wind_1,1,...,0,0,...
-    wind_2,1,...,0,0,...
-    boiler,1,...,0,0,...
+    Process,Num,...,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy...
+    chp,1,...,7000,0,0,0.5,0...
+    wind_1,1,...,0,0,1e6,0,0...
+    wind_2,1,...,0,0,1e6,0,0...
+    boiler,1,...,0,0,1e6,0,0...
 
 
 .. csv-table:: Sheet **Process-Commodity**
@@ -715,11 +694,32 @@ In the last step we want to see the influence of considering partload efficiency
    :stub-columns: 3
    
     Process,Commodity,Direction,ratio,ratio-partload
-    chp,gas,In,2.50,**5.00**
+    chp,gas,In,2.50,**4.00**
     chp,elec,Out,1.00,1.00
-    chp,heat,Out,1.25,1.25
+    chp,heat,Out,1.25,**2.2**
     
-Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the model tries to run the chp unit at full load as much as possible to benefit from it's better efficiency at full load and reduce costs for gas import.
+Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the model tries to run the chp unit at full load as much as possible to benefit from it's better electric efficiency at full load and reduce costs for gas import.
+
+
+In the last step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh *  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. (**Note:**Start-up costs only occure, if ``partload-min`` is greater than zero.
+
+.. csv-table:: Sheet **Process**
+   :header-rows: 1
+   :stub-columns: 3
+
+    Process,Num,...,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy...
+    chp,1,...,7000,0,0,0.5,**0.1**...
+    wind_1,1,...,0,0,1e6,0,0...
+    wind_2,1,...,0,0,1e6,0,0...
+    boiler,1,...,0,0,1e6,0,0...
+
+Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the number of start-up's is reduced to minimize start-up costs.
+
+.. image:: NewFactory/MIP-Partload/start-up-compare/elec-timeseries.*
+   :width: 95%
+   :align: center
+
+
 
 Min-Cap
 ^^^^^^^^
@@ -732,9 +732,35 @@ Open and run :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :downlo
    :width: 95%
    :align: center
    
-Now we want to know, if a chp unit with exactly 10,000 kW is cost-efficient for our factory. Therefore we change the ``
-   
-   
+Now we want to know, if a chp unit with exactly 10,000 kW is cost-efficient for our factory. Therefore we change the ``cap-new-min`` and the ``cap-new-max`` parameter in the ``Process`` sheet to **10,000 kW**.
+
+.. csv-table:: Sheet **Process**
+   :header-rows: 1
+   :stub-columns: 3
+
+    Process,Num,...,cap-installed,cap-new-min,cap-new-max,...
+    chp,1,...,0,**10000**,**10000**,...
+    wind_1,1,...,0,0,1e6,...
+    wind_2,1,...,0,0,1e6,...
+    boiler,1,...,0,0,1e6,...
+
+To activate this constrained , we have to activate ``Min-Cap`` in the sheet ``MIP-Equations``.
+
+.. csv-table:: Sheet **MIP-Equations**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Equation,Active
+    Storage In-Out, no
+    Partload, **yes**
+    Min-Cap, no
+
+Running the file with the above chnages show the following ``capacities`` result figure, You can see, that a chp unit with exactly 10,000 kW is built.
+ 
+ .. image:: NewFactory/MIP_Min-Cap/activated/capacities.*
+   :width: 95%
+   :align: center
+  
 .. _NEOS Server for Optimization:
     http://www.neos-server.org/neos/
 .. _gurobi: https://en.wikipedia.org/wiki/Gurobi
