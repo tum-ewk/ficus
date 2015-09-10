@@ -47,7 +47,7 @@ I recommend using the Python distribution Anaconda. If you don't want to use it 
   1. **[Anaconda (Python 2.7)](http://continuum.io/downloads)**. Choose the 64-bit installer if possible.
        1. During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
 
-Install a [solver](#installation) or continue at [Get Started](#get-started).
+Install a [solver](#solver) or continue at [Get Started](#get-started).
 
 ### Linux
 
@@ -60,7 +60,9 @@ Continue at [Get Started](#get-started).
 
 ### Solver (optional)
 
-Pyomo supports using solvers from the [NEOS Server for Optimisation](http://www.neos-server.org/neos/), so it is not necessary to install a solver. I still recommend to install and use one of the following solvers.
+Pyomo allows using the [NEOS Server for Optimisation](http://www.neos-server.org/neos/) for solving, so it is not necessary to install a solver (with me only `mosek` and `cbc` from neos are working).
+
+I still recommend to install and use one of the following solvers.
 
   1. **GLPK** (open source)
        1. Download the latest version (e.g. GLPK-4.55) of [WinGLPK](http://sourceforge.net/projects/winglpk/files/winglpk/)
