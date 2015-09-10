@@ -147,8 +147,8 @@ Set timebase of time dependent Data and timesteps to be optimized
 * **start**: First timestep to use for the optimisation
 * **end**: Last timestep to use for the optimisation
 
-*Edit Example*:  
-Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end timestep at 672 (optimise the whole 7 days)
+*Edit Example:*
+    Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end timestep at 672 (optimise the whole 7 days)
 
 .. csv-table:: Sheet **Time-Settings**;
    :header-rows: 1
