@@ -539,27 +539,27 @@ Now that ``NewFactory.xlsx`` or ``NewFactory.xlsm`` is ready to go, run the mode
 
 Th obtained results should look like this:
 
-.. image:: NewFactory/MIP-deactivated/elec-timeseries.*
+.. image:: NewFactory/img/elec-timeseries.*
    :width: 95%
    :align: center
    
-.. image:: NewFactory/MIP-deactivated/elec-energy.*
+.. image:: NewFactory/img/elec-energy.*
    :width: 95%
    :align: center
 
-.. image:: NewFactory/MIP-deactivated/heat-timeseries.*
+.. image:: NewFactory/img/heat-timeseries.*
    :width: 95%
    :align: center
 
-.. image:: NewFactory/MIP-deactivated/heat-energy.*
+.. image:: NewFactory/img/heat-energy.*
    :width: 95%
    :align: center
 
-.. image:: NewFactory/MIP-deactivated/capacities.*
+.. image:: NewFactory/img/capacities.*
    :width: 95%
    :align: center
 
-.. image:: NewFactory/MIP-deactivated/costs.*
+.. image:: NewFactory/img/costs.*
    :width: 95%
    :align: center
    
@@ -638,7 +638,7 @@ To reduce computation time, we assume that we already have a chp unit with a cap
 
 Save the input file, run the model and take a look at the ``elec`` timeseries result figure.
 
-.. image:: NewFactory/MIP-Partload/reference/elec-timeseries.*
+.. image:: NewFactory/MIP_Partload/reference/elec-timeseries.*
    :width: 95%
    :align: center
    
@@ -668,11 +668,7 @@ To activate this constrained , we have to activate ``Partload`` in the sheet ``M
     
 Now run the model and take a look at the ``elec`` timeseries result figure again. You can see that the electric power output of th chp now is allways greater than 50% of the installed capacity (7000 kW), when the chp unit is running.
 
-.. note::
-
-    If you are using neos, please use **mosek** solver (will take about 10 minutes to solve). The **cbc** solver throws an error for this example.
-
-.. image:: NewFactory/MIP-Partload/min-partload/elec-timeseries.*
+.. image:: NewFactory/MIP_Partload/min-partload/elec-timeseries.*
    :width: 95%
    :align: center
    
@@ -715,7 +711,7 @@ In the last step we add start-up costs for the chp unit, by setting the paramete
 
 Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the number of start-up's is reduced to minimize start-up costs.
 
-.. image:: NewFactory/MIP-Partload/start-up-compare/elec-timeseries.*
+.. image:: NewFactory/MIP_Partload/start-up-compare/elec-timeseries.*
    :width: 95%
    :align: center
 
@@ -728,7 +724,7 @@ Consider minimal installed capacities of processes and storages if activated. Th
 
 Open and run :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`, and take a look at the ``capacities`` result figure:
 
-.. image:: NewFactory/MIP_Min-Cap/deactivated/capacities.*
+.. image:: NewFactory/MIP_Cap-Min/deactivated/capacities.*
    :width: 95%
    :align: center
    
@@ -757,7 +753,7 @@ To activate this constrained , we have to activate ``Min-Cap`` in the sheet ``MI
 
 Running the file with the above chnages show the following ``capacities`` result figure, You can see, that a chp unit with exactly 10,000 kW is built.
  
- .. image:: NewFactory/MIP_Min-Cap/activated/capacities.*
+ .. image:: NewFactory/MIP_Cap-Min/activated/capacities.*
    :width: 95%
    :align: center
   
