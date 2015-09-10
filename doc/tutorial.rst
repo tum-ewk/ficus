@@ -197,17 +197,17 @@ For every commodity that can be imported/exported:
 * **export-max**: maximum power of commodity that can be exported per timestep
 * **operating-hours-min**: Minimum value for "operating hours" of import. Operating hours are calculated by dividing the total energy imported during one year by the highest imported power during a specific time period (``time-interval-demand-rate``) in the year. The highest possible value is the number of hours of one year (8760), which would lead to a constant import over the whole year (smooth load). This parameter can be used to model special demand charge tariffs, that require a minimum value for the operatimg hours for energy import. Set the value to zero to ignore this constraint.
 
-*Edit Example*:
-The commodities ``gas`` and ``elec`` that can be imported/exported are already defined. 
-Change the Value for the demand rate of the commodity ``elec`` to 100. Keep the other inputs as they are.
-
-.. csv-table:: Sheet **Ext-Commodities**
-   :header-rows: 1
-   :stub-columns: 1
-
-    Commodity, demand-rate,time-interval-demand-rate,p-max-initial,import-max,export-max,operating-hours-min
-    elec, **10**, 900, 0, inf, inf, 0
-    heat, 0, 900, 0, inf, 0,0
+*Edit Example:*
+    The commodities ``gas`` and ``elec`` that can be imported/exported are already defined. 
+    Change the Value for the demand rate of the commodity ``elec`` to 100. Keep the other inputs as they are.
+    
+    .. csv-table:: Sheet **Ext-Commodities**
+       :header-rows: 1
+       :stub-columns: 1
+    
+        Commodity, demand-rate,time-interval-demand-rate,p-max-initial,import-max,export-max,operating-hours-min
+        elec, **10**, 900, 0, inf, inf, 0
+        heat, 0, 900, 0, inf, 0,0
 
 Ext-Import
 ^^^^^^^^
@@ -215,21 +215,21 @@ Timeseries: Costs for every commodity that can be imported for every timestep (i
 
 **Note**: Postive values mean, that you have to **PAY** for imported energy 
 
-*Edit Example*:
-Set the costs for electricty import to 0.15 Euro/kWh and for gas import to 0.05 Euro/kWh for very timestep
-
-.. csv-table:: Sheet **Ext-Import**
-   :header-rows: 1
-   :stub-columns: 1
-
-    Time,elec,gas
-    1, **0.15**, **0.05**
-    2, **0.15**, **0.05**
-    3, **0.15**, **0.05**
-    4, **0.15**, **0.05**
-    5, **0.15**, **0.05**
-    6, **0.15**, **0.05**
-    7, ...,...
+*Edit Example:*
+    Set the costs for electricty import to 0.15 Euro/kWh and for gas import to 0.05 Euro/kWh for very timestep
+    
+    .. csv-table:: Sheet **Ext-Import**
+       :header-rows: 1
+       :stub-columns: 1
+    
+        Time,elec,gas
+        1, **0.15**, **0.05**
+        2, **0.15**, **0.05**
+        3, **0.15**, **0.05**
+        4, **0.15**, **0.05**
+        5, **0.15**, **0.05**
+        6, **0.15**, **0.05**
+        7, ...,...
 
 Ext-Export
 ^^^^^^^^
@@ -237,21 +237,21 @@ Timeseries: Revenues for every commodity that can be exported for every timestep
 
 **Note**: Postive values mean, that you **RECEIVE MONEY** for exported energy.
 
-*Edit Example*:
-Set the revenues for electricty export to 0.01 Euro/kWh. Gas can not be exported because we limited the maximal power export to zero. So no timeseries is needed.
-
-.. csv-table:: Sheet **Ext-Export**
-   :header-rows: 1
-   :stub-columns: 1
-
-    Time, elec
-    1, **0.01**
-    2, **0.01**
-    3, **0.01**
-    4, **0.01**
-    5, **0.01**
-    6, **0.01**
-    7, ...
+*Edit Example:*
+    Set the revenues for electricty export to 0.01 Euro/kWh. Gas can not be exported because we limited the maximal power export to zero. So no timeseries is needed.
+    
+    .. csv-table:: Sheet **Ext-Export**
+       :header-rows: 1
+       :stub-columns: 1
+    
+        Time, elec
+        1, **0.01**
+        2, **0.01**
+        3, **0.01**
+        4, **0.01**
+        5, **0.01**
+        6, **0.01**
+        7, ...
     
     
 Demand-Rate-Factor
@@ -262,21 +262,21 @@ Timeseries: Factor to be multiplied with the demand rate to calculate demand cha
 This allows to raise, reduce or turn off the demand rate for specific timesteps to consider special tariff systems.
 Set all values to ``1``, for a constant demand rate
 
-*Edit Example*:
-Keep all values at ``1`` for constant demand rates.
-
-.. csv-table:: Sheet **Demand-Rate-Factor**
-   :header-rows: 1
-   :stub-columns: 1
-
-    Time,elec,gas
-    1,1,1
-    2,1,1
-    3,1,1
-    4,1,1
-    5,1,1
-    6,1,1
-    7,...,...
+*Edit Example:*
+    Keep all values at ``1`` for constant demand rates.
+    
+    .. csv-table:: Sheet **Demand-Rate-Factor**
+       :header-rows: 1
+       :stub-columns: 1
+    
+        Time,elec,gas
+        1,1,1
+        2,1,1
+        3,1,1
+        4,1,1
+        5,1,1
+        6,1,1
+        7,...,...
 
 
 .. _Process-ref:
@@ -311,18 +311,18 @@ Process
 
 
 
-*Edit Example*:
-Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the parameters as shown in the table.
-
-.. csv-table:: Sheet **Process**
-   :header-rows: 1
-   :stub-columns: 3
-
-    Process,Num,class,cost-inv,cost-fix,cost-var,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy,initial-power,depreciation,wacc
-    chp,1,CHP,700,0,0.01,0,0,1e6,0,0.0,0,10,0.05
-    wind_1,1,WIND,1000,0,0.005,0,0,1e6,0,0.0,0,10,0.05
-    wind_2,1,WIND,1000,0,0.005,0,0,1e6,0,0.0,0,10,0.05
-    boiler,1,,100,0,0.001,0,0,1e6,0,0.0,0,10,0.05
+*Edit Example:*
+    Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the parameters as shown in the table.
+    
+    .. csv-table:: Sheet **Process**
+       :header-rows: 1
+       :stub-columns: 3
+    
+        Process,Num,class,cost-inv,cost-fix,cost-var,cap-installed,cap-new-min,cap-new-max,partload-min,start-up-energy,initial-power,depreciation,wacc
+        chp,1,CHP,700,0,0.01,0,0,1e6,0,0.0,0,10,0.05
+        wind_1,1,WIND,1000,0,0.005,0,0,1e6,0,0.0,0,10,0.05
+        wind_2,1,WIND,1000,0,0.005,0,0,1e6,0,0.0,0,10,0.05
+        boiler,1,,100,0,0.001,0,0,1e6,0,0.0,0,10,0.05
 
 .. _Process-Co-ref:
 
@@ -372,23 +372,23 @@ The following figure shows the power inputs/outputs and eiffiencies of a 10 kW (
    :align: center
  
  
-*Edit Example*:
-Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the ratios as shown in the table. Because partload behaviour is not considered in this example, we just use the same values for ``ratio-partload`` (we could leave the ``ratio-partload`` column empty or set to any abritary value as long as ``Partload`` in ``MIP-Equations`` is deactivated)
-
-.. csv-table:: Sheet **Process-Commodity**
-   :header-rows: 1
-   :stub-columns: 3
-   
-    Process,Commodity,Direction,ratio,ratio-partload
-    chp,gas,In,2.00,2.00
-    chp,elec,Out,1.00,1.00
-    chp,heat,Out,1.00,1.00
-    wind_1,wind1,In,1.00,1.00	
-    wind_1,elec,Out,1.00,1.00
-    wind_2,wind2,In,1.00,1.00
-    wind_2,elec,Out,1.00,1.00
-    boiler,gas,In,1.10,1.10
-    boiler,heat,Out,1.00,1.00	
+*Edit Example:*
+    Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the ratios as shown in the table. Because partload behaviour is not considered in this example, we just use the same values for ``ratio-partload`` (we could leave the ``ratio-partload`` column empty or set to any abritary value as long as ``Partload`` in ``MIP-Equations`` is deactivated)
+    
+    .. csv-table:: Sheet **Process-Commodity**
+       :header-rows: 1
+       :stub-columns: 3
+       
+        Process,Commodity,Direction,ratio,ratio-partload
+        chp,gas,In,2.00,2.00
+        chp,elec,Out,1.00,1.00
+        chp,heat,Out,1.00,1.00
+        wind_1,wind1,In,1.00,1.00	
+        wind_1,elec,Out,1.00,1.00
+        wind_2,wind2,In,1.00,1.00
+        wind_2,elec,Out,1.00,1.00
+        boiler,gas,In,1.10,1.10
+        boiler,heat,Out,1.00,1.00	
 
 
 
@@ -406,17 +406,17 @@ Processes can be assigned to a process class in the columns ``class`` in the ``P
 *   **energy-max**: Maximum value for the sum of energy of the specified commodity that can be produced/consumed by the class within one year
 
 
-*Edit Example*:
-Delete all existing processes classes and add the new classes **CHP** and **WIND** with Commodity ``elec`` and Direction ``Out``. Set the ratios as shown in the table.
-This sets a maximum of **20000 kW** for the total capacity of wind turbines, a subsidy of **0.05 Euro/kWh** for produced electricity of the wind turbines (weather sold to the grid or used to cover the demand) and a fee of **0.02 Euro/kWh** for produced electricity out of our chp unit.
-
-.. csv-table:: Sheet **Process-Class**
-   :header-rows: 1
-   :stub-columns: 2
-   
-    Class,Commodity	Direction,fee,cap-max,energy-max
-    CHP,elec,Out,0.02,inf,inf
-    WIND,elec,Out,-0.05,20000,inf
+*Edit Example:*
+    Delete all existing processes classes and add the new classes **CHP** and **WIND** with Commodity ``elec`` and Direction ``Out``. Set the ratios as shown in the table.
+    This sets a maximum of **20000 kW** for the total capacity of wind turbines, a subsidy of **0.05 Euro/kWh** for produced electricity of the wind turbines (weather sold to the grid or used to cover the demand) and a fee of **0.02 Euro/kWh** for produced electricity out of our chp unit.
+    
+    .. csv-table:: Sheet **Process-Class**
+       :header-rows: 1
+       :stub-columns: 2
+       
+        Class,Commodity	Direction,fee,cap-max,energy-max
+        CHP,elec,Out,0.02,inf,inf
+        WIND,elec,Out,-0.05,20000,inf
 
 
 Storage
@@ -450,54 +450,54 @@ Define storages for a commodity with technical parameters and specific costs.
 
 **Note**: All values for the storage energy capacities and energy specific costs are relasted to the energy that can be **stored in the storage** with 100 % depth of discharge (DOD). The energy that can be used out of the storage might be less, depending on the ``DOD`` and the discharge efficiency ``eff-out``. 
 
-*Edit Example*:
-Change the parameters of the storage **battery** and **heat storage** as shown in the table.
-
-.. csv-table:: Sheet **Storage** (1/3)
-   :header-rows: 1
-   :stub-columns: 3
-   
-    Storage,Commodity,Num,cost-inv-p,cost-inv-e,cost-fix-p,cost-fix-e,cost-var
-    battery	elec,1,0,1000,0,0,0
-    heat storage,heat,1,0,10,0,0,0
-
-.. csv-table:: Sheet **Storage** (2/3)
-   :header-rows: 1
-   :stub-columns: 3
-   
-    Storage,Commodity,Num,cap-installed-p,cap-new-min-p,cap-new-max-p,cap-installed-e,cap-new-min-e,cap-new-max-e,max-p-e-ratio
-    battery,elec,1,0,0,1e6,0,0,100000,2
-    heat storage,heat,1,0,0,1e6,0,0,30000,1
-
-
-.. csv-table:: Sheet **Storage** (3/3)
-   :header-rows: 1
-   :stub-columns: 3
-   
-    Storage,Commodity,Num,eff-in,eff-out,self-discharge,cycles-max,DOD,initial-soc,depreciation,wacc
-    battery,elec,1,0.900,0.900,0.0001,10000,1,0,10,0.05
-    heat storage,heat,1,0.950,0.950,0.0001,1000000,1,0,10,0.05
+*Edit Example:*
+    Change the parameters of the storage **battery** and **heat storage** as shown in the table.
+    
+    .. csv-table:: Sheet **Storage** (1/3)
+       :header-rows: 1
+       :stub-columns: 3
+       
+        Storage,Commodity,Num,cost-inv-p,cost-inv-e,cost-fix-p,cost-fix-e,cost-var
+        battery	elec,1,0,1000,0,0,0
+        heat storage,heat,1,0,10,0,0,0
+    
+    .. csv-table:: Sheet **Storage** (2/3)
+       :header-rows: 1
+       :stub-columns: 3
+       
+        Storage,Commodity,Num,cap-installed-p,cap-new-min-p,cap-new-max-p,cap-installed-e,cap-new-min-e,cap-new-max-e,max-p-e-ratio
+        battery,elec,1,0,0,1e6,0,0,100000,2
+        heat storage,heat,1,0,0,1e6,0,0,30000,1
+    
+    
+    .. csv-table:: Sheet **Storage** (3/3)
+       :header-rows: 1
+       :stub-columns: 3
+       
+        Storage,Commodity,Num,eff-in,eff-out,self-discharge,cycles-max,DOD,initial-soc,depreciation,wacc
+        battery,elec,1,0.900,0.900,0.0001,10000,1,0,10,0.05
+        heat storage,heat,1,0.950,0.950,0.0001,1000000,1,0,10,0.05
 
 Demand
 ^^^^^^^^
 
 Timeseries: (average) power demand for every commodity to be satisfied for every timestep (in kW). 
 
-*Edit Example*:
-Keep the demand timeseries for ``elec`` and ``heat`` as they are
-
-.. csv-table:: Sheet **Demand**
-   :header-rows: 1
-   :stub-columns: 1
-
-    Time,elec, heat
-    1,28749.52,8856
-    2,29383.66,8676
-    3,29496.09,9104
-    4,29592.54,8892
-    5,30346.42,8764
-    6,31300.91,8560
-    7,...,...
+*Edit Example:*
+    Keep the demand timeseries for ``elec`` and ``heat`` as they are
+    
+    .. csv-table:: Sheet **Demand**
+       :header-rows: 1
+       :stub-columns: 1
+    
+        Time,elec, heat
+        1,28749.52,8856
+        2,29383.66,8676
+        3,29496.09,9104
+        4,29592.54,8892
+        5,30346.42,8764
+        6,31300.91,8560
+        7,...,...
 
 
 SupIm
@@ -506,21 +506,21 @@ SupIm
 Intermittent Supply: A timeseries normalised to a maximum value of 1 relative to the installed capacity of a process using this commodity as input. For example, a wind power timeseries should reach value 1, when the wind speed exceeds the modelled wind turbine’s design wind speed is exceeded. This implies that any non-linear behaviour of intermittent processes can already be incorporated while preparing this timeseries.
 
 
-*Edit Example*:
-Copy the intermittent supply timeseries **wind1** and **wind2** from :download:`intermittent_supply_wind.xlsx <NewFactory/intermittent_supply_wind.xlsx>` to the ``SupIm`` sheet.
-
-.. csv-table:: Sheet **SupIm**
-   :header-rows: 1
-   :stub-columns: 1
-
-    Time,wind1,wind2
-    1,0.91,1.00
-    2,1.00,1.00
-    3,1.00,1.00
-    4,1.00,1.00
-    5,1.00,1.00
-    6,0.88,1.00
-    7,...,...
+*Edit Example:*
+    Copy the intermittent supply timeseries **wind1** and **wind2** from :download:`intermittent_supply_wind.xlsx <NewFactory/intermittent_supply_wind.xlsx>` to the ``SupIm`` sheet.
+    
+    .. csv-table:: Sheet **SupIm**
+       :header-rows: 1
+       :stub-columns: 1
+    
+        Time,wind1,wind2
+        1,0.91,1.00
+        2,1.00,1.00
+        3,1.00,1.00
+        4,1.00,1.00
+        5,1.00,1.00
+        6,0.88,1.00
+        7,...,...
 
 .. note::
 
@@ -652,7 +652,30 @@ To set this constrained active, we have to activate ``Partload`` in the sheet ``
     Partload, **yes**
     Min-Cap, no
     
+Now run the model and take a look at the ``elec`` timeseries result figure again. You can see that the electric power output of th chp now is allways greater than 50% of the installed capacity (6616 kW), when the chp unit is running.
 
+.. note::
+
+    If you are using neos, please use **mosek** solver (will take about 10 minutes to solve). The **cbc** solver throws an error for this example.
+
+.. image:: NewFactory/MIP-Partload/min-partload/elec-timeseries.*
+   :width: 95%
+   :align: center
+   
+In the next step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. Start-up costs only occure, if ``partload-min`` is greater than zero.
+To reduce computation time we set ``partload-min`` for the chp unit in the ``Process`` sheet to **0.1**
+
+.. csv-table:: Sheet **Process**
+   :header-rows: 1
+   :stub-columns: 3
+
+    Process,Num,...,partload-min,start-up-energy...
+    chp,1,...,**0.1**,**0.1**,...
+    wind_1,1,...,0,0,...
+    wind_2,1,...,0,0,...
+    boiler,1,...,0,0,...
+
+Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the number of start-up's is reduced to minimize start-up costs.
 
 Min-Cap
 ^^^^^^^^
