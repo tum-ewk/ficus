@@ -4,12 +4,7 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 
 [![Documentation Status](https://readthedocs.org/projects/ficus/badge/?version=latest)](https://ficus.readthedocs.org/en/latest/)
 
-[Features](#features)  
-[Screenshots](#screenshots)  
-[Installation](#installation)  
-[Get started](#get-started)  
-[Next Steps](#next-steps)  
-[Further reading](#further-reading)
+<a href="doc/img/elec-timeseries.png"><img src="doc/img/elec-timeseries.png" alt="Timeseries plot of 7 days of electricity generation and consumption in 15 minute resolution" style="width:400px"></a>
 
 ## Features
 
@@ -20,20 +15,6 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
   * It supports multiple-input and multiple-output energy conversion technologies with load dependent efficiencies
   * Thanks to [Pandas](https://pandas.pydata.org), complex data analysis is easy.
   * The model itself is quite small thanks to relying on the [Pyomo](https://software.sandia.gov/trac/coopr/wiki/Pyomo) package and includes reporting and plotting functionality.
-
-## Screenshots
-
-<a href="doc/img/elec-timeseries.png"><img src="doc/img/elec-timeseries.png" alt="Timeseries plot of 7 days of electricity generation and consumption in 15 minute resolution" style="width:400px"></a>
-
-<a href="doc/img/heat-timeseries.png"><img src="doc/img/heat-timeseries.png" alt="Timeseries plot of 7 days of heat generation and consumption and heat storage use in 15 minute resolution" style="width:400px"></a>
-
-<a href="doc/img/elec-energy.png"><img src="doc/img/elec-energy.png" alt="Bar chart of cumulated electricity of the 7 days." style="width:400px"></a>
-
-<a href="doc/img/heat-energy.png"><img src="doc/img/heat-energy.png" alt="Bar chart of cumulated heat of the 7 days." style="width:400px"></a>
-
-<a href="doc/img/capacities.png"><img src="doc/img/capacities.png" alt="Intsalled and new process and storage capacities." style="width:400px"></a>
-
-<a href="doc/img/costs.png"><img src="doc/img/costs.png" alt="Expenses, revenues and total costs" style="width:400px"></a>
 
 
 ## Installation
@@ -107,6 +88,20 @@ About a minute later the result figures should show up and the subfolder `result
   2. Quickly scan through `ficus.py`, read docstrings.
   3. Try modifying parameters in `example.xlsx` or `example_fromexcel.xlsm` and see their effect on results.
 
+ 
+## Screenshots
+
+<a href="doc/img/elec-timeseries.png"><img src="doc/img/elec-timeseries.png" alt="Timeseries plot of 7 days of electricity generation and consumption in 15 minute resolution" style="width:400px"></a>
+
+<a href="doc/img/heat-timeseries.png"><img src="doc/img/heat-timeseries.png" alt="Timeseries plot of 7 days of heat generation and consumption and heat storage use in 15 minute resolution" style="width:400px"></a>
+
+<a href="doc/img/elec-energy.png"><img src="doc/img/elec-energy.png" alt="Bar chart of cumulated electricity of the 7 days." style="width:400px"></a>
+
+<a href="doc/img/heat-energy.png"><img src="doc/img/heat-energy.png" alt="Bar chart of cumulated heat of the 7 days." style="width:400px"></a>
+
+<a href="doc/img/capacities.png"><img src="doc/img/capacities.png" alt="Intsalled and new process and storage capacities." style="width:400px"></a>
+
+<a href="doc/img/costs.png"><img src="doc/img/costs.png" alt="Expenses, revenues and total costs" style="width:400px"></a> 
   
 ## Further reading
 
