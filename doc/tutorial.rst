@@ -222,7 +222,7 @@ Set the costs for electricty import to 0.15 Euro/kWh and for gas import to 0.05 
    :header-rows: 1
    :stub-columns: 1
 
-    Time,elec, heat
+    Time,elec,gas
     1, **0.15**, **0.05**
     2, **0.15**, **0.05**
     3, **0.15**, **0.05**
@@ -575,13 +575,57 @@ See :ref:`MIP-Equations-ref` for a short Description.
 Storage In-Out
 ^^^^^^^^
 
+If activated, a constrained is added, that prevents storages from charging and discharging one commodity at the same time.
+
+Open :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`, change the costs for gas import from **0.05 Euro/kWh** to **0.03 Euro/kWh**. 
+
+.. csv-table:: Sheet **Ext-Import**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Time,elec,gas
+    1, 0.15, **0.03**
+    2, 0.15, **0.03**
+    3, 0.15*, **0.03**
+    4, 0.15, **0.03**
+    5, 0.15, **0.03**
+    6, 0.15, **0.03**
+    7, ...,...
+
+Save the new file and run the model. Take a look at the ``heat`` timeseries result figure:
+
+.. image:: NewFactory/MIP_Storage_In-Out/heat-timeseries-deactivated.*
+   :width: 95%
+   :align: center
+
+As you can see the heat storage is charged and discharged at the same time for almost the whole period. This is because of the low gas costs producing electricity from the chp unit becomes much cheaper than importing it from the grid. The model tries to produce as much electricity from the chp unit as possible, but is limited because of the lower heat demand (the produced heat has to be consumed as well). The model equations do **not** allow dumping energy. So to get rid of the heat produced, th model uses the heat storage efficiency to generate losses by simply charging and discharging at the same time.
+
+To avoid this, activate ``Storage In-Out`` in the sheet ``MIP-Equations``:
+
+.. csv-table:: Sheet **MIP-Equations**
+   :header-rows: 1
+   :stub-columns: 1
+
+    Equation,Active
+    Storage In-Out, no
+    Partload, no
+    Min-Cap, no
+    
+Run the model again. This will take a little more time than befor, because the equation uses an integer variable and the model becomes a mixed integer linear optimisation problem. Looking at the ``heat`` timeseries result figure again, you can see that charging/dischraging of the storage at the same time is avoided now.
+
+.. image:: NewFactory/MIP_Storage_In-Out/heat-timeseries-deactivated.*
+   :width: 95%
+   :align: center
+
 Partload
 ^^^^^^^^
 
 Min-Cap
 ^^^^^^^^
 
-
+* **Storage In-Out**: Prevents storages from charging and discharging one commodity at the same time, if activated. This can happen, when dumping energy of one commodity will lead to lower total costs. The model then uses the efficiency of the storage to dump the energy with no dumping costs.
+* **Partload**: Consider minimum partload settings, partload efficiencies as well as start-up costs of processes.
+* **Min-Cap**: Consider minimal installed capacities of processes and storages. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
    
 .. _NEOS Server for Optimization:
     http://www.neos-server.org/neos/
