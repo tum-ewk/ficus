@@ -305,7 +305,7 @@ def create_model(data):
 
 	# costs
 	m.cost_type = pyen.Set(
-		initialize=['Grid import', 'Grid export','Demand charges','Invest','Fix costs', 'Var costs','Process fee','Pro subsidy'],
+		initialize=['Import', 'Export','Demand charges','Invest','Fix costs', 'Var costs','Process fee','Pro subsidy'],
 		doc='Types of costs')	
 
 		
@@ -1058,14 +1058,14 @@ def create_model(data):
 					for t in m.t for s in m.sto_tuples)
 		
 		#costs for external import = sum(t) [ p_ext) * price(t)]
-		elif cost_type == 'Grid import':	
+		elif cost_type == 'Import':	
 			return m.costs[cost_type] == \
 				sum(m.ext_p_in[c,t]*p2e \
 					* (ext_import.loc[t][c])\
 					for t in m.t for c in m.co_ext_in)
 		
 		#costs for export = sum(t) [- p_ext_export(t) * price(t)]
-		elif cost_type == 'Grid export':	
+		elif cost_type == 'Export':	
 			return m.costs[cost_type] == \
 				-sum( m.ext_p_out[c,t] * p2e * ext_export.loc[t][c]\
 					for t in m.t for c in m.co_ext_out)	
@@ -1935,15 +1935,15 @@ def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=
 		= get_plot_data(co, prob, resultfile, timesteps)
 	#change order
 	try:
-		imp = created['Grid import']
-		created.pop('Grid import')
-		created['Grid import'] = imp
+		imp = created['Import']
+		created.pop('Import')
+		created['Import'] = imp
 	except KeyError:
 		pass
 	try:
-		exp = consumed['Grid export']
-		consumed.pop('Grid export')
-		consumed['Grid export'] = exp
+		exp = consumed['Export']
+		consumed.pop('Export')
+		consumed['Export'] = exp
 	except KeyError:
 		pass
 
@@ -2297,8 +2297,8 @@ def plot_costs(prob = None, resultfile = None, fontsize=16):
 	import matplotlib as mpl
 	
 	colours = {
-    'Grid import' : COLOURS[1],
-	'Grid export' : COLOURS[2],
+    'Import' : COLOURS[1],
+	'Export' : COLOURS[2],
 	'Demand charges' : COLOURS[10],
 	'Invest' : COLOURS[4],
 	'Var costs' : COLOURS[3],
@@ -2306,7 +2306,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16):
 	'Process fee' : COLOURS[7],
 	'Pro subsidy' : COLOURS[8],
 	'total' : 'steelblue'}
-	order = ['Grid import', 'Grid export','Demand charges','Invest','Fix costs', 'Var costs','Process fee','Pro subsidy']
+	order = ['Import', 'Export','Demand charges','Invest','Fix costs', 'Var costs','Process fee','Pro subsidy']
 	
 	##Get Data and Prepare Data##
 	##############
