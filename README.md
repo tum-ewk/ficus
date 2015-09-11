@@ -68,18 +68,37 @@ Then, in a directory of your choice, clone this repository by executing the foll
 
 Once installation is complete, download or clone this repository to a directory of your choice.
 
-### Run from Excel
+### [Run from Excel](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-excel)
 1. Run `ficus.py` (by double clicking or within ipython). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 2. Open the `example_fromexcel.xlsm`, choose a solver and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
 
-About a minute later the result figures should show up and the sub-folder `result` should contain plots and a result file.
 
-### Run from IPython or Spyder
-1. Fire up IPython or Spyder 
-2. Open and run `ficus.py` (Spyder: `F5`. Ipython: type `run runficus`). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
-3. Open and run the `runficus.py` script.
+### [Run from IPython](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-ipython)
 
-About a minute later the result figures should show up and the sub-folder `result` should contain plots and a result file.
+1. Fire up IPython
+2. Run `ficus.py` (only before using it the first time!):
+  * Change ipython's working directory to the directory of `ficus.py`: 
+    `import os`
+    `os.chdir("C:\\YOUR\\FOLDER")`
+  * Type `run ficus` to run the install function of `ficus.py` and continue with `y`. This will copy `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
+3. Run the `runficus.py` script.
+  * Change ipython's working directory to the directory of `runficus.py`: 
+    `import os`
+    `os.chdir("C:\\YOUR\\FOLDER")`
+  * Type `run runficus` to run the script
+ 
+### [Run from Spyder](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-spyder)
+
+1. Fire up Spyder
+2. Run `ficus.py` (only before using it the first time!):
+  * Open `ficus.py` with Spyder
+  * Run the script with `F5`
+3. Run the `runficus.py` script.
+  * Open `runficus.py` with Spyder
+  * Run the script with `F5`
+
+
+About one minute after running ``runficus.py`` the result figures should show up and the sub-folder `result` should contain plots and a result file.
 
 
 ## Next steps
