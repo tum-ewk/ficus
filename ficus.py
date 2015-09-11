@@ -1928,6 +1928,7 @@ def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=
 	"""
 	import matplotlib.pyplot as plt
 	import matplotlib as mpl
+	plt.ion()
 	
 	##Get Data and Prepare Data##
 	##############
@@ -2064,6 +2065,7 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16):
 
 	import matplotlib.pyplot as plt
 	import matplotlib as mpl
+	plt.ion()
 	
 	##Get Data and Prepare Data##
 	##############
@@ -2160,6 +2162,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16):
 	"""
 	import matplotlib.pyplot as plt
 	import matplotlib as mpl
+	plt.ion()
 	
 	##Get Data and Prepare Data##
 	##############
@@ -2295,6 +2298,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16):
 	"""
 	import matplotlib.pyplot as plt
 	import matplotlib as mpl
+	plt.ion()
 	
 	colours = {
     'Import' : COLOURS[1],
