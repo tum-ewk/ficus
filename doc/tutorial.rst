@@ -43,7 +43,7 @@ Run from Ipython
 ::
 
     import os
-    os.chdir("C:\YOUR\FOLDER")
+    os.chdir("C:\\YOUR\\FOLDER")
 * Run the script:
 
 ::
