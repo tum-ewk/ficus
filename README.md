@@ -40,7 +40,7 @@ Use your Linux distribution's package manager to get all the packages listed in 
 
 Continue at [Get Started](#get-started).
 
-### Solver (optional)
+### Solver (optional)<a name="solver"></a>
 
 Pyomo allows using the [NEOS Server for Optimisation](http://www.neos-server.org/neos/) for solving, so it is **not necessary to install a solver**.
 
@@ -57,7 +57,7 @@ I still recommend to install and use one of the following solvers.
 
        Download and install [Gurobi](http://www.gurobi.com/) solver. [Free for academics](http://www.gurobi.com/academia/for-universities)
 
-### Git (optional)
+### Git (optional)<a name="git"></a>
 
 I recommend to [install git (for version control)](http://git-scm.com/). **Remark:** at step "Adjusting your PATH environment", select "Run Git from the Windows Command Prompt".
 
@@ -67,7 +67,7 @@ Then, in a directory of your choice, clone this repository by executing the foll
 
 ## Get started
 
-Once installation is complete, [download](https://github.com/yabata/ficus/archive/master.zip) or [clone](#git) this repository to a directory of your choice.
+Once installation is complete, [download](https://github.com/yabata/ficus/archive/master.zip) or clone with [Git](#git) this repository to a directory of your choice.
 
 ### [Run from Excel](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-excel)
 1. Run `ficus.py` (by double clicking or open with python). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
