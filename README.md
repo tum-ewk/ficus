@@ -21,9 +21,10 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 
 ### Windows
 
-I recommend using the Python distribution Anaconda. If you don't want to use it or already have an existing Python 2.7 (sorry, 3.x is not yet supported) installation, you can also download the required packages one by one. Please follow the installation instructions of [urbs] (https://github.com/tum-ens/urbs) for a list of needed packages. Instead of "coopr" the package "pyomo" is needed for ficus.
+I recommend using the Python distribution Anaconda.  
+**If you don't want to Anaconda** or already have an existing Python 2.7 (sorry, 3.x is not yet supported) installation, you can also download the required packages one by one. Please follow the installation instructions of [urbs] (https://github.com/tum-ens/urbs) for a list of needed packages. Instead of "coopr" the package "pyomo" is needed for ficus.
 
-#### Anaconda (recommended)
+#### Anaconda
 
   1. **[Anaconda (Python 2.7)](http://continuum.io/downloads)**. Choose the 64-bit installer if possible.
        1. During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
@@ -39,9 +40,9 @@ Use your Linux distribution's package manager to get all the packages listed in 
 
 Continue at [Get Started](#get-started).
 
-### Solver
+### Solver (optional)
 
-Pyomo allows using the [NEOS Server for Optimisation](http://www.neos-server.org/neos/) for solving, so it is not necessary to install a solver (with me only `mosek` and `cbc` from neos are working).
+Pyomo allows using the [NEOS Server for Optimisation](http://www.neos-server.org/neos/) for solving, so it is **not necessary to install a solver**.
 
 I still recommend to install and use one of the following solvers.
 
@@ -66,7 +67,7 @@ Then, in a directory of your choice, clone this repository by executing the foll
 
 ## Get started
 
-Once installation is complete, download or clone this repository to a directory of your choice.
+Once installation is complete, [download](https://github.com/yabata/ficus/archive/master.zip) or [clone](#git) this repository to a directory of your choice.
 
 ### [Run from Excel](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-excel)
 1. Run `ficus.py` (by double clicking or open with python). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
