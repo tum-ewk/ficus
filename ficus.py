@@ -1698,7 +1698,7 @@ def result_figures(dir, prob = None, resultfile = None, timesteps = None, fontsi
 		#plot and save timeseries for every commodity in demand
 		fig = plot_timeseries(	co,\
 								prob = prob, resultfile = resultfile,\
-								timesteps=timesteps,fontsize=fontsize)
+								timesteps=timesteps,fontsize=fontsize,show=show)
 		fig.savefig(dir + '\\'+co+'-timeseries.png')
 		if not show:
 			plt.close(fig)
@@ -1706,19 +1706,19 @@ def result_figures(dir, prob = None, resultfile = None, timesteps = None, fontsi
 		#plot and save energy balance for every commodity in demand
 		fig = plot_energy(	co,\
 								prob = prob, resultfile = resultfile,\
-								timesteps=timesteps,fontsize=fontsize)
+								timesteps=timesteps,fontsize=fontsize,show=show)
 		fig.savefig(dir + '\\'+co+'-energy.png')
 		if not show:
 			plt.close(fig)
 	
 	#plot and save installed and new capacities of processes and storages
-	fig = plot_cap(prob = prob, resultfile = resultfile, fontsize=fontsize)
+	fig = plot_cap(prob = prob, resultfile = resultfile, fontsize=fontsize,show=show)
 	fig.savefig(dir + '\\capacities.png')
 	if not show:
 		plt.close(fig)
 	
 	#plot and save costs
-	fig = plot_costs(prob = prob, resultfile = resultfile, fontsize=fontsize)
+	fig = plot_costs(prob = prob, resultfile = resultfile, fontsize=fontsize,show=show)
 	fig.savefig(dir + '\\costs.png')
 	if not show:
 		plt.close(fig)
@@ -1910,7 +1910,7 @@ def get_plot_data(co, prob, resultfile, timesteps):
 	
 	
 	
-def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=16):
+def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=16,show=True):
 	"""Stacked timeseries of commodity balance 
 
 	Creates a stackplot of the power balance of a given commodity, together
@@ -2043,10 +2043,11 @@ def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=
 	
 	
 	fig.tight_layout()
-	plt.show()
+	if show:
+		plt.show(block=False)
 	return fig
 	
-def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16):
+def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,show=True):
 	"""Energy Balance
 
 	Creates a barplot with two subplots of produced/imported and consumed/imported energy balance for
@@ -2144,10 +2145,11 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16):
 		ax.yaxis.set_major_formatter(group_thousands)
 	
 	fig.tight_layout()
-	plt.show()
+	if show:
+		plt.show(block=False)
 	return fig	
 		
-def plot_cap(prob = None, resultfile = None,fontsize=16):
+def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 	"""Process and storage capacities
 
 	Creates a horizontal barplot of the new and installed capacities of processes and storages
@@ -2278,12 +2280,13 @@ def plot_cap(prob = None, resultfile = None,fontsize=16):
 					numpoints = 1)
 
 	fig.tight_layout()
-	plt.show()
+	if show:
+		plt.show(block=False)
 	
 	return fig
 
 	
-def plot_costs(prob = None, resultfile = None, fontsize=16):
+def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 	"""Costs
 
 	Creates a barplot with three subplots of expenses, revenues and total costs
@@ -2401,7 +2404,8 @@ def plot_costs(prob = None, resultfile = None, fontsize=16):
 
 	
 	fig.tight_layout()
-	plt.show()
+	if show:
+		plt.show(block=False)
 	return fig	
 		
 	
@@ -2497,7 +2501,7 @@ def install():
 		pip.main(['install', 'pyomo'])
 	
 	#copy "ficus.py" to pythons 'Scripts' Folder
-	shutil.copy(os.path.join(os.getcwd(),"ficus.py"),os.path.join(sys.exec_prefix,"Lib\\site-packages"))
+	shutil.copy(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])),"ficus.py"),os.path.join(sys.exec_prefix,"Lib\\site-packages"))
 	raw_input("Installed packages and copied ficus.py to "+os.path.join(sys.exec_prefix,"Lib\\site-packages")+"\nPress Enter to continue...\n")
 	
 # Example
