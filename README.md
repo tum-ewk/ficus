@@ -80,20 +80,20 @@ Once installation is complete, download or clone this repository to a directory 
   * Change ipython's working directory to the directory of `ficus.py`: 
 
 
-    import os
-    os.chdir("C:\\YOUR\\FOLDER")
+    import os  
+    os.chdir("C:\\YOUR\\FOLDER")  
  
   * Run the install function of `ficus.py` and continue with `y`. This will copy `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed: 
 
 
-    run ficus
+    run ficus  
 
 3. Run `runficus.py`:
   * Change ipython's working directory to the directory of `runficus.py`: 
 
 
-    import os
-    os.chdir("C:\\YOUR\\FOLDER")
+    import os  
+    os.chdir("C:\\YOUR\\FOLDER")  
  
   * Run `runficus.py`: 
 
