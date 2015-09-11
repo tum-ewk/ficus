@@ -27,8 +27,7 @@ I recommend using the Python distribution Anaconda.
 	1.	During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
 2.	Install a [solver](#solver) (optional) or continue at [Get Started](#get-started).
 
-**If you don't want to use Anaconda**  
- or already have an existing Python 2.7 (sorry, 3.x is not yet supported) installation, you can also download the required packages one by one. Please follow the installation instructions of [urbs] (https://github.com/tum-ens/urbs) for a list of needed packages. Instead of "coopr" the package "pyomo" is needed for ficus.
+**If you don't want to use Anaconda** or already have an existing Python 2.7 (sorry, 3.x is not yet supported) installation, you can also download the required packages one by one. Please follow the installation instructions of [urbs] (https://github.com/tum-ens/urbs) for a list of needed packages. Instead of "coopr" the package "pyomo" is needed for ficus.
 
 ### Linux
 
