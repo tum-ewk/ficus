@@ -69,7 +69,7 @@ Then, in a directory of your choice, clone this repository by executing the foll
 Once installation is complete, download or clone this repository to a directory of your choice.
 
 ### [Run from Excel](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-excel)
-1. Run `ficus.py` (by double clicking or within ipython). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
+1. Run `ficus.py` (by double clicking or open with python). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 2. Open the `example_fromexcel.xlsm`, choose a solver and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
 
 
@@ -109,7 +109,7 @@ Once installation is complete, download or clone this repository to a directory 
 1. Fire up Spyder
 2. Run `ficus.py` (only before using it the first time!):
   * Open `ficus.py` with Spyder
-  * Run the script with `F5`
+  * Run the script with `F5` and continue with `y`. This will copy `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 3. Run the `runficus.py` script.
   * Open `runficus.py` with Spyder
   * Run the script with `F5`
