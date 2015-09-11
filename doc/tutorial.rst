@@ -21,10 +21,10 @@ For an easy first run of ficus without using any python environment a small macr
 optimization directly from Excel.
 
 * Open the file ``example_fromexcel.xlsm``
-* Go to the ``RUN`` sheet and choose a solver. If you choose any other than the ``neos`` solver, the solver hast to be installed locally on your computer. Choosing ``neos`` uses the ``cbc`` solver from the `NEOS Server for Optimization`_ (no installation required)
+* Go to the ``RUN`` sheet and choose a solver. If you choose any other than a ``neos-...`` solver, the solver hast to be installed locally on your computer. With me only the ``mosek`` and the ``cbc`` solver from `NEOS Server for Optimization`_ are working(no installation required)
 * Push the ``RUN OPTIMIZATION`` button. 
 
-A cmd window should appear showing the actual status and a few minutes later six result figures should show up. The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
+A cmd window should appear showing the actual status and a few minutes later six result figures should show up (see `screenshots`_). The sub-folder ``result`` should contain the saved result figures as well as a result-file.
 
 Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is called within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on ``ficus.py``  or run it with python. Then continue with ``y``.  
 
@@ -50,7 +50,7 @@ Run from Ipython
 
     run runficus
     
-The shell should show the actual status and a few minutes later six result figures should show up. The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
+The shell should show the actual status and a few minutes later six result figures should show up (see `screenshots`_). The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
 
 Run from Spyder
 ^^^^^^^^
@@ -58,7 +58,7 @@ Run from Spyder
 * Open the ``runficus.py``script within Spyder
 * Run the script with ``F5``
 
-The shell should show the actual status and a few minutes later six result figures should show up. The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
+The shell should show the actual status and a few minutes later six result figures should show up (see `screenshots`_). The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
 
 runficus.py
 ^^^^^^^^
@@ -770,3 +770,4 @@ Running the file with the above changes show the following ``capacities`` result
 .. _intermittent_supply_wind.xlsx: https://github.com/yabata/ficus/blob/master/doc/NewFactory/intermittent_supply_wind.xlsx
 .. _os: https://docs.python.org/2/library/os.html
 .. _os.path: https://docs.python.org/2/library/os.path.html
+.. _screenshots: https://github.com/yabata/ficus/blob/master/README.md#screenshots
