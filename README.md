@@ -22,14 +22,16 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 ### Windows
 
 I recommend using the Python distribution Anaconda.  
-**If you don't want to use Anaconda** or already have an existing Python 2.7 (sorry, 3.x is not yet supported) installation, you can also download the required packages one by one. Please follow the installation instructions of [urbs] (https://github.com/tum-ens/urbs) for a list of needed packages. Instead of "coopr" the package "pyomo" is needed for ficus.
 
 #### Anaconda
 
   1. **[Anaconda (Python 2.7)](http://continuum.io/downloads)**. Choose the 64-bit installer if possible.
        1. During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
 
-Install a [solver](#solver) or continue at [Get Started](#get-started).
+Install a [solver](#solver) (optional) or continue at [Get Started](#get-started).
+
+**If you don't want to use Anaconda**  
+ or already have an existing Python 2.7 (sorry, 3.x is not yet supported) installation, you can also download the required packages one by one. Please follow the installation instructions of [urbs] (https://github.com/tum-ens/urbs) for a list of needed packages. Instead of "coopr" the package "pyomo" is needed for ficus.
 
 ### Linux
 
@@ -42,7 +44,7 @@ Continue at [Get Started](#get-started).
 
 ### Solver (optional)<a name="solver"></a>
 
-Pyomo allows using the [NEOS Server for Optimisation](http://www.neos-server.org/neos/) for solving, so it is **not necessary to install a solver**.
+Pyomo allows using the [NEOS Server for Optimisation](http://www.neos-server.org/neos/) for solving, so it is **not required to install a solver**.
 
 I still recommend to install and use one of the following solvers.
 
