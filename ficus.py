@@ -2116,6 +2116,7 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,s
 	handles, labels = ax0.get_legend_handles_labels()
 	ax0.legend(handles[::-1], labels[::-1]) # reverse the order
 	ax0.set_ylabel('Energy (kWh)', fontsize=fontsize)
+	ax0.set_ylim(0,created_e.sum()*1.1)
 	
 	#PLOT CONSUMED
 	ax1 = plt.subplot(gs[3],sharey=ax0)	
