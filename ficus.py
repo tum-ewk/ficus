@@ -2488,6 +2488,7 @@ def install():
 	import pip
 	import shutil
 	import sys
+	import os
 	
 	#install pyomo
 	try:
