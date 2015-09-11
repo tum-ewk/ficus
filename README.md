@@ -9,8 +9,8 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 ## Features
 
   * ficus is a (mixed integer) linear programming model for multi-commodity energy systems.
-  * It finds the minimum cost energy system to satisfy given demand timeseries for possibly multiple commodities (e.g. electricity, heat)
-  * It considers given cost timeseries for external obtained commodities as well as peak demand charges with configurable timebase for each commodity
+  * It finds the minimum cost energy system to satisfy given demand time-series for possibly multiple commodities (e.g. electricity, heat)
+  * It considers given cost time-series for external obtained commodities as well as peak demand charges with configurable timebase for each commodity
   * It allows to deactivate specific equations, so the model becomes a linear programming model without integer variables
   * It supports multiple-input and multiple-output energy conversion technologies with load dependent efficiencies
   * Thanks to [Pandas](https://pandas.pydata.org), complex data analysis is easy.
@@ -48,7 +48,7 @@ I still recommend to install and use one of the following solvers.
   1. **GLPK** (open source)
        1. Download the latest version (e.g. GLPK-4.55) of [WinGLPK](http://sourceforge.net/projects/winglpk/files/winglpk/)
        2. Extract the contents to a folder, e.g. `C:\GLPK`
-       3. Add the subfolder `w64` to your system path, e.g. `C:\GLPK\w64` ([how](http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx)).
+       3. Add the sub-folder `w64` to your system path, e.g. `C:\GLPK\w64` ([how](http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx)).
   2. **CPLEX** (commercial)
   
        Download and install IBM's [CPLEX](http://www-01.ibm.com/software/commerce/optimization/cplex-optimizer/) solver. [Free for academics](https://www.ibm.com/developerworks/community/blogs/jfp/entry/cplex_studio_in_ibm_academic_initiative?lang=en)
@@ -66,26 +66,26 @@ Then, in a directory of your choice, clone this repository by executing the foll
 
 ## Get started
 
-Once installation is complete, download or clone this repository to a dircetory of your choice.
+Once installation is complete, download or clone this repository to a directory of your choice.
 
 ### Run from Excel
 1. Run `ficus.py` (by double clicking or within ipython). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 2. Open the `example_fromexcel.xlsm`, choose a solver and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
 
-About a minute later the result figures should show up and the subfolder `result` should contain plots and a result file.
+About a minute later the result figures should show up and the sub-folder `result` should contain plots and a result file.
 
 ### Run from IPython or Spyder
 1. Fire up IPython or Spyder 
 2. Open and run `ficus.py` (Spyder: `F5`. Ipython: type `run runficus`). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 3. Open and run the `runficus.py` script.
 
-About a minute later the result figures should show up and the subfolder `result` should contain plots and a result file.
+About a minute later the result figures should show up and the sub-folder `result` should contain plots and a result file.
 
 
 ## Next steps
 
   1. Head over to the tutorial at http://ficus.readthedocs.org, which explains the input file.
-  2. Quickly scan through `ficus.py`, read docstrings.
+  2. Quickly scan through `ficus.py`, read doc-strings.
   3. Try modifying parameters in `example.xlsx` or `example_fromexcel.xlsm` and see their effect on results.
 
  

@@ -36,8 +36,8 @@ This documentation contains the following pages:
 Features
 --------
 * ficus is a (mixed integer) linear programming model for multi-commodity energy systems.
-* It finds the minimum cost energy system to satisfy given demand timeseries for possibly multiple commodities (e.g. electricity, heat)
-* It considers given cost timeseries for external obtained commodities as well as peak demand charges with configurable timebase for each commodity
+* It finds the minimum cost energy system to satisfy given demand time-series for possibly multiple commodities (e.g. electricity, heat)
+* It considers given cost time-series for external obtained commodities as well as peak demand charges with configurable timebase for each commodity
 * It allows to deactivate specific equations, so the model becomes a linear programming model without integer variables
 * It supports multiple-input and multiple-output energy conversion technologies with load dependent efficiencies
 * Thanks to `pandas`_, complex data analysis code is short and extensible.
@@ -49,7 +49,7 @@ Screenshots
 -----------
 
 This is a typical result plot created by :func:`ficus.plot_timeseries`, showing electricity
-generation, consumption and storage levels over 7 days:
+generation and consumption over 7 days:
 
 .. image:: img/elec-timeseries.*
    :width: 95%

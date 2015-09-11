@@ -17,14 +17,14 @@ This tutorial describes how to create the data input and run your own model base
 Run from Excel
 --------------
 
-For an easy first run of ficus without using any python enviroment a small macro in VBA allows running the 
+For an easy first run of ficus without using any python environment a small macro in VBA allows running the 
 optimization directly from Excel.
 
 * Open the file ``example_fromexcel.xlsm``
-* Go to the ``RUN`` sheet and choose a solver. If you chosse any other than the ``neos`` solver, the solver hast to be installed locally on your computer. Choosing ``neos`` uses the ``cbc`` solver from the `NEOS Server for Optimization`_ (no installation required)
+* Go to the ``RUN`` sheet and choose a solver. If you choose any other than the ``neos`` solver, the solver hast to be installed locally on your computer. Choosing ``neos`` uses the ``cbc`` solver from the `NEOS Server for Optimization`_ (no installation required)
 * Push the ``RUN OPTIMIZATION`` button. 
 
-A cmd window should appear showing the actual status and a few minutes later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
+A cmd window should appear showing the actual status and a few minutes later six result figures should show up. The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
 
 Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is called within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on ``ficus.py``  or run it with python. Then continue with ``y``.  
 
@@ -50,7 +50,7 @@ Run from Ipython
 
     run runficus
     
-The shell should show the actual status and a few minutes later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
+The shell should show the actual status and a few minutes later six result figures should show up. The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
 
 Run from Spyder
 ^^^^^^^^
@@ -58,7 +58,7 @@ Run from Spyder
 * Open the ``runficus.py``script within Spyder
 * Run the script with ``F5``
 
-The shell should show the actual status and a few minutes later six result figures should show up. The subfolder ``result`` should contain the saved result figures as well as a resultfile. 
+The shell should show the actual status and a few minutes later six result figures should show up. The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
 
 runficus.py
 ^^^^^^^^
@@ -110,14 +110,14 @@ If locally installed solver `gurobi`_ or `cplex`_ are used, the parameter ``Thre
 
     ficus.report(prob, result_dir)
     
-Saves the reults from the object ``prob`` to an excel file in the directory ``result_dir``.
+Saves the results from the object ``prob`` to an excel file in the directory ``result_dir``.
 
 ::
 
     ficus.result_figures(result_dir,prob=prob, show=True)
     
 Reads and plots the results from the object ``prob`` and saves them in the directory ``result_dir``.
-Can also be used to plot data from a given resultfile with the Paraneter ``resultfile=PATH\TO\RESULTFILE.xlsx`` instead of giving ``prob``.
+Can also be used to plot data from a given result-file with the Parameter ``resultfile=PATH\TO\RESULTFILE.xlsx`` instead of giving ``prob``.
 ``show`` turns on/off showing the plots.
 
 
@@ -125,28 +125,28 @@ Create Input File
 --------------
 The following tutorial is a step by step explanation of how to create your own input file.
 
-For the sake of an example, assume you want to build a new factory named *NewFactory* and cover its energy demand cost optimal. You have the (predicted) demand timeseries in 15 minute time resolution for electricity (``elec``) and heat (``heat``) for 7 days (672 timesteps). 
-You can import electricty and gas through the given infrastructure and export electricity back to the grid.
+For the sake of an example, assume you want to build a new factory named *NewFactory* and cover its energy demand cost optimal. You have the (predicted) demand time-series in 15 minute time resolution for electricity (``elec``) and heat (``heat``) for 7 days (672 time-steps). 
+You can import electricity and gas through the given infrastructure and export electricity back to the grid.
 You consider following processes/storages for converting/storing energy:
 
 * A combined heat and power plant (``chp``) to convert gas to electricity and heat, limited to 1,000,000 kW
 * Two different wind turbines (``wind_1`` and ``wind_2``), limited to 20,000 kW total
 * A gas boiler (``boiler``) to convert gas to heat, limited to  1,000,000 kW
 * A heat storages (``heat_storage``) to store heat, limited to 30,000 kWh
-* A battery storage (``battery``) to store electricity, imited to 100,000 kWh
+* A battery storage (``battery``) to store electricity, limited to 100,000 kWh
 
 First make a copy of ``example.xlsx`` or ``example_fromexcel.xlsm`` depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the new file step by step following the instructions.
 
 Time-Settings
 ^^^^^^^^
-Set timebase of time dependent Data and timesteps to be optimized
+Set timebase of time dependent Data and time-steps to be optimized
 
-* **timebase**: time-interval between timesteps of all given timeseries data.
-* **start**: First timestep to use for the optimisation
-* **end**: Last timestep to use for the optimisation
+* **timebase**: time-interval between time-steps of all given time-series data.
+* **start**: First time-step to use for the optimisation
+* **end**: Last time-step to use for the optimisation
 
 *Edit Example:*
-    Keep the timebase at 900s (=15 minutes), the start timestep at 1 and the end timestep at 672 (optimise the whole 7 days)
+    Keep the timebase at 900s (=15 minutes), the start time-step at 1 and the end time-step at 672 (optimise the whole 7 days)
 
     .. csv-table:: Sheet **Time-Settings**;
        :header-rows: 1
@@ -165,8 +165,8 @@ If all settings are set to ``no``, the problem will be a linear optimisation pro
 Activating one/more of the settings will activate equations, that allow additional restriction but may lead to longer claculation of the model because integer variable have to be used. The problem will then become a mixed integer linear optimisation problem.
 
 * **Storage In-Out**: Prevents storages from charging and discharging one commodity at the same time, if activated. This can happen, when dumping energy of one commodity will lead to lower total costs. The model then uses the efficiency of the storage to dump the energy with no dumping costs.
-* **Partload**: Consider minimum partload settings, partload efficiencies as well as start-up costs of processes.
-* **Min-Cap**: Consider minimal installed capacities of processes and storages. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
+* **Partload**: Consider minimum part-load settings, part-load efficiencies as well as start-up costs of processes.
+* **Min-Cap**: Consider minimal installed capacities of processes and storages. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal capacities of processes/storages to the same level, this allows investigating if building a specific process/storage with a specific size is cost efficient.
 
 See :ref:`MIP-Equations-main-ref` for a more detailed description on the effects of activating one of the equations with examples.
 
@@ -191,9 +191,9 @@ For every commodity that can be imported/exported:
 * **demand rate**: demand rate (in Euro/kW/a) to calculate the 'peak demand charge'_ of one commodity. The highest imported power during a specific time period (``time-interval-demand-rate``) of highest use in the year is used to calculate the demand charges by multiplication with the demand rate
 * **time-interval-demand-rate**: time period or time interval used to determine the highest imported power use in the year for calculating the peak demnd charge
 * **p-max-initial**: Initial value of highest imported power use in the year. Sets the minimum for demand charges to ``demand-rate`` * ``p-max-initial``
-* **import-max**: maximum power of commodity that can be imported per timestep
-* **export-max**: maximum power of commodity that can be exported per timestep
-* **operating-hours-min**: Minimum value for "operating hours" of import. Operating hours are calculated by dividing the total energy imported during one year by the highest imported power during a specific time period (``time-interval-demand-rate``) in the year. The highest possible value is the number of hours of one year (8760), which would lead to a constant import over the whole year (smooth load). This parameter can be used to model special demand charge tariffs, that require a minimum value for the operatimg hours for energy import. Set the value to zero to ignore this constraint.
+* **import-max**: maximum power of commodity that can be imported per time-step
+* **export-max**: maximum power of commodity that can be exported per time-step
+* **operating-hours-min**: Minimum value for "operating hours" of import. Operating hours are calculated by dividing the total energy imported during one year by the highest imported power during a specific time period (``time-interval-demand-rate``) in the year. The highest possible value is the number of hours of one year (8760), which would lead to a constant import over the whole year (smooth load). This parameter can be used to model special demand charge tariffs, that require a minimum value for the operating hours for energy import. Set the value to zero to ignore this constraint.
 
 *Edit Example:*
     The commodities ``gas`` and ``elec`` that can be imported/exported are already defined. 
@@ -209,12 +209,12 @@ For every commodity that can be imported/exported:
 
 Ext-Import
 ^^^^^^^^
-Timeseries: Costs for every commodity that can be imported for every timestep (in Euro/kWh). 
+Time-series: Costs for every commodity that can be imported for every time-step (in Euro/kWh). 
 
-**Note**: Postive values mean, that you have to **PAY** for imported energy 
+**Note**: Positive values mean, that you have to **PAY** for imported energy 
 
 *Edit Example:*
-    Set the costs for electricty import to 0.15 Euro/kWh and for gas import to 0.05 Euro/kWh for very timestep
+    Set the costs for electricity import to 0.15 Euro/kWh and for gas import to 0.05 Euro/kWh for very time-step.
     
     .. csv-table:: Sheet **Ext-Import**
        :header-rows: 1
@@ -231,12 +231,12 @@ Timeseries: Costs for every commodity that can be imported for every timestep (i
 
 Ext-Export
 ^^^^^^^^
-Timeseries: Revenues for every commodity that can be exported for every timestep (in Euro/kWh). 
+Time-series: Revenues for every commodity that can be exported for every time-step (in Euro/kWh). 
 
-**Note**: Postive values mean, that you **RECEIVE MONEY** for exported energy.
+**Note**: Positive values mean, that you **RECEIVE MONEY** for exported energy.
 
 *Edit Example:*
-    Set the revenues for electricty export to 0.01 Euro/kWh. Gas can not be exported because we limited the maximal power export to zero. So no timeseries is needed.
+    Set the revenues for electricty export to 0.01 Euro/kWh. Gas can not be exported because we limited the maximal power export to zero. So no time-series is needed.
     
     .. csv-table:: Sheet **Ext-Export**
        :header-rows: 1
@@ -255,9 +255,9 @@ Timeseries: Revenues for every commodity that can be exported for every timestep
 Demand-Rate-Factor
 ^^^^^^^^
 
-Timeseries: Factor to be multiplied with the demand rate to calculate demand charges for every timestep.
+Time-series: Factor to be multiplied with the demand rate to calculate demand charges for every time-step.
 
-This allows to raise, reduce or turn off the demand rate for specific timesteps to consider special tariff systems.
+This allows to raise, reduce or turn off the demand rate for specific time-steps to consider special tariff systems.
 Set all values to ``1``, for a constant demand rate
 
 *Edit Example:*
@@ -284,20 +284,20 @@ Process
 
 * **Process**: Name of the process
 * **Num**: Number of identical processes
-* **class**: assign process to a Process Class, which allows to consider addtitional fees/subsidies for inputs or outputs of this class and total power/energy limits for the whole class
+* **class**: assign process to a Process Class, which allows to consider additional fees/subsidies for inputs or outputs of this class and total power/energy limits for the whole class
 * **cost-inv**: Specific investment costs for new capacities (in Euro/kW)
 * **cost-fix**: Specific annual fix costs (in Euro/kW/a)
 * **cost-var**: Specific variable costs per energy throughput (in Euro/kWh)
 * **cap-installed**: Already installed capacity of process (no additional investment costs) (in kW)
-* **cap-new-min**: Minimum capacity of process to be build, if process is built. It is allways possible that the process isn't built at all. (in kW) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
+* **cap-new-min**: Minimum capacity of process to be build, if process is built. It is allays possible that the process isn't built at all. (in kW) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
 * **cap-new-max**: Maximum new process capacity
-* **partload-min**: Specific minimum partload of process (normalized to 1 = max). (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True``)
-* **start-up-energy**: Specific additional energy consumed by the process for strat-up (in kWh/kW). For each input commodity this value is multiplied by the ``ratio`` in ``Process-Commodity`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True``)
-* **initial-power**: Initial Power throughput of process for timestep t=0 (in kW)
+* **partload-min**: Specific minimum part-load of process (normalized to 1 = max). (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True``)
+* **start-up-energy**: Specific additional energy consumed by the process for start-up (in kWh/kW). For each input commodity this value is multiplied by the ``ratio`` in ``Process-Commodity`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True``)
+* **initial-power**: Initial Power throughput of process for time-step t=0 (in kW)
 * **depreciation**: Depreciation period. Economic lifetime (more conservative than technical lifetime) of a process investment in years (a). Used to calculate annuity factor for investment costs.
 * **wacc**: Weighted average cost of capital. Percentage (%/100) of costs for capital after taxes. Used to calculate annuity factor for investment costs.
 
-**Note**: All specific costs and capacities refer to the commoditis with input or output ratios of ``1``! For a process *Turbine* defined by the following table, all specific costs (e.g. Specific Investment Costs) corespond to the installed electric power. So if specific investment costs of 10 Euro/kW are given and a turbine with 10 kW electric output power is built, the investment costs are 100 Euro. The maximum input power of the commodity gas though is 300 kW!
+**Note**: All specific costs and capacities refer to the commodities with input or output ratios of ``1``! For a process *Turbine* defined by the following table, all specific costs (e.g. Specific Investment Costs) correspond to the installed electric power. So if specific investment costs of 10 Euro/kW are given and a turbine with 10 kW electric output power is built, the investment costs are 100 Euro. The maximum input power of the commodity gas though is 300 kW!
 
 .. csv-table:: Example for input/output ratios of a process
    :header-rows: 1
@@ -326,16 +326,16 @@ Process
 
 Process-Commodity
 ^^^^^^^^
-Define input and output commodities and the conversion efficiencies between them for eacht process. Each commodities can have multiple inputs and outputs.
+Define input and output commodities and the conversion efficiencies between them for each process. Each commodities can have multiple inputs and outputs.
 
 * **Process**: Name of the Process. Make sure that you use exactly the same name, than in sheet ``Process``
 * **Commodity**: Name of commodity that is used/produced by the process.
 * **Direction**:  *In* if the commodity is used by the process, *Out* if the commodity is produced. 
 * **ratio**: input/output ratios for the commodities of the process at full load.
-* **partload-ratio**: input/output ratios for the commodities of the process at minimum partload (``partload-min``) given in sheet ``Process`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True`` and ``partload-min`` is between 0 and 1)
+* **partload-ratio**: input/output ratios for the commodities of the process at minimum part-load (``partload-min``) given in sheet ``Process`` (**Note**: only considered if ``Partload`` in ``MIP-Settings`` is ``True`` and ``partload-min`` is between 0 and 1)
 
 
-Let's assume we defined a **chp** (combined heat and power) unit and set the minimum partload to 50% (``partload-min=0.5``) in the :ref:`Process-ref` sheet:
+Let's assume we defined a **chp** (combined heat and power) unit and set the minimum part-load to 50% (``partload-min=0.5``) in the :ref:`Process-ref` sheet:
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
@@ -344,11 +344,11 @@ Let's assume we defined a **chp** (combined heat and power) unit and set the min
     Process,Num,class,...,partload-min,...
     chp,1,CHP,...,0.5,...
 
-Now we want to define, that the chp unit consumes ``gas`` and produces elecricity (``elec``) and ``heat``. We want to set the electric efficiency to **40%** at full load and to **30%** at minimmum partload. The efficinecy for 
-generating heat should be **50%** at full load and **55%** at partload.
+Now we want to define, that the chp unit consumes ``gas`` and produces electricity (``elec``) and ``heat``. We want to set the electric efficiency to **40%** at full load and to **30%** at minimum part-load. The efficiency for 
+generating heat should be **50%** at full load and **55%** at part-load.
 
-Because specific costs and power outputs for chp units are usually given refered to the electric power output, we set the ``ratio`` **ans** ``ratio-partload`` of ``(chp,elec,Out)`` to **1**.
-(**Note**: All specific costs and capacities given in the ``Process`` sheet refer to the commoditis with input or output ratios of ``1``! See :ref:`Process-ref`)
+Because specific costs and power outputs for chp units are usually given referred to the electric power output, we set the ``ratio`` **ans** ``ratio-partload`` of ``(chp,elec,Out)`` to **1**.
+(**Note**: All specific costs and capacities given in the ``Process`` sheet refer to the commodities with input or output ratios of ``1``! See :ref:`Process-ref`)
 
 Now we can calculate the ratios of the other commodities based on the efficiencies, so we get:
 
@@ -361,9 +361,9 @@ Now we can calculate the ratios of the other commodities based on the efficienci
     chp,elec,Out,**1.00**,**1.00**
     chp,heat,Out,1.25,2.20
 
-So with setting the ratios for full load and minimum partload we defined the partload performance curve of our process. Points between full load and minimum partload are approximated as a linear function between them. (**Note**: If ``Partload`` in ``MIP-Settings`` is set to ``False``, partload behaviour is not considered and the efficiencies defined by ``ratio`` are constant for all operating points. The values in ``ratio-partload`` are ignored).
+So with setting the ratios for full load and minimum part-load we defined the part-load performance curve of our process. Points between full load and minimum part-load are approximated as a linear function between them. (**Note**: If ``Partload`` in ``MIP-Settings`` is set to ``False``, part-load behaviour is not considered and the efficiencies defined by ``ratio`` are constant for all operating points. The values in ``ratio-partload`` are ignored).
 
-The following figure shows the power inputs/outputs and eiffiencies of a 10 kW (elec!) chp unit with the parameters used in this example with and without considering partload behaviour.
+The following figure shows the power inputs/outputs and efficiencies of a 10 kW (elec!) chp unit with the parameters used in this example with and without considering part-load behaviour.
 
 .. image:: img/process_commodity_partload_example.*
    :width: 95%
@@ -371,7 +371,7 @@ The following figure shows the power inputs/outputs and eiffiencies of a 10 kW (
  
  
 *Edit Example:*
-    Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the ratios as shown in the table. Because partload behaviour is not considered in this example, we just use the same values for ``ratio-partload`` (we could leave the ``ratio-partload`` column empty or set to any abritary value as long as ``Partload`` in ``MIP-Equations`` is deactivated)
+    Delete all existing processes and add the new processes **chp**, **wind_1**, **wind_2** and **boiler**. Set the ratios as shown in the table. Because part-load behaviour is not considered in this example, we just use the same values for ``ratio-partload`` (we could leave the ``ratio-partload`` column empty or set to any arbitrary value as long as ``Partload`` in ``MIP-Equations`` is deactivated)
     
     .. csv-table:: Sheet **Process-Commodity**
        :header-rows: 1
@@ -399,7 +399,7 @@ Processes can be assigned to a process class in the columns ``class`` in the ``P
 *   **Class**: Name of the Process Class
 *   **Commodity**: Commodity of the processes within the class
 *   **Direction**: Direction of the commodity within the processes of this class (*In* or  *Out*)
-*   **fee**: additional fee for produced/consumed energy in this class. (Postive values: Pay Money; Negative Values: Receive Money)
+*   **fee**: additional fee for produced/consumed energy in this class. (Positive values: Pay Money; Negative Values: Receive Money)
 *   **cap-max**: Maximum value for the sum of all process capacities of this class (Independent from ``Commodity``)
 *   **energy-max**: Maximum value for the sum of energy of the specified commodity that can be produced/consumed by the class within one year
 
@@ -431,12 +431,12 @@ Define storages for a commodity with technical parameters and specific costs.
 *   **cost-fix-e**: Specific annual fix costs per installed energy (in Euro/kWh/a)
 *   **cost-var**: Specific variable costs per energy throughput (in Euro/kWh)
 *   **cap-installed-p**: Already installed charge/discharge power capacity of storage (no additional investment costs) (in kW)
-*   **cap-new-min-p**: Minimum charge/discharge power capacity of stotage to be build, if process is built. It is allways possible that the storage isn't built at all. (in kW) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
+*   **cap-new-min-p**: Minimum charge/discharge power capacity of storage to be build, if process is built. It is always possible that the storage isn't built at all. (in kW) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
 *   **cap-new-max-p**:  Maximum new charge/discharge power capacity of storage (in kW)
 *   **cap-installed-e**:Already installed energy capacity of storage (no additional investment costs) (in kWh)
-*   **cap-new-min-e**: Minimum power capacity of stotage to be build, if process is built. It is allways possible that the storage isn't built at all. (in kWh) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
+*   **cap-new-min-e**: Minimum power capacity of storage to be build, if process is built. It is always possible that the storage isn't built at all. (in kWh) (**Note**: only considered if ``Min-Cap`` in ``MIP-Settings`` is ``True``)
 *   **cap-new-max-e**: Maximum new energy capacity of storage (in kWh)
-*   **max-p-e-ratio**: Maximum relation of charge-dischrage power to storage energy (in kW/kWh). power <= energy * ratio
+*   **max-p-e-ratio**: Maximum relation of charge-discharge power to storage energy (in kW/kWh). power <= energy * ratio
 *   **eff-in**: Charge efficiency (in %/100)
 *   **eff-out**: Discharge efficiency (in %/100)
 *   **self-discharge**: Self discharge of storage (in %/h/100)
@@ -446,7 +446,7 @@ Define storages for a commodity with technical parameters and specific costs.
 *   **depreciation**: Depreciation period. Economic lifetime (more conservative than technical lifetime) of a process investment in years (a). Used to calculate annuity factor for investment costs.
 *   **wacc**: Weighted average cost of capital. Percentage (%/100) of costs for capital after taxes. Used to calculate annuity factor for investment costs.
 
-**Note**: All values for the storage energy capacities and energy specific costs are relasted to the energy that can be **stored in the storage** with 100 % depth of discharge (DOD). The energy that can be used out of the storage might be less, depending on the ``DOD`` and the discharge efficiency ``eff-out``. 
+**Note**: All values for the storage energy capacities and energy specific costs are related to the energy that can be **stored in the storage** with 100 % depth of discharge (DOD). The energy that can be used out of the storage might be less, depending on the ``DOD`` and the discharge efficiency ``eff-out``. 
 
 *Edit Example:*
     Change the parameters of the storage **battery** and **heat storage** as shown in the table.
@@ -479,10 +479,10 @@ Define storages for a commodity with technical parameters and specific costs.
 Demand
 ^^^^^^^^
 
-Timeseries: (average) power demand for every commodity to be satisfied for every timestep (in kW). 
+Time-series: (average) power demand for every commodity to be satisfied for every time-step (in kW). 
 
 *Edit Example:*
-    Keep the demand timeseries for ``elec`` and ``heat`` as they are
+    Keep the demand time-series for ``elec`` and ``heat`` as they are
     
     .. csv-table:: Sheet **Demand**
        :header-rows: 1
@@ -501,7 +501,7 @@ Timeseries: (average) power demand for every commodity to be satisfied for every
 SupIm
 ^^^^^^^^
 
-Intermittent Supply: A timeseries normalised to a maximum value of 1 relative to the installed capacity of a process using this commodity as input. For example, a wind power timeseries should reach value 1, when the wind speed exceeds the modelled wind turbine’s design wind speed is exceeded. This implies that any non-linear behaviour of intermittent processes can already be incorporated while preparing this timeseries.
+Intermittent Supply: A time-series normalised to a maximum value of 1 relative to the installed capacity of a process using this commodity as input. For example, a wind power time-series should reach value 1, when the wind speed exceeds the modelled wind turbine’s design wind speed is exceeded. This implies that any non-linear behaviour of intermittent processes can already be incorporated while preparing this time-series.
 
 
 *Edit Example:*
@@ -590,7 +590,7 @@ Open :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewF
     6, 0.15, **0.03**
     7, ...,...
 
-Save the new file and run the model. Take a look at the ``heat`` timeseries result figure:
+Save the new file and run the model. Take a look at the ``heat`` time-series result figure:
 
 .. image:: NewFactory/MIP_Storage_In-Out/deactivated/heat-timeseries.*
    :width: 95%
@@ -609,7 +609,7 @@ To avoid this, activate ``Storage In-Out`` in the sheet ``MIP-Equations``:
     Partload, no
     Min-Cap, no
     
-Run the model again. This will take a little more time than befor, because the equation uses an integer variable and the model becomes a mixed integer linear optimisation problem. Looking at the ``heat`` timeseries result figure again, you can see that charging/dischraging of the storage at the same time is avoided now.
+Run the model again. This will take a little more time than before, because the equation uses an integer variable and the model becomes a mixed integer linear optimisation problem. Looking at the ``heat`` time-series result figure again, you can see that charging/discharging of the storage at the same time is avoided now.
 
 .. image:: NewFactory/MIP_Storage_In-Out/activated/heat-timeseries.*
    :width: 95%
@@ -618,7 +618,7 @@ Run the model again. This will take a little more time than befor, because the e
 Partload
 ^^^^^^^^
 
-If activated, minimum partload settings, partload efficiencies as well as start-up costs of processes are considered.
+If activated, minimum part-load settings, part-load efficiencies as well as start-up costs of processes are considered.
 
 Open :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`.
 
@@ -664,13 +664,13 @@ To activate this constrained , we have to activate ``Partload`` in the sheet ``M
     Partload, **yes**
     Min-Cap, no
     
-Now run the model and take a look at the ``elec`` timeseries result figure again. You can see that the electric power output of th chp now is allways greater than 50% of the installed capacity (7000 kW), when the chp unit is running.
+Now run the model and take a look at the ``elec`` time-series result figure again. You can see that the electric power output of the chp now is always greater than 50% of the installed capacity (7000 kW), when the chp unit is running.
 
 .. image:: NewFactory/MIP_Partload/min-partload/elec-timeseries.*
    :width: 95%
    :align: center
    
-In the next step we want to see the influence of considering partload efficiency. Therefore we change the ``ratio-partload`` values in the ``Process-Commodity`` sheet as shown below , without changing the values in ``Process`` sheet. With this changes the chp unit has an electric (thermal) efficiency of **40% (50%)** at full load and **30% (55%)** at minimum partload (50% of max power). See :ref:`Process-Co-ref` for detailed information. (**Note:** partload efficiency can only be considere if ``partload-min`` is greater than zero.)
+In the next step we want to see the influence of considering part-load efficiency. Therefore we change the ``ratio-partload`` values in the ``Process-Commodity`` sheet as shown below , without changing the values in ``Process`` sheet. With this changes the chp unit has an electric (thermal) efficiency of **40% (50%)** at full load and **30% (55%)** at minimum part-load (50% of max. power). See :ref:`Process-Co-ref` for detailed information. (**Note:** part-load efficiency can only be considered if ``partload-min`` is greater than zero.)
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
@@ -692,13 +692,13 @@ In the next step we want to see the influence of considering partload efficiency
     chp,elec,Out,1.00,1.00
     chp,heat,Out,1.25,**2.2**
     
-Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the model tries to run the chp unit at full load as much as possible to benefit from it's better electric efficiency at full load and reduce costs for gas import.
+Run the model and take a look at the ``elec`` time-series result figure again. You can see how the model tries to run the chp unit at full load as much as possible to benefit from it's better electric efficiency at full load and reduce costs for gas import.
 
 .. image:: NewFactory/MIP_Partload/partload-eff/elec-timeseries.*
    :width: 95%
    :align: center
 
-In the last step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh *  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. (**Note:**Start-up costs only occure, if ``partload-min`` is greater than zero.
+In the last step we add start-up costs for the chp unit, by setting the parameter ``start-up-energy`` in the ``Process`` sheet to **0.1 kWh/kW**. This means, that for every start-up all input commodities (here gas) consume  0.1 kWh *  ``ratio`` (here 0.1*2.5 kWh) per installed capacity of the process. (**Note:**Start-up costs only occur, if ``partload-min`` is greater than zero.
 
 .. csv-table:: Sheet **Process**
    :header-rows: 1
@@ -710,7 +710,7 @@ In the last step we add start-up costs for the chp unit, by setting the paramete
     wind_2,1,...,0,0,1e6,0,0...
     boiler,1,...,0,0,1e6,0,0...
 
-Run the model and take a look at the ``elec`` timeseries result figure again. You can see how the number of start-up's is reduced to minimize start-up costs.
+Run the model and take a look at the ``elec`` time-series result figure again. You can see how the number of start-up's is reduced to minimize start-up costs.
 
 .. image:: NewFactory/MIP_Partload/start-up/elec-timeseries.*
    :width: 95%
@@ -721,7 +721,7 @@ Run the model and take a look at the ``elec`` timeseries result figure again. Yo
 Min-Cap
 ^^^^^^^^
 
-Consider minimal installed capacities of processes and storages if activated. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal cpapcities of processes/storages to the same level, this allows invetigating if buidling a specific process/storage with a specific size is cost efficient.
+Consider minimal installed capacities of processes and storages if activated. This allows to set a minimum capacity of processes and storages, that has to be build, if the process is built at all (it still can not be built at all). Setting minimal and maximal capacities of processes/storages to the same level, this allows investigating if building a specific process/storage with a specific size is cost efficient.
 
 Open and run :download:`NewFactory.xlsx <NewFactory/NewFactory.xlsx>` or :download:`NewFactory.xlsm <NewFactory/NewFactory.xlsm>`, and take a look at the ``capacities`` result figure:
 
@@ -752,7 +752,7 @@ To activate this constraint , we have to activate ``Min-Cap`` in the sheet ``MIP
     Partload, **yes**
     Min-Cap, no
 
-Running the file with the above chnages show the following ``capacities`` result figure, You can see, that a chp unit with exactly 10,000 kW is built.
+Running the file with the above changes show the following ``capacities`` result figure, You can see, that a chp unit with exactly 10,000 kW is built.
  
  .. image:: NewFactory/MIP_Cap-Min/activated/capacities.*
    :width: 95%
