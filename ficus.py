@@ -1029,52 +1029,52 @@ def create_model(data):
 			return m.costs[cost_type] == \
 				sum(m.pro_cap_new[p] * \
 					process.loc[p]['cost-inv'] * \
-					process.loc[p]['annuity_factor'] * year_factor\
+					process.loc[p]['annuity_factor']\
 					for p in m.pro_tuples)\
 				+sum(m.sto_cap_p_new[s] * 
 						storage.loc[s]['cost-inv-p'] * 
-						storage.loc[s]['annuity_factor']  * year_factor\
+						storage.loc[s]['annuity_factor']\
 					+m.sto_cap_e_new[s] * 
 						storage.loc[s]['cost-inv-e'] * 
-						storage.loc[s]['annuity_factor'] * year_factor\
+						storage.loc[s]['annuity_factor']\
 					for s in m.sto_tuples)
 		
 		#operation independent costs = capacity * cost_fix
 		elif cost_type == 'Fix costs':
 			return m.costs[cost_type] == \
-				sum(m.pro_cap[p] * process.loc[p]['cost-fix'] * year_factor\
+				sum(m.pro_cap[p] * process.loc[p]['cost-fix']\
 					for p in m.pro_tuples)\
 				+sum(m.sto_cap_p[s] * storage.loc[s]['cost-fix-p']
 					+m.sto_cap_e[s] * storage.loc[s]['cost-fix-e'] 
-					for s in m.sto_tuples) * year_factor
+					for s in m.sto_tuples)
 		
 		# Variable costs dependent on energy through process/storage = sum(t)[cost_var * energy(t)] 
 		elif cost_type == 'Var costs':
 			return m.costs[cost_type] == \
 				sum(m.pro_p_flow[p,t] * p2e \
 					*process.loc[p]['cost-var']\
-					for t in m.t for p in m.pro_tuples)\
+					for t in m.t for p in m.pro_tuples)/year_factor\
 				+sum((m.sto_p_in[s,t] + m.sto_p_out[s,t]) * p2e * storage.loc[s]['cost-var']
-					for t in m.t for s in m.sto_tuples)
+					for t in m.t for s in m.sto_tuples)/year_factor
 		
 		#costs for external import = sum(t) [ p_ext) * price(t)]
 		elif cost_type == 'Import':	
 			return m.costs[cost_type] == \
 				sum(m.ext_p_in[c,t]*p2e \
 					* (ext_import.loc[t][c])\
-					for t in m.t for c in m.co_ext_in)
+					for t in m.t for c in m.co_ext_in)/year_factor
 		
 		#costs for export = sum(t) [- p_ext_export(t) * price(t)]
 		elif cost_type == 'Export':	
 			return m.costs[cost_type] == \
 				-sum( m.ext_p_out[c,t] * p2e * ext_export.loc[t][c]\
-					for t in m.t for c in m.co_ext_out)	
+					for t in m.t for c in m.co_ext_out)/year_factor
 		
 		# Costs for grid use = p_max * power_price
 		elif cost_type == 'Demand charges':
 			return m.costs[cost_type] == \
-				sum(m.ext_demandrate_max[c] * ext_co.loc[c]['demand-rate']  * year_factor\
-					for c in m.co_ext_in )	
+				sum(m.ext_demandrate_max[c] * ext_co.loc[c]['demand-rate']\
+					for c in m.co_ext_in )
 					
 		# Costs for process fee
 		elif cost_type == 'Process fee':
@@ -1082,22 +1082,22 @@ def create_model(data):
 					sum(m.proclass_e_in[procl] * process_class.loc[procl]['fee']\
 						for procl in m.proclass_tuples\
 						if process_class.loc[procl]['Direction']=='In'\
-						if process_class.loc[procl]['fee']>0)\
+						if process_class.loc[procl]['fee']>0)/year_factor\
 					+sum(m.proclass_e_out[procl] * process_class.loc[procl]['fee']
 						for procl in m.proclass_tuples\
 						if process_class.loc[procl]['Direction']=='Out'\
-						if process_class.loc[procl]['fee']>0)
+						if process_class.loc[procl]['fee']>0)/year_factor
 		# Costs for process subsidies
 		elif cost_type == 'Pro subsidy':
 				return m.costs[cost_type] == \
 					sum(m.proclass_e_in[procl] * process_class.loc[procl]['fee']\
 						for procl in m.proclass_tuples\
 						if process_class.loc[procl]['Direction']=='In'\
-						if process_class.loc[procl]['fee']<0)\
+						if process_class.loc[procl]['fee']<0)/year_factor\
 					+sum(m.proclass_e_out[procl] * process_class.loc[procl]['fee']
 						for procl in m.proclass_tuples\
 						if process_class.loc[procl]['Direction']=='Out'\
-						if process_class.loc[procl]['fee']<0)			
+						if process_class.loc[procl]['fee']<0)/year_factor			
 		else:
 			raise NotImplementedError("Unknown cost type!")					
 	m.cost_sum = pyen.Constraint(
@@ -2344,7 +2344,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 	# FIGURE
 	fig = plt.figure(figsize=(11,7))
 	gs = mpl.gridspec.GridSpec(2, 3, height_ratios=[0.01,10], width_ratios = [2,2,1])
-	fig.suptitle('Costs',fontsize=fontsize)
+	fig.suptitle('Annual costs',fontsize=fontsize)
 		
 	ax0 = plt.subplot(gs[3])
 	ax1 = plt.subplot(gs[4],sharey=ax0)
@@ -2373,7 +2373,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 				numpoints = 1)
 	handles, labels = ax0.get_legend_handles_labels()
 	ax0.legend(handles[::-1], labels[::-1]) # reverse the order
-	ax0.set_ylabel('Costs (Euro)', fontsize=fontsize-2)
+	ax0.set_ylabel('Costs (Euro/a)', fontsize=fontsize-2)
 	ax0.set_ylim(0,max(costs[costs>0].sum(),costs[costs<0].sum())*1.1)
 	
 	#Set ax1 properties and legend	
