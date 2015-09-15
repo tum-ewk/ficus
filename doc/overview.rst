@@ -7,7 +7,7 @@ The objective of the model is to supply the given demand with minimal costs. The
 
 .. note::
 
-    All resulting costs of the optimisation are given based on the time period of zhe given input data. (e.g. if data timeseries for one week are given as a model input, the all results show cost per week!)
+    All resulting costs of the optimisation are **annualized**.
 
 The timebase of the model can be configured depending on the timebase of the given data (demand). For all commodities and entities then the same timebase is used.
 
