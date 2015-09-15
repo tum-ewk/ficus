@@ -1689,7 +1689,7 @@ def result_figures(dir, prob = None, resultfile = None, timesteps = None, fontsi
 		else:
 			commodities = prob.demand.columns
 	elif resultfile:
-		commodities = pd.ExcelFile(resultfile).parse('Demand',index_col=[0]).columns
+		commodities = pd.ExcelFile(resultfile).parse('Demand timeseries',index_col=[0]).columns
 	else:
 		raise NotImplementedError('please specify either "prob" or "resultfile"!')
 
