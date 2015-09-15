@@ -5,11 +5,11 @@ ficus consists of several **model entities**. These are external imported/export
 
 The objective of the model is to supply the given demand with minimal costs. The main restriction is the power balance of every commodity for every time-step. Commodities are goods that can be imported/exported, generated, stored and consumed. They are represented by their power flow (in kW) per time-step.
 
+The timebase of the model can be configured depending on the timebase of the given data (demand). For all commodities and entities then the same timebase is used.
+
 .. note::
 
     All resulting costs of the optimisation are **annualized**.
-
-The timebase of the model can be configured depending on the timebase of the given data (demand). For all commodities and entities then the same timebase is used.
 
 External imported/exported commodities
 ^^^^^^^^^
