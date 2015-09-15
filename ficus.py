@@ -2132,14 +2132,16 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,s
 	ax1.legend(handles[::-1], labels[::-1]) # reverse the order
 	plt.setp(ax1.get_yticklabels(), visible=False)
 
+
 	##AXES Properties##
 	##############	
 	axes = [ax0, ax1]
 	for ax in axes:
-		ax.grid()
+		ax.grid(axis='y')
 		ax.set_xlim(0.55,2.1)
 		ax.tick_params(labelsize=fontsize-2)
 		plt.setp(ax.get_xticklabels(), visible=False)
+		ax.xaxis.set_tick_params(size=0)
 		# group 1,000,000 with commas
 		group_thousands = mpl.ticker.FuncFormatter(
 			lambda x, pos: '{:0,d}'.format(int(x)))
@@ -2397,6 +2399,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 		ax.set_xlim(0.55,2.4)
 		ax.tick_params(labelsize=fontsize-2)
 		plt.setp(ax.get_xticklabels(), visible=False)
+		ax.xaxis.set_tick_params(size=0)
 		# group 1,000,000 with commas
 		group_thousands = mpl.ticker.FuncFormatter(
 			lambda x, pos: '{:0,d}'.format(int(x)))
