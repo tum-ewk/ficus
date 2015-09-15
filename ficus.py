@@ -95,10 +95,11 @@ def run_from_excel(input_file,opt):
 		input_file: path of input file
 		opt: solver
 	"""
+	import sys
 	
 	#create new time stamp folder in subfolder "result" with name of inputfile 
 	result_name = os.path.splitext(os.path.split(input_file)[1])[0]
-	result_folder = 'result'
+	result_folder = os.path.join(os.path.split(input_file)[0],'result')
 	result_dir = prepare_result_directory(result_folder,result_name)
 
 	#Use "cbc" or "mosek" solver from Neos server, if selected
@@ -116,7 +117,7 @@ def run_from_excel(input_file,opt):
 
 	#save results
 	report(prob, result_dir)
-	#save figures
+	#save figures	
 	result_figures(result_dir,prob=prob, show=True)
 	
 	raw_input("Press Enter to close figures and cmd window...\n")
@@ -2505,7 +2506,7 @@ def install():
 		pip.main(['install', 'pyomo'])
 	
 	#copy "ficus.py" to pythons 'Scripts' Folder
-	shutil.copy(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])),"ficus.py"),os.path.join(sys.exec_prefix,"Lib\\site-packages"))
+	shutil.copy(os.path.join(os.path.dirname(os.path.realpath(__file__)),"ficus.py"),os.path.join(sys.exec_prefix,"Lib\\site-packages"))
 	raw_input("Installed packages and copied ficus.py to "+os.path.join(sys.exec_prefix,"Lib\\site-packages")+"\nPress Enter to continue...\n")
 	
 # Example
