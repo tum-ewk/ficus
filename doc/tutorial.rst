@@ -197,7 +197,7 @@ For every commodity that can be imported/exported:
 
 *Edit Example:*
     The commodities ``gas`` and ``elec`` that can be imported/exported are already defined. 
-    Change the Value for the demand rate of the commodity ``elec`` to 100. Keep the other inputs as they are.
+    Change the Value for the demand rate of the commodity ``elec`` to 10. Keep the other inputs as they are.
     
     .. csv-table:: Sheet **Ext-Commodities**
        :header-rows: 1
