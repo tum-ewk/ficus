@@ -933,8 +933,7 @@ def create_model(data):
 			m.sto_tuples, m.t,
 			rule = sto_p_out_not_in_rule,
 			doc='only discharge, when not charging')
-
-	
+		
 		
 	#Energy Content
 	def sto_e_cont_def_rule(m,sto,co,num,t):
