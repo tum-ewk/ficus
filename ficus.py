@@ -2039,6 +2039,10 @@ def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=
 		
 		if ax == axes[-1]:
 			ax.set_xlabel('Time in year (h)', fontsize=fontsize)
+			# ax.set_xticklabels(ax.get_xticks()/4)
+			group_thousandsx = mpl.ticker.FuncFormatter(
+			lambda x, pos: '{:0,d}'.format(int(x/4)))
+			ax.xaxis.set_major_formatter(group_thousandsx)
 		else:
 			plt.setp(ax.get_xticklabels(), visible=False)
 	
