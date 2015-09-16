@@ -71,6 +71,7 @@ Once installation is complete, [download](https://github.com/yabata/ficus/archiv
 1. Run `ficus.py` (by double clicking or open with python). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 2. Open the `example_fromexcel.xlsm`, choose a solver and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
 
+About one minute after running the optimisation the result figures should show up and the sub-folder `result` should contain plots and a result file.
 
 ### [Run from IPython](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-ipython)
 
@@ -102,7 +103,9 @@ Once installation is complete, [download](https://github.com/yabata/ficus/archiv
   ```
     run ficus
   ```
- 
+  
+About one minute after running ``runficus.py`` the result figures should show up and the sub-folder `result` should contain plots and a result file.
+
 ### [Run from Spyder](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-spyder)
 
 1. Fire up Spyder
@@ -112,7 +115,6 @@ Once installation is complete, [download](https://github.com/yabata/ficus/archiv
 3. Run the `runficus.py` script.
   * Open `runficus.py` with Spyder
   * Run the script with `F5`
-
 
 About one minute after running ``runficus.py`` the result figures should show up and the sub-folder `result` should contain plots and a result file.
 
