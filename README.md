@@ -1,6 +1,6 @@
 # ficus
 
-ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) [linear programming](https://en.wikipedia.org/wiki/Linear_programming) optimisation model for capacity expansion planning and unit commitment for local energy systems. Referring to [URBS](https://github.com/tum-ens/urbs) and [VICUS](https://github.com/ojdo/vicus) it was developed as a model for optimisation energy systems of factories, but it can also be used for other energy consumers (e.g. households)
+ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) [linear programming](https://en.wikipedia.org/wiki/Linear_programming) optimisation model for capacity expansion planning and unit commitment for local energy systems. Referring to [URBS](https://github.com/tum-ens/urbs) and [VICUS](https://github.com/ojdo/vicus) it was developed as a model for optimisation energy systems of factories, but it can also be used for other energy consumers (e.g. residential buildings)
 
 [![Documentation Status](https://readthedocs.org/projects/ficus/badge/?version=latest)](https://ficus.readthedocs.org/en/latest/)
 
@@ -68,7 +68,7 @@ Then, in a directory of your choice, clone this repository by executing the foll
 Once installation is complete, [download](https://github.com/yabata/ficus/archive/master.zip) or clone (with [Git](#git-link)) this repository to a directory of your choice.
 
 ### [Run from Excel](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-excel)
-1. Run `ficus.py` (by double clicking or open with python). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
+1. Before using ficus the first time: Run `ficus.py` (by double clicking or open with python). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 2. Open the `example_fromexcel.xlsm`, choose a solver and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
 
 About one minute after running the optimisation the result figures should show up and the sub-folder `result` should contain plots and a result file.
