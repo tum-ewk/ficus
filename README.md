@@ -68,7 +68,7 @@ Then, in a directory of your choice, clone this repository by executing the foll
 Once installation is complete, [download](https://github.com/yabata/ficus/archive/master.zip) or clone (with [Git](#git-link)) this repository to a directory of your choice.
 
 ### [Run from Excel](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-excel)
-1. Before using ficus the first time: Run `ficus.py` (by double clicking or open with python). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
+1. **Before using ficus the first time:** Run `ficus.py` (by double clicking or open with python). Continue with `y`. This will copy the `ficus.py` to `..\Lib\site-package` folder so python can find it and install pyomo if not yet installed.
 2. Open the `example_fromexcel.xlsm`, choose a solver and push the `RUN OPTIMISATION` Button in the `RUN` Sheet.
 
 About one minute after running the optimisation the result figures should show up and the sub-folder `result` should contain plots and a result file.
