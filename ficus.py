@@ -588,7 +588,6 @@ def create_model(data):
 		doc='p_flow <= capacity of process')
 	
 	#Supim
-	m.co_supim
 	def pro_p_supim_input_rule(m,pro,num,co,t):
 		if co in m.co_supim:
 			return m.pro_p_in[pro,num,co,t] <= \
@@ -960,7 +959,7 @@ def create_model(data):
 		return sum( m.sto_p_in[sto,co,num,t] * p2e for t in m.t) <=\
 				m.sto_cap_e[sto,co,num] \
 				* storage.loc[sto,co,num]['DOD'] * storage.loc[sto,co,num]['cycles-max']\
-				* year_factor/storage.loc[sto,co,num]['depreciation']
+				* year_factor/storage.loc[sto,co,num]['lifetime']
 	m.sto_max_cycle= pyen.Constraint(
 		m.sto_tuples,
 		rule=sto_max_cycle_rule,
