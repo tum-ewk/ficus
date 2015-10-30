@@ -717,14 +717,30 @@ def create_model(data):
 			doc='p_flow >= capacity * partload if run =1 ')
 		
 		#switch on losses			
-		def pro_mode_start_up_rule(m,pro,num,t):
+		def pro_mode_start_up1_rule(m,pro,num,t):
 			return m.pro_mode_startup[pro,num,t] >= \
-				(m.pro_mode_run[pro,num,t]) - \
+				m.pro_mode_run[pro,num,t] - \
 				(m.pro_mode_run[pro,num,t-1])
-		m.pro_mode_start_up = pyen.Constraint(
+		m.pro_mode_start_up1 = pyen.Constraint(
 			m.pro_tuples,m.t,
-			rule=pro_mode_start_up_rule,
-			doc='switch on is 1 if run[t] - run[t-1] = 1. else 0')
+			rule=pro_mode_start_up1_rule,
+			doc='switch on >=  run[t] - run[t-1]')
+			
+		def pro_mode_start_up2_rule(m,pro,num,t):
+			return m.pro_mode_startup[pro,num,t] <= \
+				m.pro_mode_run[pro,num,t]
+		m.pro_mode_start_up2 = pyen.Constraint(
+			m.pro_tuples,m.t,
+			rule=pro_mode_start_up2_rule,
+			doc='switch on <= run[t]')
+			
+		def pro_mode_start_up3_rule(m,pro,num,t):
+			return m.pro_mode_startup[pro,num,t] <= \
+				1 - m.pro_mode_run[pro,num,t-1]
+		m.pro_mode_start_up3 = pyen.Constraint(
+			m.pro_tuples,m.t,
+			rule=pro_mode_start_up3_rule,
+			doc='switch on <= run[t-1]')
 			
 		def pro_p_startup_lt_rule(m,pro,num,co,t):
 			return (m.pro_p_startup[pro,num,co,t]\
