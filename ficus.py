@@ -786,6 +786,10 @@ def create_model(data):
 				sum(m.pro_cap[p[0:2]] * m.r_out[p]\
 					for p in m.pro_output_tuples
 					if co in p
+					if cl == process.loc[p[0:2]]['class'])\
+				+ sum(m.pro_cap[p[0:2]] * m.r_in[p]\
+					for p in m.pro_input_tuples
+					if co in p
 					if cl == process.loc[p[0:2]]['class'])
 	m.proclass_cap_sum = pyen.Constraint(
 		m.proclass_tuples,
@@ -806,7 +810,7 @@ def create_model(data):
 		
 	def proclass_e_in_sum_rule(m,cl,co):			
 		return m.proclass_e_in[cl,co] == \
-				sum(m.pro_p_out[p,t] * p2e\
+				sum(m.pro_p_in[p,t] * p2e\
 					for t in m.t
 					for p in m.pro_input_tuples\
 					if co in p
