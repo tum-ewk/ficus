@@ -1633,7 +1633,10 @@ def prepare_result_directory(result_folder,result_name):
 	
 	# timestamp for result directory
 	now = datetime.now().strftime('%Y%m%dT%H%M')
-
+	
+	if not os.path.exists(result_folder):
+		os.makedirs(result_folder)
+	
 	# create result directory if not existent
 	result_dir = os.path.join(result_folder, '{}-{}'.format(result_name, now))
 	if not os.path.exists(result_dir):
