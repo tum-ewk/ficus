@@ -2070,7 +2070,10 @@ def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=
 	
 	fig.tight_layout()
 	if show:
-		plt.show(block=False)
+		try:
+			plt.show(block=False)
+		except TypeError:
+			plt.show()
 	return fig
 	
 def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,show=True):
@@ -2175,7 +2178,10 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,s
 		
 	fig.tight_layout()
 	if show:
-		plt.show(block=False)
+		try:
+			plt.show(block=False)
+		except TypeError:
+			plt.show()
 	return fig	
 		
 def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
@@ -2310,7 +2316,10 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 
 	fig.tight_layout()
 	if show:
-		plt.show(block=False)
+		try:
+			plt.show(block=False)
+		except TypeError:
+			plt.show()
 	
 	return fig
 
@@ -2435,7 +2444,10 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 	
 	fig.tight_layout()
 	if show:
-		plt.show(block=False)
+		try:
+			plt.show(block=False)
+		except TypeError:
+			plt.show()
 	return fig	
 		
 	
