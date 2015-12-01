@@ -21,7 +21,6 @@ except ImportError:
 	pass
 
 
-
 ############################################################################################	
 #RUN FUNCTIONS
 ############################################################################################
@@ -192,7 +191,7 @@ def create_model(data):
 	########	
 	#commodity
 	m.commodity = pyen.Set(
-		initialize=demand.columns | supim.columns | pd.Index(set(process_commodity.index.get_level_values(2))) | ext_import.columns,
+		initialize=demand.columns | pd.Index(set(process_commodity.index.get_level_values(2))) | ext_import.columns,
 		doc='Commodities')
 		
 	m.co_consumed = pyen.Set(
@@ -231,7 +230,6 @@ def create_model(data):
 		doc='Commodities stored in Storage')
 		
 	m.co_supim = pyen.Set(
-		within=m.commodity, 
 		initialize=supim.columns,
 		doc='Commodities in supim')
 		
@@ -254,16 +252,27 @@ def create_model(data):
 		within=m.pro_name*m.pro_num,
 		initialize=process.index.get_values(),
 		doc='Processes, converting commodities')	
-		
-	m.pro_input_tuples = pyen.Set(
-		within=m.pro_name*m.pro_num*m.commodity, 
-		initialize = process_commodity.xs('In',level='Direction').index.get_values(),
-		doc='Commodities consumed by processes')
+	
+	if process.index.get_values().size>0:
+		m.pro_input_tuples = pyen.Set(
+			within=m.pro_name*m.pro_num*m.commodity, 
+			initialize = process_commodity.xs('In',level='Direction').index.get_values(),
+			doc='Commodities consumed by processes')
 
-	m.pro_output_tuples = pyen.Set(
-		within=m.pro_name*m.pro_num*m.commodity, 
-		initialize=process_commodity.xs('Out',level='Direction').index.get_values(),
-		doc='Commodities emitted by processes')
+		m.pro_output_tuples = pyen.Set(
+			within=m.pro_name*m.pro_num*m.commodity, 
+			initialize=process_commodity.xs('Out',level='Direction').index.get_values(),
+			doc='Commodities emitted by processes')
+	else:
+		m.pro_input_tuples = pyen.Set(
+			within=m.pro_name*m.pro_num*m.commodity, 
+			initialize = [],
+			doc='Commodities consumed by processes')
+
+		m.pro_output_tuples = pyen.Set(
+			within=m.pro_name*m.pro_num*m.commodity, 
+			initialize=[],
+			doc='Commodities emitted by processes')
 		
 	#Process Class
 	
@@ -312,26 +321,26 @@ def create_model(data):
 		
 	##Parameters##
 	##############
-
-	# process input/output ratios	
-	m.r_in = process_commodity.xs('In', level='Direction')['ratio']
-	m.r_in_partl = process_commodity.xs('In', level='Direction')['ratio-partload']
-	m.r_out = process_commodity.xs('Out', level='Direction')['ratio']
-	m.r_out_partl = process_commodity.xs('Out', level='Direction')['ratio-partload']
-	
-	#Calculate slope and offset for process input and output equations
-	#For calculating power input/output p for each commodity dependent on power throughput "flow"
-	# p = slope * flow + offset	
-	m.pro_p_in_slope = pd.Series(index=m.r_in.index)
-	m.pro_p_in_offset_spec = pd.Series(index=m.r_in.index)
-	for idx in m.pro_p_in_slope.index:
-		m.pro_p_in_slope.loc[idx] = (m.r_in.loc[idx] - m.r_in_partl.loc[idx]*process.loc[idx[0:2]]['partload-min'])/(1-process.loc[idx[0:2]]['partload-min'])
-		m.pro_p_in_offset_spec[idx] = m.r_in.loc[idx]-m.pro_p_in_slope.loc[idx]	
-	m.pro_p_out_slope = pd.Series(index=m.r_out.index)
-	m.pro_p_out_offset_spec = pd.Series(index=m.r_out.index)
-	for idx in m.pro_p_out_slope.index:
-		m.pro_p_out_slope.loc[idx] = (m.r_out.loc[idx] - m.r_out_partl.loc[idx]*process.loc[idx[0:2]]['partload-min'])/(1-process.loc[idx[0:2]]['partload-min'])
-		m.pro_p_out_offset_spec[idx] = m.r_out.loc[idx]-m.pro_p_out_slope.loc[idx]
+	if process.index.get_values().size>0:
+		# process input/output ratios	
+		m.r_in = process_commodity.xs('In', level='Direction')['ratio']
+		m.r_in_partl = process_commodity.xs('In', level='Direction')['ratio-partload']
+		m.r_out = process_commodity.xs('Out', level='Direction')['ratio']
+		m.r_out_partl = process_commodity.xs('Out', level='Direction')['ratio-partload']
+		
+		#Calculate slope and offset for process input and output equations
+		#For calculating power input/output p for each commodity dependent on power throughput "flow"
+		# p = slope * flow + offset	
+		m.pro_p_in_slope = pd.Series(index=m.r_in.index)
+		m.pro_p_in_offset_spec = pd.Series(index=m.r_in.index)
+		for idx in m.pro_p_in_slope.index:
+			m.pro_p_in_slope.loc[idx] = (m.r_in.loc[idx] - m.r_in_partl.loc[idx]*process.loc[idx[0:2]]['partload-min'])/(1-process.loc[idx[0:2]]['partload-min'])
+			m.pro_p_in_offset_spec[idx] = m.r_in.loc[idx]-m.pro_p_in_slope.loc[idx]	
+		m.pro_p_out_slope = pd.Series(index=m.r_out.index)
+		m.pro_p_out_offset_spec = pd.Series(index=m.r_out.index)
+		for idx in m.pro_p_out_slope.index:
+			m.pro_p_out_slope.loc[idx] = (m.r_out.loc[idx] - m.r_out_partl.loc[idx]*process.loc[idx[0:2]]['partload-min'])/(1-process.loc[idx[0:2]]['partload-min'])
+			m.pro_p_out_offset_spec[idx] = m.r_out.loc[idx]-m.pro_p_out_slope.loc[idx]
 	
 	
 	m.demand = demand
@@ -1251,18 +1260,18 @@ def read_xlsdata(input_file):
 	xls_data = {} # create dictionary
 	
 	xls_data.update({'input_file' : input_file})
-	xls_data.update({'time-settings' : xls.parse('Time-Settings', index_col=[0]) })
-	xls_data.update({'mip-equations' : xls.parse('MIP-Equations', index_col=[0]) })
-	xls_data.update({'ext-co' : xls.parse('Ext-Commodities', index_col=[0]) })
-	xls_data.update({'ext_import' : xls.parse('Ext-Import', index_col=[0]) })
-	xls_data.update({'ext_export' : xls.parse('Ext-Export', index_col=[0]) })
-	xls_data.update({'demandrate_factor' : xls.parse('Demand-Rate-Factor', index_col=[0]) })
-	xls_data.update({'process' : xls.parse('Process', index_col=[0]) })
-	xls_data.update({'process_commodity' : xls.parse('Process-Commodity', index_col=[0,1,2]) })
-	xls_data.update({'process_class' : xls.parse('Process-Class', index_col=[0,1]) })
-	xls_data.update({'storage' : xls.parse('Storage', index_col=[0,1]) })
-	xls_data.update({'demand' : xls.parse('Demand', index_col=[0]) })
-	xls_data.update({'supim' : xls.parse('SupIm', index_col=[0]) })
+	xls_data.update({'time-settings' : xls.parse('Time-Settings').set_index(['Info']) })
+	xls_data.update({'mip-equations' : xls.parse('MIP-Equations').set_index(['Equations']) })
+	xls_data.update({'ext-co' : xls.parse('Ext-Commodities').set_index(['Commodity']) })
+	xls_data.update({'ext_import' : xls.parse('Ext-Import').set_index(['Time']) })
+	xls_data.update({'ext_export' : xls.parse('Ext-Export').set_index(['Time']) })
+	xls_data.update({'demandrate_factor' : xls.parse('Demand-Rate-Factor').set_index(['Time']) })
+	xls_data.update({'process' : xls.parse('Process').set_index(['Process']) })
+	xls_data.update({'process_commodity' : xls.parse('Process-Commodity').set_index(['Process','Commodity','Direction']) })
+	xls_data.update({'process_class' : xls.parse('Process-Class').set_index(['Class','Commodity']) })
+	xls_data.update({'storage' : xls.parse('Storage').set_index(['Storage','Commodity']) })
+	xls_data.update({'demand' : xls.parse('Demand').set_index(['Time']) })
+	xls_data.update({'supim' : xls.parse('SupIm').set_index(['Time']) })
 	
 	return xls_data
 
@@ -1854,12 +1863,12 @@ def get_plot_data(co, prob, resultfile, timesteps):
 		sto = sto.groupby(level=['storage_name','commodity','t0']).sum()
 		sto_names = sto.index.levels[0]
 	except ValueError:
-		sto_names = ['']
+		sto_names = pd.Index([''])
 	try:
 		pro = pro.groupby(level=['pro_name','commodity','t0']).sum()
 		pro_names = pro.index.levels[0]
 	except ValueError:
-		pro_names = ['']
+		pro_names = pd.Index([''])
 	prosto_names = pro_names|sto_names
 
 	
@@ -2201,6 +2210,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 	import matplotlib as mpl
 	plt.ion()
 	
+
 	##Get Data and Prepare Data##
 	##############
 	
@@ -2233,26 +2243,38 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 	except ValueError:
 		pass
 	
+
 	##PLOT##
 	##############		
 	# FIGURE
-	fig = plt.figure(figsize=(11,7))	
-	if csto.empty:
+	fig = plt.figure(figsize=(11,7))
+	if csto.empty and cpro.empty:
+	#No Processes and storages
+		return fig
+	elif csto.empty:
 		gs = mpl.gridspec.GridSpec(1, 1)
+	elif cpro.empty:
+		gs = mpl.gridspec.GridSpec(1, 2)
 	else:
 		height_ratio = [cpro.index.size, csto.index.size]
 		gs = mpl.gridspec.GridSpec(2, 2, height_ratios=height_ratio)
+	axes = []
 	
+	if cpro.empty:
+		ofs = 2#offset for storage plot axes index
+		sharex = None
+	else:
 	#PLOT PROCESS
-	ax0 = plt.subplot(gs[0])
-	yticks = np.arange(len(cpro))
-	ax0.barh(yticks,cpro['pro_cap']-cpro['pro_cap_new'],color=COLOURS[1],align='center')
-	ax0.barh(yticks,cpro['pro_cap_new'],\
-			left=cpro['pro_cap']-cpro['pro_cap_new'],color=COLOURS[3],align='center')
-	ax0.set_yticks(yticks)
-	ax0.set_yticklabels(cpro.index)
-	axes = [ax0]
-	
+		ofs = 0
+		ax0 = plt.subplot(gs[0])
+		yticks = np.arange(len(cpro))
+		ax0.barh(yticks,cpro['pro_cap']-cpro['pro_cap_new'],color=COLOURS[1],align='center')
+		ax0.barh(yticks,cpro['pro_cap_new'],\
+				left=cpro['pro_cap']-cpro['pro_cap_new'],color=COLOURS[3],align='center')
+		ax0.set_yticks(yticks)
+		ax0.set_yticklabels(cpro.index)
+		axes.append(ax0)
+		sharex = ax0
 
 	if csto.empty:
 	#If no storage exists, only show process capacities
@@ -2263,7 +2285,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 	else:
 	#PLOT STORAGE
 		#Plot Power Capacities
-		ax2 = plt.subplot(gs[2],sharex=ax0)
+		ax2 = plt.subplot(gs[2-ofs],sharex=sharex)
 		yticks = np.arange(len(csto))
 		ax2.barh(yticks,csto['sto_cap_p']-csto['sto_cap_p_new'],color=COLOURS[1],align='center')
 		ax2.barh(yticks,csto['sto_cap_p_new'],\
@@ -2276,7 +2298,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 		axes.append(ax2)
 		
 		#Plot Energy Capacities
-		ax3 = plt.subplot(gs[3])
+		ax3 = plt.subplot(gs[3-ofs])
 		ax3.barh(yticks,csto['sto_cap_e']-csto['sto_cap_e_new'],color=COLOURS[1],align='center')
 		ax3.barh(yticks,csto['sto_cap_e_new'],\
 				left=csto['sto_cap_e']-csto['sto_cap_e_new'],color=COLOURS[3],align='center')
@@ -2286,9 +2308,11 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 		ax3.set_xticks(ax3.get_xticks()[::2])
 		ax3.set_xlim(0,ax3.get_xlim()[1]*1.1)
 		axes.append(ax3)
-
-		plt.setp(ax0.get_xticklabels(), visible=False)
 		loc = 'upper left'
+		if not cpro.empty:
+			plt.setp(ax0.get_xticklabels(), visible=False)
+			loc='upper center'
+
 		
 	##AXES Properties##
 	##############	
@@ -2303,16 +2327,25 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 
 	##LEGEND##
 	##############
-	
-	ax0.plot([],[],color = COLOURS[1], linestyle='None', marker='s', label='Installed',markersize=12)
-	ax0.plot([],[],color = COLOURS[3], linestyle='None', marker='s', label='New',markersize=12)
-	lg = ax0.legend(frameon=False,
-					ncol=1,
-					loc = loc, 
-					bbox_to_anchor = (1.0, 0.5),
-					borderaxespad=0.,
-					fontsize=fontsize-2,
-					numpoints = 1)
+	if not cpro.empty:
+		ax0.plot([],[],color = COLOURS[1], linestyle='None', marker='s', label='Installed',markersize=12)
+		ax0.plot([],[],color = COLOURS[3], linestyle='None', marker='s', label='New',markersize=12)
+		lg = ax0.legend(frameon=False,
+						ncol=1,
+						loc = loc, 
+						bbox_to_anchor = (1.0, 0.5),
+						borderaxespad=0.,
+						fontsize=fontsize-2,
+						numpoints = 1)
+	else:
+		ax2.plot([],[],color = COLOURS[1], linestyle='None', marker='s', label='Installed',markersize=12)
+		ax2.plot([],[],color = COLOURS[3], linestyle='None', marker='s', label='New',markersize=12)
+		lg = ax2.legend(frameon=False,
+						ncol=2,
+						loc = loc, 
+						borderaxespad=0.,
+						fontsize=fontsize-2,
+						numpoints = 1)
 
 	fig.tight_layout()
 	if show:
