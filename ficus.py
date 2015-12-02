@@ -2308,10 +2308,10 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 		ax3.set_xticks(ax3.get_xticks()[::2])
 		ax3.set_xlim(0,ax3.get_xlim()[1]*1.1)
 		axes.append(ax3)
-		loc = 'upper left'
+		loc='upper center'
 		if not cpro.empty:
 			plt.setp(ax0.get_xticklabels(), visible=False)
-			loc='upper center'
+			loc = 'upper left'
 
 		
 	##AXES Properties##
