@@ -1934,7 +1934,7 @@ def get_plot_data(co, prob, resultfile, timesteps):
 	'edgecolor': 'slategray'}
 	
 	for i,name in enumerate(prosto_names):
-		colours.update({name : COLOURS[i+3]})
+		colours.update({name : to_color(i+3,COLOURS)})
 		
 		
 	return demand, ext, pro, sto, timesteps, tb, created, consumed, storage, colours
@@ -2484,14 +2484,15 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 	return fig	
 		
 	
-def to_color(obj,colours):
+def to_color(obj,colors):
 	"""Assign a named color to argument.
 
-	If COLORS[obj] is set, return that. Otherwise, create a random color from
+	If colors[obj] is set, return that. Otherwise, create a random color from
 	matplotlib.colors.cnames
 
 	Args:
 		obj: any hashable object
+		colours: dict (or other other type) with predefined colors
 
 	Returns:
 		color: named color in matplotlib
@@ -2500,7 +2501,7 @@ def to_color(obj,colours):
 	import matplotlib.colors as mpl_colors
 
 	try:
-		color = colours[obj]
+		color = colors[obj]
 	except KeyError:
 		color=random.choice(mpl_colors.cnames.keys()) # random deterministic color
 	return color
