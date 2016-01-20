@@ -23,7 +23,7 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 
 I recommend using the Python distribution Anaconda.  
 
-1.	**[Anaconda (Python 2.7)](http://continuum.io/downloads)**. Choose the 64-bit installer if possible.
+1.	**[Anaconda (Python 2.7 or Python 3.5)](http://continuum.io/downloads)**. Choose the 64-bit installer if possible.
 	1.	During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
 2.	Install a [solver](#solver) (optional) or continue at [Get Started](#get-started).
 

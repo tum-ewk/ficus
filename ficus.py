@@ -47,43 +47,43 @@ def run_ficus (input_file, opt = 'glpk', Threads = 2,neos=False):
 	elif optimizer.name == 'cplex' and not neos:
 		optimizer.options["threads"] = Threads # number of simultaneous CPU threads
 	else:
-		print '\n Setting number of simultaneous CPU threads only available for locally installed "gurobi" and "cplex"\n'
+		print('\n Setting number of simultaneous CPU threads only available for locally installed "gurobi" and "cplex"\n')
 	
 	# RUN MODEL
 	# ============
 	#read model data	
-	print 'Read Data ...\n'
+	print('Read Data ...\n')
 	t0 = time.time()
 	xls_data = read_xlsdata(input_file) 
-	print 'Data Read. time: '+"{:.1f}".format(time.time()-t0)+' s\n'	
+	print('Data Read. time: '+"{:.1f}".format(time.time()-t0)+' s\n')
 	
 	#prepare data for model from xls_data
-	print 'Prepare Data ...\n'
+	print('Prepare Data ...\n')
 	t = time.time()
 	data = prepare_modeldata(xls_data)
-	print 'Data Prepared. time: '+"{:.1f}".format(time.time()-t)+' s\n'
+	print('Data Prepared. time: '+"{:.1f}".format(time.time()-t)+' s\n')
 	
 	#define optimisation problem
-	print 'Define Model ...\n'
+	print('Define Model ...\n')
 	t = time.time()
 	prob = create_model(data) 
-	print 'Model Defined. time: '+"{:.1f}".format(time.time()-t)+' s\n'
+	print('Model Defined. time: '+"{:.1f}".format(time.time()-t)+' s\n')
 	
 	# solve the problem
-	print 'Solve Model ...\n'
+	print('Solve Model ...\n')
 	t = time.time()
 	if neos:
 		solver_manager = SolverManagerFactory('neos')
 		result = solver_manager.solve(prob,opt=optimizer,tee=True) 
 	else:
 		result = optimizer.solve(prob,tee=True) 
-	print 'Model Solved. time: '+"{:.1f}".format(time.time()-t)+' s\n'
+	print('Model Solved. time: '+"{:.1f}".format(time.time()-t)+' s\n')
 	
-	print 'Load Results ...\n'
+	print('Load Results ...\n')
 	t = time.time()
 	prob.solutions.load_from(result) # load result back to model instance
-	print 'Results Loaded. time: '+"{:.1f}".format(time.time()-t)+' s\n'
-	print 'Total Time: '+"{:.1f}".format(time.time()-t0)+' s\n'
+	print('Results Loaded. time: '+"{:.1f}".format(time.time()-t)+' s\n')
+	print('Total Time: '+"{:.1f}".format(time.time()-t0)+' s\n')
 		
 	return prob
 		
@@ -1355,28 +1355,25 @@ def del_processes(process_commodity, process):
 ############################################################################################
 
 def get_entity(prob, name):
-    """ Return a DataFrame for an entity in model instance.
+	""" Return a DataFrame for an entity in model instance.
 
-    Args:
-        prob: a Pyomo ConcreteModel instance
-        name: name of a Set, Param, Var, Constraint or Objective
+	Args:
+		prob: a Pyomo ConcreteModel instance
+		name: name of a Set, Param, Var, Constraint or Objective
 
-    Returns:
-        a single-columned Pandas DataFrame with domain as index
-    """
+	Returns:
+		a single-columned Pandas DataFrame with domain as index
+	"""
 
-    # retrieve entity, its type and its onset names
-    entity = prob.__getattribute__(name)
-    labels = get_onset_names(entity)
-
-    # extract values		
-    if isinstance(entity, pyen.Set):
-        # Pyomo sets don't have values, only elements
-		
-		if len(entity.value) == 0:
+	# retrieve entity, its type and its onset names
+	entity = prob.__getattribute__(name)
+	labels = get_onset_names(entity)
+	# extract values		
+	if isinstance(entity, pyen.Set):
+		# Pyomo sets don't have values, only elements
+		if len(entity.value)==0:
 			results = 0
 			return results
-			
 		else:
 			results = pd.DataFrame([[v] for v in entity.value])
 			# for unconstrained sets, the column label is identical to their index
@@ -1389,65 +1386,63 @@ def get_entity(prob, name):
 			results.columns = [name]
 			return results
 		
-			
-
-    elif len(entity.items()) == 0:
+	elif len(entity.items()) == 0:
 		#entity is empty
 		results = pd.DataFrame()
 		return results
 		
-    elif isinstance(entity, pyen.Param):
-        if entity.dim() > 1:
-            results = pd.DataFrame([v[0]+(v[1],) for v in entity.iteritems()])
-        else:
-            results = pd.DataFrame(entity.iteritems())
+	elif isinstance(entity, pyen.Param):
+		if entity.dim() > 1:
+			results = pd.DataFrame([v[0]+(v[1],) for v in entity.iteritems()])
+		else:
+			results = pd.DataFrame(entity.iteritems())
 	
 	
-    else:
-        # create DataFrame
-        if entity.dim() > 1:
-            # concatenate index tuples with value if entity has
-            # multidimensional indices v[0]
-            results = pd.DataFrame(
-                [v[0]+(v[1].value,) for v in entity.iteritems()])
-        else:
-            # otherwise, create tuple from scalar index v[0]
-            results = pd.DataFrame(
-                [(v[0], v[1].value) for v in entity.iteritems()])
+	else:
+		# create DataFrame
+		if entity.dim() > 1:
+			# concatenate index tuples with value if entity has
+			# multidimensional indices v[0]
+			results = pd.DataFrame(
+				[v[0]+(v[1].value,) for v in entity.iteritems()])
+		else:
+			# otherwise, create tuple from scalar index v[0]
+			results = pd.DataFrame(
+				[(v[0], v[1].value) for v in entity.iteritems()])
 
-    # check for duplicate onset names and append one to several "_" to make
-    # them unique, e.g. ['sit', 'sit', 'com'] becomes ['sit', 'sit_', 'com']
-    for k, label in enumerate(labels):
-        if label in labels[:k]:
-            labels[k] = labels[k] + "_"
+	# check for duplicate onset names and append one to several "_" to make
+	# them unique, e.g. ['sit', 'sit', 'com'] becomes ['sit', 'sit_', 'com']
+	for k, label in enumerate(labels):
+		if label in labels[:k]:
+			labels[k] = labels[k] + "_"
 
-    # name columns according to labels + entity name
-    results.columns = labels + [name]
-    results.set_index(labels, inplace=True)
+	# name columns according to labels + entity name
+	results.columns = labels + [name]
+	results.set_index(labels, inplace=True)
 
-    return results
+	return results
 	
 def get_entities(prob, names):
-    """ Return one DataFrame with entities in columns and a common index.
+	""" Return one DataFrame with entities in columns and a common index.
 
-    Works only on entities that share a common domain (set or set_tuple), which
-    is used as index of the returned DataFrame.
+	Works only on entities that share a common domain (set or set_tuple), which
+	is used as index of the returned DataFrame.
 
-    Args:
-        prob: a Pyomo ConcreteModel instance
-        names: list of entity names (as returned by list_entities)
+	Args:
+		prob: a Pyomo ConcreteModel instance
+		names: list of entity names (as returned by list_entities)
 
-    Returns:
-        a Pandas DataFrame with entities as columns and domains as index
-    """
+	Returns:
+		a Pandas DataFrame with entities as columns and domains as index
+	"""
 
-    df = pd.DataFrame()
-    for name in names:
-        other = get_entity(prob, name)
+	df = pd.DataFrame()
+	for name in names:
+		other = get_entity(prob, name)
 
-        if df.empty:
-            df = other
-        else:
+		if df.empty:
+			df = other
+		else:
 			index_names_before = df.index.names
 			if not other.empty:
 				df = df.join(other, how='outer')
@@ -1455,7 +1450,7 @@ def get_entities(prob, names):
 			if index_names_before != df.index.names:
 				df.index.names = index_names_before
 
-    return df
+	return df
 
 
 def list_entities(prob, entity_type):
@@ -1663,7 +1658,7 @@ def report(prob, dir):
 	Returns:
 		resultfile: Path of Resultfile
 	"""
-	print 'Save Results to Reportfile...\n'
+	print('Save Results to Reportfile...\n')
 	t0 = time.time()
 	
 	# Create Name of Resultfile
@@ -1695,7 +1690,7 @@ def report(prob, dir):
 		
 	writer.save() #save
 
-	print 'Results Saved. time: '+"{:.1f}".format(time.time()-t0)+' s\n'
+	print('Results Saved. time: '+"{:.1f}".format(time.time()-t0)+' s\n')
 	
 	return resultfile
 	
@@ -2584,8 +2579,8 @@ def install():
 if __name__ == '__main__':
 	x = raw_input("\n\nInstall Pyomo and copy 'ficus.py' to the 'python27\Lib\site-packages' Folder (y/n)?\n")
 	if x == 'y':
-		print '\ninstalling...\n'
+		print('\ninstalling...\n')
 		install()
 	else:
-		print '\nInstallation aborted\n'
+		print('\nInstallation aborted\n')
 	
