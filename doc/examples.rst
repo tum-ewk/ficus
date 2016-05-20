@@ -11,7 +11,7 @@ In the ``examples`` folder several examples of input files are given. This secti
 example.xls and example_from_excel.xlsm
 ----------------------------------------
 
-The input file ``example.xls`` and ``example_from_excel.xlsm`` are used within the :ref:`create-input-ref <tutorial>` explaining how to create an own input file by editing a given one.
+The input file ``example.xls`` and ``example_from_excel.xlsm`` are used within the :ref:`tutorial <create-input-ref>` explaining how to create an own input file by editing a given one.
 
 The factory described in this example has given demand time-series for electricity (*elec*) and *heat*, that have to be covered. While *elec* can be imported and exported, *heat* has to be produced inside the factory. Therefore an electric heater, a gas boiler and/or chp unit can be used. Since the chp and the gas boiler require *gas* as an input, *gas* can be imported as well. To model a *pv* system, the intermittend supply time-series *solar* is given. Additionally a battery storage for *elec* and a heat storage for *heat* are defined.
 

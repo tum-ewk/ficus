@@ -33,7 +33,7 @@ Two packages are included.
   are :func:`prepare_result_directory`, :func:`run_ficus`, :func:`report` and
   :func:`result_figures`.
   
-To import ficus, ``ficus.py`` hast to be either in the same directory than ``runficus.py`` or in any directory, that is searched by python.  To make sure this is the case, follow step 4 of the :ref:`install-ref <installation>`.
+To import ficus, ``ficus.py`` hast to be either in the same directory than ``runficus.py`` or in any directory, that is searched by python.  To make sure this is the case, follow step 4 of the :ref:` installation <install-ref>`.
 
 ::
 
@@ -86,7 +86,7 @@ optimization directly from Excel. Still python an all needed packages have to be
 
 A cmd window should appear showing the actual status and a few minutes later six result figures should show up. The sub-folder ``result`` should contain the saved result figures as well as a result-file.
 
-Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is called within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, follow step 4 of the :ref:`install-ref <installation>`.
+Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is called within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, follow step 4 of the :ref:`installation <install-ref>`.
 
 
   

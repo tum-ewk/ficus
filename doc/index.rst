@@ -53,11 +53,11 @@ If you don't already have an existing Python I recommend using the Python distri
 2. `Pyomo`_ (pip install pyomo)	
 3. `download`_ or clone (with `git`_) this repository to a directory of your choice.
 4. Copy the ``ficus.py`` file to a directory which is already in python's search path or add the ``python`` folder to python's search path (sys.path) (`how to`__)
-5.	Install a :ref:`solver-ref <solver>` (optional).
+5.	Install a :ref:`solver <solver-ref>` (optional).
 
 Get started
 ------------
-1.	:ref:`run_ficus <Run>` the given examples in the `examples` folder.
+1.	:ref:`Run <run_ficus>` the given examples in the `examples` folder.
 2.	Follow the :ref:`turorial <tutorial>` to create your own input file.
 
 
@@ -97,7 +97,6 @@ generation and consumption over 7 days:
 .. _Institute for Energy Economy and Application Technology: http://www.ewk.ei.tum.de/
 .. _matplotlib: http://matplotlib.org
 .. _pandas: https://pandas.pydata.org
-.. _pyomo: https://software.sandia.gov/trac/coopr/wiki/Pyomo
 .. _ficus: https://github.com/yabata/ficus
 .. _download: https://github.com/yabata/ficus/archive/master.zip
 .. _git: http://git-scm.com/

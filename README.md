@@ -24,7 +24,7 @@ If you don't already have an existing Python I recommend using the Python distri
 2. **[Pyomo](http://www.pyomo.org/installation)**. (pip install pyomo)	
 	
 3. [download](https://github.com/yabata/ficus/archive/master.zip) or clone (with [git](http://git-scm.com/)) this repository to a directory of your choice.
-4.	Copy the `ficus.py` file in the to a directory which is already in python's search path or add the your folder to python's search path (sys.path) ([how to](http://stackoverflow.com/questions/17806673/where-shall-i-put-my-self-written-python-packages/17811151#17811151))	
+4.	Copy the `ficus.py` file to a directory which is already in python's search path or add the your folder to python's search path (sys.path) ([how to](http://stackoverflow.com/questions/17806673/where-shall-i-put-my-self-written-python-packages/17811151#17811151))	
 	
 5.	Install a [solver](#solver) (optional).
 
