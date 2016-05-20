@@ -49,20 +49,16 @@ Installation
 ------------
 If you don't already have an existing Python I recommend using the Python distribution Anaconda. It contains all needed packages except Pyomo. 
 
-1.	`Anaconda`_ (Python 2.7 or Python 3.5). Choose the 64-bit installer if possible.
-	* During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
-2. `Pyomo` (pip install pyomo)	
+1.	`Anaconda`_ (Python 2.7 or Python 3.5). Choose the 64-bit installer if possible. During the installation procedure, keep both checkboxes "modify PATH" and "register Python" selected!
+2. `Pyomo`_ (pip install pyomo)	
 3. `download`_ or clone (with `git`_) this repository to a directory of your choice.
-4. Copy the ``ficus.py`` file in the ``python`` folder to a directory which is already in python's search path or add the ``python`` folder to python's search path (sys.path) (`how to`__)
+4. Copy the ``ficus.py`` file to a directory which is already in python's search path or add the ``python`` folder to python's search path (sys.path) (`how to`__)
 5.	Install a :ref:`solver-ref <solver>` (optional).
 
 Get started
 ------------
-1. Run the given examples in the `examples` folder. You can run ficus from `a python script`_
-4. Follow the :ref:`turorial <tutorial>` to create your own input file.
-
-
-:ref:`solver-ref <solver>`
+1.	:ref:`run_ficus <Run>` the given examples in the `examples` folder.
+2.	Follow the :ref:`turorial <tutorial>` to create your own input file.
 
 
 .. _solver-ref:
@@ -70,7 +66,7 @@ Get started
 Solver
 -----------
 
-Pyomo allows using the `NEOS Server for Optimisation'_ for solving, so it is **not required to install a solver**.
+Pyomo allows using the `NEOS Server for Optimization'_ for solving, so it is **not required to install a solver**.
 
 I still recommend to install and use one of the following solvers.
 
@@ -110,6 +106,6 @@ generation and consumption over 7 days:
 .. _NEOS Server for Optimization:
     http://www.neos-server.org/neos/
 .. _WinGLPK: http://sourceforge.net/projects/winglpk/files/winglpk/
-.. _how:  http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx))
+.. _how:  http://geekswithblogs.net/renso/archive/2009/10/21/how-to-set-the-windows-path-in-windows-7.aspx
 .. __: http://stackoverflow.com/questions/17806673/where-shall-i-put-my-self-written-python-packages/17811151#17811151) 
 .. _how to: http://www.mathworks.com/help/matlab/matlab_env/add-remove-or-reorder-folders-on-the-search-path.html

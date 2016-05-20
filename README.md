@@ -4,7 +4,6 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 
 [![Documentation Status](https://readthedocs.org/projects/ficus/badge/?version=latest)](https://ficus.readthedocs.org/en/latest/)  [![DOI](https://zenodo.org/badge/18757/yabata/ficus.svg)](https://zenodo.org/badge/latestdoi/18757/yabata/ficus)
 
-<a href="doc/img/elec-timeseries.png"><img src="doc/img/elec-timeseries.png" alt="Timeseries plot of 7 days of electricity generation and consumption in 15 minute resolution" style="width:400px"></a>
 
 ## Features
 
