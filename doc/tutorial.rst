@@ -5,121 +5,10 @@
 Tutorial
 ========
 
-The README file contains `installation notes`__. This tutorial
-expands on the steps that follow this installation.
-
-.. __: https://github.com/yabata/ficus/blob/master/README.md#installation
 
 This tutorial describes how to create the data input and run your own model based on an example.
 
-.. _run-excel-ref:
-
-Run from Excel
---------------
-
-For an easy first run of ficus without using any python environment a small macro in VBA allows running the 
-optimization directly from Excel.
-
-* Open the file ``example_fromexcel.xlsm``
-* Go to the ``RUN`` sheet and choose a solver. If you choose any other than a ``neos-...`` solver, the solver hast to be installed locally on your computer. With me only the ``mosek`` and the ``cbc`` solver from `NEOS Server for Optimization`_ are working(no installation required)
-* Push the ``RUN OPTIMIZATION`` button. 
-
-A cmd window should appear showing the actual status and a few minutes later six result figures should show up (see `screenshots`_). The sub-folder ``result`` should contain the saved result figures as well as a result-file.
-
-Using this way of running the model, the function :func:`run_from_excel` from the ``ficus.py``  script is called within VBA. This requires, that ``ficus.py`` can be found by python. To make sure this is the case, before the first time of running the model, use the :func:`install` function, by just double clicking on ``ficus.py``  or run it with python. Then continue with ``y``.  
-
-.. _run-python-ref:
-
-Run from Python
---------------
-
-Running the model from python (e.g. Ipython or Spyder) gives you more options for running the optimisation and plotting the results. 
-
-Run from Ipython
-^^^^^^^^
-* Open Ipython 
-* Change the working directory to the folder where the ``runficus.py`` script is: 
-
-::
-
-    import os
-    os.chdir("C:\\YOUR\\FOLDER")
-* Run the script:
-
-::
-
-    run runficus
-    
-The shell should show the actual status and a few minutes later six result figures should show up (see `screenshots`_). The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
-
-Run from Spyder
-^^^^^^^^
-* Open Spyder 
-* Open the ``runficus.py``script within Spyder
-* Run the script with ``F5``
-
-The shell should show the actual status and a few minutes later six result figures should show up (see `screenshots`_). The sub-folder ``result`` should contain the saved result figures as well as a result-file. 
-
-runficus.py
-^^^^^^^^
-
-Here the ``runficus.py`` script is explained step by step, so you can change it and use it for your own model.
-
-::
-
-    import os
-    import ficus
-
-Two packages are included.
-
-* `os`_ is a builtin Python module, included here for its `os.path`_ submodule
-  that offers operating system independent path manipulation routines. 
-  
-* `ficus`_ is the module whose functions are used mainly in this script. These
-  are :func:`prepare_result_directory`, :func:`run_ficus`, :func:`report` and
-  :func:`result_figures`.
-  
-To import ficus, ``ficus.py`` hast to be either in the same directory than ``runficus.py`` or in any directory, that is searched by python.  To copy ``ficus.py`` to the ``\Lib\site-packages`` folder of python, use the :func:`install` function, by just running ``ficus.py`` ones and continue with ``y``.
-
-::
-
-    input_file = 'example.xlsx'
-
-
-Gives the path to the ``input_file`` used for model creation. If the file is not in the same folder than ``ficus.py``, give the FULL PATH (e.g. C:\YOUR\INPUT\FILE.xlsx)
-
-::
-
-    result_folder = 'result'
-    result_name = os.path.splitext(os.path.split(input_file)[1])[0]
-    result_dir = ficus.prepare_result_directory(result_folder,result_name)
-
-Creates a time stamped folder ``result_name-TIME`` within the ``result_folder`` directory and saves the full path to ``result_dir``.
-Give FULL PATH for ``result_folder``, if it should not be in the same directory, than ``runficus.py``
-
-::
-
-    prob = ficus.run_ficus(input_file, opt = 'cbc', neos=True)
-
-The :func:`run_ficus` function, is the "work horse", where most computation and time is spent. The
-optimization problem is first defined and filled with values from the ``input_file``. Then the solver ``opt`` is called to solve the model.  If ``neos`` is set to ``True``, the problem is sent to the 'NEOS Server for Optimization'_ to solve the problem (Note, that using some solvers on NEOS require a license). If ``neos`` is set to false, the locally installed solver is used (if installed). After solving the problem the results are read back to  the ``prob`` object.
-
-If locally installed solver `gurobi`_ or `cplex`_ are used, the parameter ``Threads`` allows to set the maximal number of simultaneous CPU threads.
-
-::
-
-    ficus.report(prob, result_dir)
-    
-Saves the results from the object ``prob`` to an excel file in the directory ``result_dir``.
-
-::
-
-    ficus.result_figures(result_dir,prob=prob, show=True)
-    
-Reads and plots the results from the object ``prob`` and saves them in the directory ``result_dir``.
-Can also be used to plot data from a given result-file with the Parameter ``resultfile=PATH\TO\RESULTFILE.xlsx`` instead of giving ``prob``.
-``show`` turns on/off showing the plots.
-
+.. _create-input-ref:
 
 Create Input File
 --------------
@@ -135,7 +24,7 @@ You consider following processes/storages for converting/storing energy:
 * A heat storages (``heat_storage``) to store heat, limited to 30,000 kWh
 * A battery storage (``battery``) to store electricity, limited to 100,000 kWh
 
-First make a copy of ``example.xlsx`` or ``example_fromexcel.xlsm`` depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the new file step by step following the instructions.
+First make a copy of ``example.xlsx`` or ``example_fromexcel.xlsm`` (``example`` folder) depending on how you want to run the model and give it the name ``NewFactory.xlsx`` or ``NewFactory.xlsm``. Now edit the new file step by step following the instructions.
 
 Time-Settings
 ^^^^^^^^

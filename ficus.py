@@ -9,16 +9,15 @@ and storage for saving/retrieving commodities.
 https://github.com/yabata/ficus
 dennis.atabay@gmail.com
 """
-try:
-	import pyomo.environ as pyen
-	from pyomo.opt import SolverFactory
-	from pyomo.opt import SolverManagerFactory
-	import pandas as pd
-	import numpy as np
-	import time
-	import os
-except ImportError:
-	pass
+
+import pyomo.environ as pyen
+from pyomo.opt import SolverFactory
+from pyomo.opt import SolverManagerFactory
+import pandas as pd
+import numpy as np
+import time
+import os
+
 
 
 ############################################################################################	
@@ -1029,10 +1028,14 @@ def create_model(data):
 	def demandrate_in_tb_rule(m, co, t):
 		t_rel=ext_co.loc[co]['time-interval-demand-rate']/tb #relation of power price and opt timebase
 		if (t%t_rel) == 0:
+			if (t-t_rel+1) < time_settings.loc['Time']['start']:
+				t_0 = time_settings.loc['Time']['start']
+			else:
+				t_0 = t-t_rel+1
 			return m.ext_demandrate_in[co,t] == \
 				sum(\
 					m.ext_p_in[co,tg]\
-					for tg in np.arange(t-t_rel+1,t+1))\
+					for tg in np.arange(t_0,t+1))\
 				/t_rel *  demandrate_factor.loc[t][co]
 		else:
 			return m.ext_demandrate_in[co,t] == 0
@@ -2555,32 +2558,4 @@ def step_edit_y(y):
 			break
 	return Y
 
-	
-def install():
-	"""
-	Install not installed packages and copy "ficus.py" to the 'python27\Scripts' Folder
-	"""
-	import pip
-	import shutil
-	import sys
-	import os
-	
-	#install pyomo
-	try:
-		import pyomo
-	except ImportError:
-		pip.main(['install', 'pyomo'])
-	
-	#copy "ficus.py" to pythons 'Scripts' Folder
-	shutil.copy(os.path.join(os.path.dirname(os.path.realpath(__file__)),"ficus.py"),os.path.join(sys.exec_prefix,"Lib\\site-packages"))
-	raw_input("Installed packages and copied ficus.py to "+os.path.join(sys.exec_prefix,"Lib\\site-packages")+"\nPress Enter to continue...\n")
-	
-# Example
-if __name__ == '__main__':
-	x = raw_input("\n\nInstall Pyomo and copy 'ficus.py' to the 'python27\Lib\site-packages' Folder (y/n)?\n")
-	if x == 'y':
-		print('\ninstalling...\n')
-		install()
-	else:
-		print('\nInstallation aborted\n')
 	
