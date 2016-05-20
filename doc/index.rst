@@ -66,7 +66,7 @@ Get started
 Solver
 -----------
 
-Pyomo allows using the `NEOS Server for Optimization'_ for solving, so it is **not required to install a solver**.
+Pyomo allows using the `NEOS Server for Optimization`_ for solving, so it is **not required to install a solver**.
 
 I still recommend to install and use one of the following solvers.
 

@@ -33,7 +33,7 @@ If you don't already have an existing Python I recommend using the Python distri
 ## Get started
 
 
-1. Run the given examples in the `examples` folder. You can run ficus from [a python script](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-python) or [directly from the input file using excel](https://ficus.readthedocs.org/en/latest/tutorial.html#run-from-excel).
+1. Run the given examples in the `examples` folder. You can run ficus from [a python script](https://ficus.readthedocs.io/en/latest/run_ficus.html#run-from-python) or [directly from the input file using excel](https://ficus.readthedocs.io/en/latest/run_ficus.html#run-from-excel).
 2. Read the [documenation](http://ficus.readthedocs.org) and create your own input file following the tutorial
 
 ## Solver (optional)<a name="solver"></a>
