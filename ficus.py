@@ -10,7 +10,8 @@ https://github.com/yabata/ficus
 dennis.atabay@gmail.com
 """
 
-import pyomo.environ as pyen
+import pyomo.core as pyen
+import pyomo.environ
 from pyomo.opt import SolverFactory
 from pyomo.opt import SolverManagerFactory
 import pandas as pd
@@ -1357,169 +1358,181 @@ def del_processes(process_commodity, process):
 #GET RESULTS	
 ############################################################################################
 
-def get_entity(prob, name):
-	""" Return a DataFrame for an entity in model instance.
-
-	Args:
-		prob: a Pyomo ConcreteModel instance
-		name: name of a Set, Param, Var, Constraint or Objective
-
-	Returns:
-		a single-columned Pandas DataFrame with domain as index
-	"""
-
-	# retrieve entity, its type and its onset names
-	entity = prob.__getattribute__(name)
-	labels = get_onset_names(entity)
-	# extract values		
-	if isinstance(entity, pyen.Set):
-		# Pyomo sets don't have values, only elements
-		if len(entity.value)==0:
-			results = 0
-			return results
-		else:
-			results = pd.DataFrame([[v] for v in entity.value])
-			# for unconstrained sets, the column label is identical to their index
-			# hence, make index equal to entity name and append underscore to name
-			# (=the later column title) to preserve identical index names for both
-			# unconstrained supersets
-			if not labels:
-				labels = [name]
-				name = name+'_'
-			results.columns = [name]
-			return results
-		
-	elif len(entity.items()) == 0:
-		#entity is empty
-		results = pd.DataFrame()
-		return results
-		
-	elif isinstance(entity, pyen.Param):
-		if entity.dim() > 1:
-			results = pd.DataFrame([v[0]+(v[1],) for v in entity.iteritems()])
-		else:
-			results = pd.DataFrame(entity.iteritems())
-	
-	
-	else:
-		# create DataFrame
-		if entity.dim() > 1:
-			# concatenate index tuples with value if entity has
-			# multidimensional indices v[0]
-			results = pd.DataFrame(
-				[v[0]+(v[1].value,) for v in entity.iteritems()])
-		else:
-			# otherwise, create tuple from scalar index v[0]
-			results = pd.DataFrame(
-				[(v[0], v[1].value) for v in entity.iteritems()])
-
-	# check for duplicate onset names and append one to several "_" to make
-	# them unique, e.g. ['sit', 'sit', 'com'] becomes ['sit', 'sit_', 'com']
-	for k, label in enumerate(labels):
-		if label in labels[:k]:
-			labels[k] = labels[k] + "_"
-
-	# name columns according to labels + entity name
-	results.columns = labels + [name]
-	results.set_index(labels, inplace=True)
-
-	return results
-	
-def get_entities(prob, names):
-	""" Return one DataFrame with entities in columns and a common index.
-
-	Works only on entities that share a common domain (set or set_tuple), which
-	is used as index of the returned DataFrame.
-
-	Args:
-		prob: a Pyomo ConcreteModel instance
-		names: list of entity names (as returned by list_entities)
-
-	Returns:
-		a Pandas DataFrame with entities as columns and domains as index
-	"""
-
-	df = pd.DataFrame()
-	for name in names:
-		other = get_entity(prob, name)
-
-		if df.empty:
-			df = other
-		else:
-			index_names_before = df.index.names
-			if not other.empty:
-				df = df.join(other, how='outer')
-
-			if index_names_before != df.index.names:
-				df.index.names = index_names_before
-
-	return df
-
-
-def list_entities(prob, entity_type):
-    """ Return list of sets, params, variables, constraints or objectives
-
+def get_entity(instance, name):
+    """ Retrieve values (or duals) for an entity in a model instance.
     Args:
-        prob: a Pyomo ConcreteModel object
-        entity_type: "set", "par", "var", "con" or "obj"
+        instance: a Pyomo ConcreteModel instance
+        name: name of a Set, Param, Var, Constraint or Objective
+    Returns:
+        a Pandas Series with domain as index and values (or 1's, for sets) of
+        entity name. For constraints, it retrieves the dual values
+    """
 
+    # retrieve entity, its type and its onset names
+    entity = instance.__getattribute__(name)
+    labels = _get_onset_names(entity)
+
+    # extract values
+    if isinstance(entity, pyen.Set):
+        # Pyomo sets don't have values, only elements
+        results = pd.DataFrame([(v, 1) for v in entity.value])
+
+        # for unconstrained sets, the column label is identical to their index
+        # hence, make index equal to entity name and append underscore to name
+        # (=the later column title) to preserve identical index names for both
+        # unconstrained supersets
+        if not labels:
+            labels = [name]
+            name = name+'_'
+
+    elif isinstance(entity, pyen.Param):
+        if entity.dim() > 1:
+            results = pd.DataFrame([v[0]+(v[1],) for v in entity.iteritems()])
+        else:
+            results = pd.DataFrame(entity.iteritems())
+
+    elif isinstance(entity, pyen.Constraint):
+        if entity.dim() > 1:
+            results = pd.DataFrame(
+                [v[0] + (instance.dual[v[1]],) for v in entity.iteritems()])
+        elif entity.dim() == 1:
+            results = pd.DataFrame(
+                [(v[0], instance.dual[v[1]]) for v in entity.iteritems()])
+        else:
+            results = pd.DataFrame(
+                [(v[0], instance.dual[v[1]]) for v in entity.iteritems()])
+            labels = ['None']
+
+    else:
+        # create DataFrame
+        if entity.dim() > 1:
+            # concatenate index tuples with value if entity has
+            # multidimensional indices v[0]
+            results = pd.DataFrame(
+                [v[0]+(v[1].value,) for v in entity.iteritems()])
+        elif entity.dim() == 1:
+            # otherwise, create tuple from scalar index v[0]
+            results = pd.DataFrame(
+                [(v[0], v[1].value) for v in entity.iteritems()])
+        else:
+            # assert(entity.dim() == 0)
+            results = pd.DataFrame(
+                [(v[0], v[1].value) for v in entity.iteritems()])
+            labels = ['None']
+
+    # check for duplicate onset names and append one to several "_" to make
+    # them unique, e.g. ['sit', 'sit', 'com'] becomes ['sit', 'sit_', 'com']
+    for k, label in enumerate(labels):
+        if label in labels[:k]:
+            labels[k] = labels[k] + "_"
+
+    if not results.empty:
+        # name columns according to labels + entity name
+        results.columns = labels + [name]
+        results.set_index(labels, inplace=True)
+
+        # convert to Series
+        results = results[name]
+    else:
+        # return empty Series
+        results = pd.Series(name=name)
+    return results
+
+
+def get_entities(instance, names):
+    """ Return one DataFrame with entities in columns and a common index.
+    Works only on entities that share a common domain (set or set_tuple), which
+    is used as index of the returned DataFrame.
+    Args:
+        instance: a Pyomo ConcreteModel instance
+        names: list of entity names (as returned by list_entities)
+    Returns:
+        a Pandas DataFrame with entities as columns and domains as index
+    """
+
+    df = pd.DataFrame()
+    for name in names:
+        other = get_entity(instance, name)
+
+        if df.empty:
+            df = other.to_frame()
+        else:
+            index_names_before = df.index.names
+
+            df = df.join(other, how='outer')
+
+            if index_names_before != df.index.names:
+                df.index.names = index_names_before
+
+    return df
+
+
+def list_entities(instance, entity_type):
+    """ Return list of sets, params, variables, constraints or objectives
+    Args:
+        instance: a Pyomo ConcreteModel object
+        entity_type: "set", "par", "var", "con" or "obj"
     Returns:
         DataFrame of entities
-
     Example:
-        >>> data = read_excel('data-example.xlsx')
+        >>> data = read_excel('mimo-example.xlsx')
         >>> model = create_model(data, range(1,25))
         >>> list_entities(model, 'obj')  #doctest: +NORMALIZE_WHITESPACE
                                          Description Domain
         Name
         obj   minimize(cost = sum of all cost types)     []
-        [1 rows x 2 columns]
-
     """
 
-    iter_entities = prob.__dict__.iteritems()
+    # helper function to discern entities by type
+    def filter_by_type(entity, entity_type):
+        if entity_type == 'set':
+            return isinstance(entity, pyen.Set) and not entity.virtual
+        elif entity_type == 'par':
+            return isinstance(entity, pyen.Param)
+        elif entity_type == 'var':
+            return isinstance(entity, pyen.Var)
+        elif entity_type == 'con':
+            return isinstance(entity, pyen.Constraint)
+        elif entity_type == 'obj':
+            return isinstance(entity, pyen.Objective)
+        else:
+            raise ValueError("Unknown entity_type '{}'".format(entity_type))
 
-    if entity_type == 'set':
-        entities = sorted(
-            (x, y.doc, get_onset_names(y)) for (x, y) in iter_entities
-            if isinstance(y, pyen.Set) and not y.virtual)
+    # create entity iterator, using a python 2 and 3 compatible idiom:
+    # http://python3porting.com/differences.html#index-6
+    try:
+        iter_entities = instance.__dict__.iteritems()  # Python 2 compat
+    except AttributeError:
+        iter_entities = instance.__dict__.items()  # Python way
 
-    elif entity_type == 'par':
-        entities = sorted(
-            (x, y.doc, get_onset_names(y)) for (x, y) in iter_entities
-            if isinstance(y, pyen.Param))
+    # now iterate over all entties and keep only those whose type matches
+    entities = sorted(
+        (name, entity.doc, _get_onset_names(entity))
+        for (name, entity) in iter_entities
+        if filter_by_type(entity, entity_type))
 
-    elif entity_type == 'var':
-        entities = sorted(
-            (x, y.doc, get_onset_names(y)) for (x, y) in iter_entities
-            if isinstance(y, pyen.Var))
-
-    elif entity_type == 'con':
-        entities = sorted(
-            (x, y.doc, get_onset_names(y)) for (x, y) in iter_entities
-            if isinstance(y, pyen.Constraint))
-
-    elif entity_type == 'obj':
-        entities = sorted(
-            (x, y.doc, get_onset_names(y)) for (x, y) in iter_entities
-            if isinstance(y, pyen.Objective))
-
+    # if something was found, wrap tuples in DataFrame, otherwise return empty
+    if entities:
+        entities = pd.DataFrame(entities,
+                                columns=['Name', 'Description', 'Domain'])
+        entities.set_index('Name', inplace=True)
     else:
-        raise ValueError("Unknown parameter entity_type")
-
-    entities = pd.DataFrame(entities,
-                            columns=['Name', 'Description', 'Domain'])
-    entities.set_index('Name', inplace=True)
+        entities = pd.DataFrame()
     return entities
 
 
-def get_onset_names(entity):
-    """
-        Example:
-            >>> data = read_excel('data-example.xlsx')
-            >>> model = create_model(data, range(1,25))
-            >>> get_onset_names(model.e_co_stock)
-            ['t', 'sit', 'com', 'com_type']
+def _get_onset_names(entity):
+    """ Return a list of domain set names for a given model entity
+    Args:
+        entity: a member entity (i.e. a Set, Param, Var, Objective, Constraint)
+                of a Pyomo ConcreteModel object
+    Returns:
+        list of domain set names for that entity
+    Example:
+        >>> data = read_excel('mimo-example.xlsx')
+        >>> model = create_model(data, range(1,25))
+        >>> _get_onset_names(model.e_co_stock)
+        ['t', 'sit', 'com', 'com_type']
     """
     # get column titles for entities from domain set names
     labels = []
@@ -1527,13 +1540,21 @@ def get_onset_names(entity):
     if isinstance(entity, pyen.Set):
         if entity.dimen > 1:
             # N-dimensional set tuples, possibly with nested set tuples within
-            if isinstance(entity.domain, pyen.base.sets._SetProduct):
+            if entity.domain:
+                # retreive list of domain sets, which itself could be nested
                 domains = entity.domain.set_tuple
             else:
-                domains = entity.set_tuple
+                try:
+                    # if no domain attribute exists, some
+                    domains = entity.set_tuple
+                except AttributeError:
+                    # if that fails, too, a constructed (union, difference,
+                    # intersection, ...) set exists. In that case, the
+                    # attribute _setA holds the domain for the base set
+                    domains = entity._setA.domain.set_tuple
 
             for domain_set in domains:
-                labels.extend(get_onset_names(domain_set))
+                labels.extend(_get_onset_names(domain_set))
 
         elif entity.dimen == 1:
             if entity.domain:
@@ -1549,7 +1570,7 @@ def get_onset_names(entity):
     elif isinstance(entity, (pyen.Param, pyen.Var, pyen.Constraint,
                     pyen.Objective)):
         if entity.dim() > 0 and entity._index:
-            labels = get_onset_names(entity._index)
+            labels = _get_onset_names(entity._index)
         else:
             # zero dimensions, so no onset labels
             pass
@@ -1602,7 +1623,7 @@ def get_timeseries(prob, timesteps=None):
 	"""
 	if timesteps is None:
         # default to all simulated timesteps
-		timesteps = sorted(get_entity(prob, 't')['t'])
+		timesteps = sorted(get_entity(prob, 't').index)
         
     # DEMAND
 	demand = prob.demand.loc[timesteps]
@@ -1683,7 +1704,7 @@ def report(prob, dir):
 
 	# write to excel
 	info.to_excel(writer, 'Info', merge_cells = False)
-	costs.to_excel(writer, 'Costs', merge_cells = False)
+	costs.to_frame().to_excel(writer, 'Costs', merge_cells = False)
 	cpro.to_excel(writer, 'Process caps', merge_cells = False)
 	csto.to_excel(writer, 'Storage caps', merge_cells = False)
 	ext.to_excel(writer, 'External timeseries', merge_cells = False)
@@ -1808,7 +1829,7 @@ def get_plot_data(co, prob, resultfile, timesteps):
 		# prob is given, get timeseries from prob
 		if timesteps is None:
 		# default to all simulated timesteps
-			timesteps = sorted(get_entity(prob, 't')['t'])
+			timesteps = sorted(get_entity(prob, 't').index)
 		demand, ext, pro, sto = get_timeseries(prob,timesteps)
 		tb = prob.tb		
 	else:
@@ -2401,7 +2422,6 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 		costs = xls.parse('Costs', index_col=[0])
 	
 	#delete index with zero capacity	
-	costs = costs['costs']
 	costs = costs[costs!=0]
 	
 	
