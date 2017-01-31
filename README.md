@@ -4,6 +4,9 @@ ficus is a ([mixed integer](https://en.wikipedia.org/wiki/Integer_programming)) 
 
 [![Documentation Status](https://readthedocs.org/projects/ficus/badge/?version=latest)](https://ficus.readthedocs.org/en/latest/)  [![DOI](https://zenodo.org/badge/18757/yabata/ficus.svg)](https://zenodo.org/badge/latestdoi/18757/yabata/ficus)
 
+## Publication
+
+[D. Atabay: An open-source model for optimal design and operation of industrial energy systems, Energy, 121 (2017), 803–821](http://dx.doi.org/10.1016/j.energy.2017.01.030)
 
 ## Features
 
