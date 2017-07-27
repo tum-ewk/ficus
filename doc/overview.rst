@@ -1,7 +1,7 @@
 Overview
 --------
 
-ficus consists of several **model entities**. These are external imported/exported commodities, processes and storages. Demand and intermittent commodity supply are modelled through time series datasets.
+ficus consists of several **model entities**. These are external imported/exported commodities, processes and storages. Demand and intermittent commodity supply are modelled through time-series datasets.
 
 The objective of the model is to supply the given demand with minimal costs. The main restriction is the power balance of every commodity for every time-step. Commodities are goods that can be imported/exported, generated, stored and consumed. They are represented by their power flow (in kW) per time-step.
 
