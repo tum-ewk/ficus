@@ -1789,7 +1789,7 @@ COLOURS = {
     6: 'orchid', 
     7: 'burlywood',
     8: 'palegoldenrod', 
-    9: 'sage', 
+    9: 'darkkhaki', 
     10: 'lightskyblue', 
     11: 'firebrick',
     12: 'blue',

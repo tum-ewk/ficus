@@ -1,4 +1,5 @@
 *~
 *.pyc
 result/*
+examples/result/*
 __pycache__\*
