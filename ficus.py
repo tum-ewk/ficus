@@ -1355,8 +1355,6 @@ def del_processes(process_commodity, process):
         pro_co.columns = process_commodity.columns
     else:
         pro_co=process_commodity.ix[0:0]
-    import pdb
-    pdb.set_trace()
     return pro_co
 	
 ############################################################################################	
