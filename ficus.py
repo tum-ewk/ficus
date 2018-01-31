@@ -1337,22 +1337,27 @@ def num_index(df_data):
 
 def del_processes(process_commodity, process):
 # Delete non used processes in process_commodity
-	if process.index.values.size>0:
-		pro_co=pd.DataFrame()
-		pro_type = process.index.get_level_values(0)
-		for i in range(0,len(process_commodity)):		
-			if process_commodity[i:i+1].index[0][0] in pro_type:
-				for n in range(0,max(process.loc[process_commodity.index[i][0]].index)):
-					df_temp = pd.DataFrame(process_commodity[i:i+1].values, \
-						index = [pd.Index(tuple([(process_commodity[i:i+1].index.get_values()[0][0], n+1, process_commodity[i:i+1].index.get_values()[0][1], process_commodity[i:i+1].index.get_values()[0][2])]))] )
-					pro_co=pro_co.append(df_temp)
-						
-		pro_co.index=pd.MultiIndex.from_tuples(tuple(pro_co.index),names=process_commodity.index.names[0:1]+['Num'] +process_commodity.index.names[1:3])	
-		pro_co.columns = process_commodity.columns
-	else:
-		pro_co=process_commodity.ix[0:0]
-
-	return pro_co
+    if process.index.values.size>0:
+        pro_co=pd.DataFrame()
+        pro_type = process.index.get_level_values(0)
+        for i in range(0,len(process_commodity)):		
+            if process_commodity[i:i+1].index[0][0] in pro_type:
+                for n in range(0,max(process.loc[process_commodity.index[i][0]].index)):
+                    df_temp = pd.DataFrame(process_commodity[i:i+1].values,
+                        index = pd.MultiIndex.from_tuples(
+                        tuple([(process_commodity[i:i+1].index.get_values()[0][0],
+                                n+1,
+                                process_commodity[i:i+1].index.get_values()[0][1],
+                                process_commodity[i:i+1].index.get_values()[0][2])])))
+                    pro_co=pro_co.append(df_temp)
+                        
+        pro_co.index=pd.MultiIndex.from_tuples(tuple(pro_co.index),names=process_commodity.index.names[0:1]+['Num'] +process_commodity.index.names[1:3])	
+        pro_co.columns = process_commodity.columns
+    else:
+        pro_co=process_commodity.ix[0:0]
+    import pdb
+    pdb.set_trace()
+    return pro_co
 	
 ############################################################################################	
 #GET RESULTS	
