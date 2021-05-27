@@ -1337,7 +1337,7 @@ def num_index(df_data):
         output.index=pd.MultiIndex.from_tuples(tuple(output.index), names=df_1.index.names) #adding multiindex and index names
         # derive annuity factor for process and storage
     else:
-        output = df_1.ix[0:0]
+        output = df_1.iloc[0:0] #ix
         # output = pd.DataFrame(columns = df_data.columns[1:])
     output['annuity_factor'] = annuity_factor(output['depreciation'], output['wacc'])
     return output
@@ -1361,7 +1361,7 @@ def del_processes(process_commodity, process):
         pro_co.index=pd.MultiIndex.from_tuples(tuple(pro_co.index),names=process_commodity.index.names[0:1]+['Num'] +process_commodity.index.names[1:3])    
         pro_co.columns = process_commodity.columns
     else:
-        pro_co=process_commodity.ix[0:0]
+        pro_co=process_commodity.iloc[0:0] #ix
     return pro_co
     
 ############################################################################################    
@@ -1397,20 +1397,20 @@ def get_entity(instance, name):
 
     elif isinstance(entity, pyen.Param):
         if entity.dim() > 1:
-            results = pd.DataFrame([v[0]+(v[1],) for v in entity.iteritems()])
+            results = pd.DataFrame([v[0]+(v[1],) for v in entity.items()])
         else:
-            results = pd.DataFrame(entity.iteritems())
+            results = pd.DataFrame(entity.items())
 
     elif isinstance(entity, pyen.Constraint):
         if entity.dim() > 1:
             results = pd.DataFrame(
-                [v[0] + (instance.dual[v[1]],) for v in entity.iteritems()])
+                [v[0] + (instance.dual[v[1]],) for v in entity.items()])
         elif entity.dim() == 1:
             results = pd.DataFrame(
-                [(v[0], instance.dual[v[1]]) for v in entity.iteritems()])
+                [(v[0], instance.dual[v[1]]) for v in entity.items()])
         else:
             results = pd.DataFrame(
-                [(v[0], instance.dual[v[1]]) for v in entity.iteritems()])
+                [(v[0], instance.dual[v[1]]) for v in entity.items()])
             labels = ['None']
 
     else:
@@ -1419,15 +1419,15 @@ def get_entity(instance, name):
             # concatenate index tuples with value if entity has
             # multidimensional indices v[0]
             results = pd.DataFrame(
-                [v[0]+(v[1].value,) for v in entity.iteritems()])
+                [v[0]+(v[1].value,) for v in entity.items()])
         elif entity.dim() == 1:
             # otherwise, create tuple from scalar index v[0]
             results = pd.DataFrame(
-                [(v[0], v[1].value) for v in entity.iteritems()])
+                [(v[0], v[1].value) for v in entity.items()])
         else:
             # assert(entity.dim() == 0)
             results = pd.DataFrame(
-                [(v[0], v[1].value) for v in entity.iteritems()])
+                [(v[0], v[1].value) for v in entity.items()])
             labels = ['None']
 
     # check for duplicate onset names and append one to several "_" to make
@@ -1511,7 +1511,7 @@ def list_entities(instance, entity_type):
     # create entity iterator, using a python 2 and 3 compatible idiom:
     # http://python3porting.com/differences.html#index-6
     try:
-        iter_entities = instance.__dict__.iteritems()  # Python 2 compat
+        iter_entities = instance.__dict__.items()  # Python 2 compat
     except AttributeError:
         iter_entities = instance.__dict__.items()  # Python way
 
