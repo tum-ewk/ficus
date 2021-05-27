@@ -21,11 +21,12 @@ import os
 
 
 
-############################################################################################	
+############################################################################################    
 #RUN FUNCTIONS
 ############################################################################################
 
-def run_ficus (input_file, opt = 'glpk', Threads = 2,neos=False):
+
+def run_ficus(input_file, opt = 'glpk', Threads = 2, neos=False):
 	"""Read input data, create a model and solve it
 
 	Args:
@@ -38,10 +39,10 @@ def run_ficus (input_file, opt = 'glpk', Threads = 2,neos=False):
 	"""
 	# Optimizer
 	# ============
-	optimizer = SolverFactory(opt) #set optimizer	
+	optimizer = SolverFactory(opt) #set optimizer   
 	if optimizer.name == 'gurobi' and not neos:
 		# reference with list of option names
-        # http://www.gurobi.com/documentation/5.6/reference-manual/parameters
+		# http://www.gurobi.com/documentation/5.6/reference-manual/parameters
 		optimizer.set_options("Threads="+str(Threads))  # number of simultaneous CPU threads
 
 	elif optimizer.name == 'cplex' and not neos:
@@ -51,7 +52,7 @@ def run_ficus (input_file, opt = 'glpk', Threads = 2,neos=False):
 	
 	# RUN MODEL
 	# ============
-	#read model data	
+	#read model data    
 	print('Read Data ...\n')
 	t0 = time.time()
 	xls_data = read_xlsdata(input_file) 
@@ -111,19 +112,19 @@ def run_from_excel(input_file,opt):
 	else:
 		neos = False
 		
-	#create and solve model from inputfile	
+	#create and solve model from inputfile  
 	prob = run_ficus(input_file, opt = opt,neos=neos)
 
 	#save results
 	report(prob, result_dir)
-	#save figures	
+	#save figures   
 	result_figures(result_dir,prob=prob, show=True)
 	
 	raw_input("Press Enter to close figures and cmd window...\n")
 	
-	return		
+	return      
 				
-############################################################################################	
+############################################################################################    
 #Model
 ############################################################################################
 
@@ -188,15 +189,15 @@ def create_model(data):
 	m.inputfile = data['input_file']
 	
 	##Sets##
-	########	
+	########    
 	#commodity
 	m.commodity = pyen.Set(
-		initialize=demand.columns | pd.Index(set(process_commodity.index.get_level_values(2))) | ext_import.columns,
+		initialize=demand.columns.union(pd.Index(set(process_commodity.index.get_level_values(2)))).union(ext_import.columns), # change
 		doc='Commodities')
 		
 	m.co_consumed = pyen.Set(
 		within=m.commodity, 
-		initialize=demand.columns | get_pro_inputs(process_commodity),
+		initialize=demand.columns.union(get_pro_inputs(process_commodity)),
 		doc='Commodities that are consumed by processes or demand')
 		
 	m.co_produced = pyen.Set(
@@ -216,7 +217,7 @@ def create_model(data):
 		
 	m.co_ext = pyen.Set(
 		within=m.commodity, 
-		initialize=ext_export.columns | ext_import.columns,
+		initialize= ext_export.columns.union(ext_import.columns), # change
 		doc='Commodities in External Supply or Feed-In-Price')
 		
 	m.co_demand = pyen.Set(
@@ -250,18 +251,19 @@ def create_model(data):
 
 	m.pro_tuples = pyen.Set(
 		within=m.pro_name*m.pro_num,
-		initialize=process.index.get_values(),
-		doc='Processes, converting commodities')	
+		initialize=process.index.to_numpy(),
+		doc='Processes, converting commodities')    
 	
-	if process.index.get_values().size>0:
+	# change
+	if process.index.to_numpy().size>0:
 		m.pro_input_tuples = pyen.Set(
 			within=m.pro_name*m.pro_num*m.commodity, 
-			initialize = process_commodity.xs('In',level='Direction').index.get_values(),
+			initialize = process_commodity.xs('In',level='Direction').index.to_numpy(),
 			doc='Commodities consumed by processes')
 
 		m.pro_output_tuples = pyen.Set(
 			within=m.pro_name*m.pro_num*m.commodity, 
-			initialize=process_commodity.xs('Out',level='Direction').index.get_values(),
+			initialize=process_commodity.xs('Out',level='Direction').index.to_numpy(),
 			doc='Commodities emitted by processes')
 	else:
 		m.pro_input_tuples = pyen.Set(
@@ -282,7 +284,7 @@ def create_model(data):
 		
 	m.proclass_tuples = pyen.Set( 
 		within=m.proclass_name*m.commodity,
-		initialize=process_class.index.get_values(),
+		initialize=process_class.index.to_numpy(),
 		doc='Process Class tuples')
 
 	#Storage
@@ -298,7 +300,7 @@ def create_model(data):
 
 	m.sto_tuples = pyen.Set(
 		within=m.storage_name*m.co_storage*m.storage_num,
-		initialize=storage.index.get_values(),
+		initialize=storage.index.to_numpy(),
 		doc='storage name with stored commodity and num')
 
 	# time
@@ -311,18 +313,18 @@ def create_model(data):
 		within=m.t0,
 		ordered=True,
 		initialize=timesteps[1:], 
-		doc='Timesteps for model')	
+		doc='Timesteps for model')  
 
 	# costs
 	m.cost_type = pyen.Set(
 		initialize=['Import', 'Export','Demand charges','Invest','Fix costs', 'Var costs','Process fee','Pro subsidy'],
-		doc='Types of costs')	
+		doc='Types of costs')   
 
 		
 	##Parameters##
 	##############
-	if process.index.get_values().size>0:
-		# process input/output ratios	
+	if process.index.to_numpy().size>0:
+		# process input/output ratios   
 		m.r_in = process_commodity.xs('In', level='Direction')['ratio']
 		m.r_in_partl = process_commodity.xs('In', level='Direction')['ratio-partload']
 		m.r_out = process_commodity.xs('Out', level='Direction')['ratio']
@@ -330,12 +332,12 @@ def create_model(data):
 		
 		#Calculate slope and offset for process input and output equations
 		#For calculating power input/output p for each commodity dependent on power throughput "flow"
-		# p = slope * flow + offset	
+		# p = slope * flow + offset 
 		m.pro_p_in_slope = pd.Series(index=m.r_in.index)
 		m.pro_p_in_offset_spec = pd.Series(index=m.r_in.index)
 		for idx in m.pro_p_in_slope.index:
 			m.pro_p_in_slope.loc[idx] = (m.r_in.loc[idx] - m.r_in_partl.loc[idx]*process.loc[idx[0:2]]['partload-min'])/(1-process.loc[idx[0:2]]['partload-min'])
-			m.pro_p_in_offset_spec[idx] = m.r_in.loc[idx]-m.pro_p_in_slope.loc[idx]	
+			m.pro_p_in_offset_spec[idx] = m.r_in.loc[idx]-m.pro_p_in_slope.loc[idx] 
 		m.pro_p_out_slope = pd.Series(index=m.r_out.index)
 		m.pro_p_out_offset_spec = pd.Series(index=m.r_out.index)
 		for idx in m.pro_p_out_slope.index:
@@ -346,7 +348,7 @@ def create_model(data):
 	m.demand = demand
 	m.supim = supim
 	m.tb = tb
-	
+
 	
 	##Variables##
 	##############
@@ -381,10 +383,10 @@ def create_model(data):
 
 	m.ext_demandrate_in= pyen.Var(
 			m.co_ext_in,m.t, within=pyen.NonNegativeReals,
-			doc=' power flow (kW) of imported commodity in one timestep based in demand rate time interval')		
+			doc=' power flow (kW) of imported commodity in one timestep based in demand rate time interval')        
 	m.ext_demandrate_out= pyen.Var(
 			m.co_ext_out,m.t, within=pyen.NonNegativeReals,
-			doc='power flow (kW) of exported commodity in one timestep based in demand rate time interval')		
+			doc='power flow (kW) of exported commodity in one timestep based in demand rate time interval')     
 	m.ext_demandrate_max= pyen.Var(
 			m.co_ext_in, within=pyen.NonNegativeReals,
 			doc='max power flow (kW) of imported or exported commodity in one timestep based in demand rate time interval')
@@ -404,7 +406,7 @@ def create_model(data):
 			doc='Capacity (kW) of process')
 	m.pro_cap_new = pyen.Var(
 			m.pro_tuples, within=pyen.NonNegativeReals,
-			doc='New additional Capacity (kW) of process')								
+			doc='New additional Capacity (kW) of process')                              
 
 	if mip_equations.loc['Min-Cap']['Active']=='yes':
 		m.pro_cap_build = pyen.Var(
@@ -423,7 +425,7 @@ def create_model(data):
 			doc='offset for calculating process input (kW)')
 		m.pro_p_out_offset= pyen.Var(
 			m.pro_output_tuples,m.t, within=pyen.Reals,
-			doc='offset for calculating process output (kW)')	
+			doc='offset for calculating process output (kW)')   
 		m.pro_mode_run= pyen.Var(
 			m.pro_tuples,m.t0, within=pyen.Boolean,
 			doc='booelan : true if process in run mode')
@@ -439,7 +441,7 @@ def create_model(data):
 			doc='No Partload: offset is zero')
 		m.pro_p_out_offset= pyen.Param(
 			m.pro_output_tuples,m.t, initialize=0,
-			doc='No Partload: offset is zero')	
+			doc='No Partload: offset is zero')  
 		m.pro_mode_run= pyen.Param(
 				m.pro_tuples,m.t0, initialize=1,
 				doc='No Partload: run=1')
@@ -489,7 +491,7 @@ def create_model(data):
 	if mip_equations.loc['Min-Cap']['Active']=='yes':
 		m.sto_cap_build = pyen.Var(
 			m.sto_tuples, within=pyen.Boolean,
-			doc='Boolean: True if new capacity is build. Needed for minimum new capacity')	
+			doc='Boolean: True if new capacity is build. Needed for minimum new capacity')  
 	elif mip_equations.loc['Min-Cap']['Active']=='no':
 			m.sto_cap_build = pyen.Param(
 				m.sto_tuples, initialize=1,
@@ -500,7 +502,7 @@ def create_model(data):
 	if mip_equations.loc['Storage In-Out']['Active'] == 'yes':
 		m.sto_charge = pyen.Var(
 				m.co_storage, m.t, within=pyen.Boolean,
-				doc='Bool Variable, 1 if charging')	
+				doc='Bool Variable, 1 if charging') 
 	elif mip_equations.loc['Storage In-Out']['Active'] == 'no':
 		pass
 	else:
@@ -564,7 +566,7 @@ def create_model(data):
 			doc='initial run mode')
 
 		
-	# capacity		
+	# capacity      
 	def pro_cap_abs_rule(m,pro,num):
 		return m.pro_cap[pro,num] == m.pro_cap_new[pro,num] + process.loc[pro,num]['cap-installed']
 	m.pro_cap_abs = pyen.Constraint(
@@ -607,7 +609,7 @@ def create_model(data):
 		m.pro_input_tuples,m.t,
 		rule=pro_p_supim_input_rule,
 		doc='Limit power input from "supim" to installed capacity')
-	# in	
+	# in    
 	def pro_p_input_rule(m,pro,num,co,t):
 		return m.pro_p_in[pro,num,co,t] == \
 				m.pro_p_flow[pro,num,t] * m.pro_p_in_slope[pro,num,co]\
@@ -619,7 +621,7 @@ def create_model(data):
 		doc='Calculate input power for every commodity dependent on ratios\
 			p_in = p_flow * p_slope_in + p_offset_in + startup * E_startup/t*r_in;')
 	
-	#out	
+	#out    
 	def pro_p_output_rule(m,pro,num,co,t):
 		return m.pro_p_out[pro,num,co,t] == m.pro_p_flow[pro,num,t] * m.pro_p_out_slope[pro,num,co]\
 											+ m.pro_p_out_offset[pro,num,co,t] 
@@ -627,10 +629,10 @@ def create_model(data):
 		m.pro_output_tuples, m.t,
 		rule=pro_p_output_rule,
 		doc='Calculate output power for every commodity dependent on ratios\
-			p_out = p_flow  *  p_slope_out + p_offset_out')		
+			p_out = p_flow  *  p_slope_out + p_offset_out')     
 
 	if mip_equations.loc['Partload']['Active']=='yes':
-		#offset in	
+		#offset in  
 		def pro_p_in_offset_lt_rule(m,pro,num,co,t):
 			return m.pro_p_in_offset[pro,num,co,t] \
 					- (m.pro_p_in_offset_spec[pro,num,co] * m.pro_cap[pro,num]) \
@@ -648,7 +650,7 @@ def create_model(data):
 			m.pro_input_tuples,m.t,
 			rule = pro_p_in_offset_gt_rule,
 			doc='offset must be (greater) equal to offset_spec*cap , when run = 1\
-			p_offset - (offset_spec*cap) >= -(1-run) * cap-max -> p_offset >= (offset_spec*cap) if run=1')	
+			p_offset - (offset_spec*cap) >= -(1-run) * cap-max -> p_offset >= (offset_spec*cap) if run=1')  
 
 		def pro_p_offset_in_ltzero_when_off_rule(m,pro,num,co,t):
 			return m.pro_p_in_offset[pro,num,co,t] <= \
@@ -658,7 +660,7 @@ def create_model(data):
 			m.pro_input_tuples,m.t,
 			rule = pro_p_offset_in_ltzero_when_off_rule,
 			doc='p_offset must be (lower) equal to zero when run=0\
-				p_offset <= run * cap_max')	
+				p_offset <= run * cap_max') 
 				
 		def pro_p_offset_in_gtzero_when_off_rule(m,pro,num,co,t):
 			return m.pro_p_in_offset[pro,num,co,t] >= \
@@ -668,9 +670,9 @@ def create_model(data):
 			m.pro_input_tuples,m.t,
 			rule = pro_p_offset_in_gtzero_when_off_rule,
 			doc='p_offset must be (greater) equal to zero when run=0\
-				p_offset >= run * cap_max')		
+				p_offset >= run * cap_max')     
 					
-		#offset out		
+		#offset out     
 		def pro_p_out_offset_lt_rule(m,pro,num,co,t):
 			return m.pro_p_out_offset[pro,num,co,t] - (m.pro_p_out_offset_spec[pro,num,co] * m.pro_cap[pro,num])\
 			<= (1 - m.pro_mode_run[pro,num,t]) * process.loc[pro,num]['cap-abs-max']*m.r_out[pro,num,co]
@@ -705,9 +707,9 @@ def create_model(data):
 		m.pro_p_offset_out_gtzero_when_off = pyen.Constraint(
 			m.pro_output_tuples,m.t,
 			rule = pro_p_offset_out_gtzero_when_off_rule,
-			doc='p_offset is zero when mode not "run"')	
+			doc='p_offset is zero when mode not "run"') 
 		
-		# mode	
+		# mode  
 		def pro_p_flow_zero_when_off_rule(m,pro,num,t):
 			return m.pro_p_flow[pro,num,t] <= \
 				(m.pro_mode_run[pro,num,t]) * \
@@ -719,13 +721,13 @@ def create_model(data):
 
 			
 		def pro_p_gt_partload_rule(m,pro,num,t):
-			return (m.pro_p_flow[pro,num,t] - m.pro_cap[pro,num] * process.loc[pro,num]['partload-min']) >= -(1 - m.pro_mode_run[pro,num,t]) * process.loc[pro,num]['cap-abs-max']		
+			return (m.pro_p_flow[pro,num,t] - m.pro_cap[pro,num] * process.loc[pro,num]['partload-min']) >= -(1 - m.pro_mode_run[pro,num,t]) * process.loc[pro,num]['cap-abs-max']      
 		m.pro_p_gt_partload = pyen.Constraint(
 			m.pro_tuples,m.t,
 			rule = pro_p_gt_partload_rule,
 			doc='p_flow >= capacity * partload if run =1 ')
 		
-		#switch on losses			
+		#switch on losses           
 		def pro_mode_start_up1_rule(m,pro,num,t):
 			return m.pro_mode_startup[pro,num,t] >= \
 				m.pro_mode_run[pro,num,t] - \
@@ -789,8 +791,8 @@ def create_model(data):
 					
 	
 	"""PROCESS CLASS"""
-	# CALCULATIONS		
-	def proclass_cap_sum_rule(m,cl,co):			
+	# CALCULATIONS      
+	def proclass_cap_sum_rule(m,cl,co):         
 		return m.proclass_cap[cl,co] == \
 				sum(m.pro_cap[p[0:2]] * m.r_out[p]\
 					for p in m.pro_output_tuples
@@ -805,7 +807,7 @@ def create_model(data):
 		rule=proclass_cap_sum_rule,
 		doc='Calculate total capacity of class and commodity') 
 				
-	def proclass_e_out_sum_rule(m,cl,co):			
+	def proclass_e_out_sum_rule(m,cl,co):           
 		return m.proclass_e_out[cl,co] == \
 				sum(m.pro_p_out[p,t] * p2e\
 					for t in m.t
@@ -817,7 +819,7 @@ def create_model(data):
 		rule=proclass_e_out_sum_rule,
 		doc='Calculate total energy outpout of class and commodity') 
 		
-	def proclass_e_in_sum_rule(m,cl,co):			
+	def proclass_e_in_sum_rule(m,cl,co):            
 		return m.proclass_e_in[cl,co] == \
 				sum(m.pro_p_in[p,t] * p2e\
 					for t in m.t
@@ -826,7 +828,7 @@ def create_model(data):
 					if cl == process.loc[p[0:2]]['class'])
 	m.proclass_e_in_sum = pyen.Constraint(
 		m.proclass_tuples,
-		rule=proclass_e_in_sum_rule,		
+		rule=proclass_e_in_sum_rule,        
 		doc='Calculate total energy outpout of class and commodity') 
 			
 	# CONSTRAINTS
@@ -868,7 +870,7 @@ def create_model(data):
 		doc='initial and minimum final content of energy storage')
 		
 		
-	# capacity		
+	# capacity      
 	def sto_cap_e_abs_rule(m,sto,co,num):
 		return m.sto_cap_e[sto,co,num] == \
 				m.sto_cap_e_new[sto,co,num] + storage.loc[sto,co,num]['cap-installed-e']
@@ -1008,7 +1010,7 @@ def create_model(data):
 	m.ext_p_out_max = pyen.Constraint(
 		m.co_ext_out, m.t,
 		rule=ext_p_out_max_rule,
-		doc='max power export (kW) for every timestep ')			
+		doc='max power export (kW) for every timestep ')            
 	
 	
 	def demandrate_initial_max_rule(m, co, t):
@@ -1090,14 +1092,14 @@ def create_model(data):
 					for t in m.t for s in m.sto_tuples)/year_factor
 		
 		#costs for external import = sum(t) [ p_ext) * price(t)]
-		elif cost_type == 'Import':	
+		elif cost_type == 'Import': 
 			return m.costs[cost_type] == \
 				sum(m.ext_p_in[c,t]*p2e \
 					* (ext_import.loc[t][c])\
 					for t in m.t for c in m.co_ext_in)/year_factor
 		
 		#costs for export = sum(t) [- p_ext_export(t) * price(t)]
-		elif cost_type == 'Export':	
+		elif cost_type == 'Export': 
 			return m.costs[cost_type] == \
 				-sum( m.ext_p_out[c,t] * p2e * ext_export.loc[t][c]\
 					for t in m.t for c in m.co_ext_out)/year_factor
@@ -1129,23 +1131,23 @@ def create_model(data):
 					+sum(m.proclass_e_out[procl] * process_class.loc[procl]['fee']
 						for procl in m.proclass_tuples\
 						if process_class.loc[procl]['Direction']=='Out'\
-						if process_class.loc[procl]['fee']<0)/year_factor			
+						if process_class.loc[procl]['fee']<0)/year_factor           
 		else:
-			raise NotImplementedError("Unknown cost type!")					
+			raise NotImplementedError("Unknown cost type!")                 
 	m.cost_sum = pyen.Constraint(
 		m.cost_type,
 		rule=cost_sum_rule,
 		doc='Calculate Costs per cost type')
 		
-	#OBJECTIVE	
+	#OBJECTIVE  
 	def obj_rule(m):
 	# Return sum of total costs over all cost types.
 	# Simply calculates the sum of m.costs over all m.cost_types.
-		return pyen.summation(m.costs)		
+		return pyen.summation(m.costs)      
 	m.obj = pyen.Objective(
 		sense=pyen.minimize,
 		rule=obj_rule,
-		doc='Sum costs by cost type')	
+		doc='Sum costs by cost type')   
 			
 	return m
 			   
@@ -1160,26 +1162,26 @@ def commodity_balance(m, co, t):
 
 	if co in m.co_demand:
 		# demand increases balance
-		balance += m.demand.loc[t][co]			
+		balance += m.demand.loc[t][co]          
 	for p in m.pro_input_tuples:
 		if co in p:
 			#usage as input for process increases balance
-			balance += m.pro_p_in[p,t]	
+			balance += m.pro_p_in[p,t]  
 			if co in m.co_supim:
 				balance -= m.pro_p_in[p,t] # commodities in supim do not count for balance
 	for p in m.pro_output_tuples:
 		if co in p:
 		# output from processes decreases balance
-			balance -= m.pro_p_out[p,t]			
+			balance -= m.pro_p_out[p,t]         
 	if co in m.co_ext_in:
 		# additional external import decreases balance
-		balance -= m.ext_p_in[co,t]	
+		balance -= m.ext_p_in[co,t] 
 	if co in m.co_ext_out:
 		# external export in increases balance
-		balance += m.ext_p_out[co,t]	     			
+		balance += m.ext_p_out[co,t]                    
 	for s in m.sto_tuples:
-        # usage as input for storage increases consumption
-        # output from storage decreases consumption
+		# usage as input for storage increases consumption
+		# output from storage decreases consumption
 		if co in s:
 			balance += m.sto_p_in[s,t]
 			balance -= m.sto_p_out[s,t]
@@ -1193,19 +1195,19 @@ def energy_consumption(m, co):
 
 	if co in m.co_demand:
 		# demand increases consumption
-		consumption += sum(m.demand.loc[t][co] for t in m.t)					
+		consumption += sum(m.demand.loc[t][co] for t in m.t)                    
 	for p in m.pro_input_tuples:
 		if co in p:
 		# input processes 
-			consumption += sum(m.pro_p_in[p,t] for t in m.t)		     			
+			consumption += sum(m.pro_p_in[p,t] for t in m.t)                        
 	for s in m.sto_tuples:
-        # usage as input for storage increases consumption
-        # output from storage decreases consumption
+		# usage as input for storage increases consumption
+		# output from storage decreases consumption
 		if co in s:
 			consumption += sum(m.sto_p_in[s,t] for t in m.t)
 			consumption -= sum(m.sto_p_out[s,t] for t in m.t)
 	
-	return consumption	
+	return consumption  
 
 def energy_production(m, co):
 # Calculate energy productio of each commodity
@@ -1215,7 +1217,7 @@ def energy_production(m, co):
 				
 	for p in m.pro_output_tuples:
 		if co in p:
-			production += sum(m.pro_p_out[p,t] for t in m.t)		     			
+			production += sum(m.pro_p_out[p,t] for t in m.t)                        
 			
 	return production
 
@@ -1223,13 +1225,13 @@ def annuity_factor(n, i):
 # Calculate annuity factor from depreciation and interest.
 # n: depreciation period (years)
 # i: interest rate (percent, e.g. 0.06 means 6 %)
-    return (1+i)**n * i / ((1+i)**n - 1)
+	return (1+i)**n * i / ((1+i)**n - 1)
 
 def get_pro_inputs(process_commodity):
 	#get commodities with direction "in" in process_commodity
 	if process_commodity.index.values.size>0:
 		inputs = tuple()
-		input_tuples = process_commodity.xs('In',level='Direction').index.get_values()
+		input_tuples = process_commodity.xs('In',level='Direction').index.to_numpy() #change
 		for i in range(0,input_tuples.size):
 			inp = tuple([input_tuples[i][2]])
 			inputs = inputs + inp
@@ -1243,7 +1245,7 @@ def get_pro_outputs(process_commodity):
 	#get commodities with direction "out" in process_commodity
 	if process_commodity.index.values.size>0:
 		outputs = tuple()
-		output_tuples = process_commodity.xs('Out',level='Direction').index.get_values()
+		output_tuples = process_commodity.xs('Out',level='Direction').index.to_numpy() #change
 		for i in range(0,output_tuples.size):
 			outp = tuple([output_tuples[i][2]])
 			outputs = outputs + outp
@@ -1251,11 +1253,11 @@ def get_pro_outputs(process_commodity):
 		outputs = pd.Index(set(outputs))
 	else:
 		outputs = pd.Index([])
-	return outputs	
+	return outputs  
 	
-############################################################################################	
+############################################################################################    
 #DATA PREPARE
-############################################################################################	
+############################################################################################    
 	
 def read_xlsdata(input_file):
 # read sheets of excel file and put them in one dictionary xls_data
@@ -1276,6 +1278,11 @@ def read_xlsdata(input_file):
 	xls_data.update({'storage' : xls.parse('Storage').set_index(['Storage','Commodity']) })
 	xls_data.update({'demand' : xls.parse('Demand').set_index(['Time']) })
 	xls_data.update({'supim' : xls.parse('SupIm').set_index(['Time']) })
+
+	# change
+	for key in xls_data.keys():
+		if isinstance(xls_data[key], pd.DataFrame):
+			xls_data[key] = xls_data[key].loc[:,~xls_data[key].columns.str.contains('Unname')]
 	
 	return xls_data
 
@@ -1300,288 +1307,288 @@ def prepare_modeldata(xls_data):
 	data['process']['initial-run'] = (data['process']['initial-power'] >= (data['process']['cap-installed'] * data['process']['partload-min'])) *1
 	data['process']['initial-start'] = (data['process']['initial-power'] < data['process']['cap-installed'] * data['process']['partload-min']) & (data['process']['initial-power']>0) *1
 	
-	return data	
+	return data 
 
 		
 def num_index(df_data):
 	#Create DataFrame"output" with additional rows dependent on new index 1 to "Num"
 		
-	# df_data = dataframe with data of sheet, index columns without num!!!	
-	df_0 = df_data	#only index columns without num
-	df_1 = df_data.set_index('Num',True,True) # add'num' to index columns	
-	output=pd.DataFrame()	#empty Dataframe to be filled
+	# df_data = dataframe with data of sheet, index columns without num!!!  
+	df_0 = df_data  #only index columns without num
+	df_1 = df_data.set_index('Num',True,True) # add'num' to index columns   
+	output=pd.DataFrame()   #empty Dataframe to be filled
 	mxn=0
 	for i in range(0,len(df_0.index),1): #for every index tuple
 		maxnum = int(df_0.loc[df_0.index[i]]['Num'])
 		mxn=max(mxn,maxnum)
-		for n in range(1,maxnum+1,1): #from 1 to "Num" 			
+		for n in range(1,maxnum+1,1): #from 1 to "Num"          
 			if len(df_0.index.names)==1:  #only one index column
 				newindex=df_0.index[i]
 				newindex=(newindex,n)
-			else:					# more than one index columns
+			else:                   # more than one index columns
 				newindex=list(df_0.index[i])
 				newindex.append(n)
 			newindex=tuple([newindex])
-			values=df_1.ix[df_1.index[i]]
+			values=df_1.loc[df_1.index[i]]
 			values=np.matrix(values)
 			df=pd.DataFrame(values,index=newindex,columns=df_1.columns) # new row
-			output=output.append(df)		# add row to output
-	if output.empty == False:	
+			output=output.append(df)        # add row to output
+	if output.empty == False:   
 		output.index=pd.MultiIndex.from_tuples(tuple(output.index), names=df_1.index.names) #adding multiindex and index names
 		# derive annuity factor for process and storage
 	else:
-		output = df_1.ix[0:0]
+		output = df_1.iloc[0:0] #ix
 		# output = pd.DataFrame(columns = df_data.columns[1:])
 	output['annuity_factor'] = annuity_factor(output['depreciation'], output['wacc'])
 	return output
 
 def del_processes(process_commodity, process):
 # Delete non used processes in process_commodity
-    if process.index.values.size>0:
-        pro_co=pd.DataFrame()
-        pro_type = process.index.get_level_values(0)
-        for i in range(0,len(process_commodity)):		
-            if process_commodity[i:i+1].index[0][0] in pro_type:
-                for n in range(0,max(process.loc[process_commodity.index[i][0]].index)):
-                    df_temp = pd.DataFrame(process_commodity[i:i+1].values,
-                        index = pd.MultiIndex.from_tuples(
-                        tuple([(process_commodity[i:i+1].index.get_values()[0][0],
-                                n+1,
-                                process_commodity[i:i+1].index.get_values()[0][1],
-                                process_commodity[i:i+1].index.get_values()[0][2])])))
-                    pro_co=pro_co.append(df_temp)
-                        
-        pro_co.index=pd.MultiIndex.from_tuples(tuple(pro_co.index),names=process_commodity.index.names[0:1]+['Num'] +process_commodity.index.names[1:3])	
-        pro_co.columns = process_commodity.columns
-    else:
-        pro_co=process_commodity.ix[0:0]
-    return pro_co
+	if process.index.values.size>0:
+		pro_co=pd.DataFrame()
+		pro_type = process.index.get_level_values(0)
+		for i in range(0,len(process_commodity)):       
+			if process_commodity[i:i+1].index[0][0] in pro_type:
+				for n in range(0,max(process.loc[process_commodity.index[i][0]].index)):
+					df_temp = pd.DataFrame(process_commodity[i:i+1].values,
+						index = pd.MultiIndex.from_tuples(
+						tuple([(process_commodity[i:i+1].index.to_numpy()[0][0], #change
+								n+1,
+								process_commodity[i:i+1].index.to_numpy()[0][1], # change
+								process_commodity[i:i+1].index.to_numpy()[0][2])]))) # change
+					pro_co=pro_co.append(df_temp)
+						
+		pro_co.index=pd.MultiIndex.from_tuples(tuple(pro_co.index),names=process_commodity.index.names[0:1]+['Num'] +process_commodity.index.names[1:3])    
+		pro_co.columns = process_commodity.columns
+	else:
+		pro_co=process_commodity.iloc[0:0] #ix
+	return pro_co
 	
-############################################################################################	
-#GET RESULTS	
+############################################################################################    
+#GET RESULTS    
 ############################################################################################
 
 def get_entity(instance, name):
-    """ Retrieve values (or duals) for an entity in a model instance.
-    Args:
-        instance: a Pyomo ConcreteModel instance
-        name: name of a Set, Param, Var, Constraint or Objective
-    Returns:
-        a Pandas Series with domain as index and values (or 1's, for sets) of
-        entity name. For constraints, it retrieves the dual values
-    """
+	""" Retrieve values (or duals) for an entity in a model instance.
+	Args:
+		instance: a Pyomo ConcreteModel instance
+		name: name of a Set, Param, Var, Constraint or Objective
+	Returns:
+		a Pandas Series with domain as index and values (or 1's, for sets) of
+		entity name. For constraints, it retrieves the dual values
+	"""
 
-    # retrieve entity, its type and its onset names
-    entity = instance.__getattribute__(name)
-    labels = _get_onset_names(entity)
+	# retrieve entity, its type and its onset names
+	entity = instance.__getattribute__(name)
+	labels = _get_onset_names(entity)
 
-    # extract values
-    if isinstance(entity, pyen.Set):
-        # Pyomo sets don't have values, only elements
-        results = pd.DataFrame([(v, 1) for v in entity.value])
+	# extract values
+	if isinstance(entity, pyen.Set):
+		# Pyomo sets don't have values, only elements
+		results = pd.DataFrame([(v, 1) for v in entity.data()]) #change
 
-        # for unconstrained sets, the column label is identical to their index
-        # hence, make index equal to entity name and append underscore to name
-        # (=the later column title) to preserve identical index names for both
-        # unconstrained supersets
-        if not labels:
-            labels = [name]
-            name = name+'_'
+		# for unconstrained sets, the column label is identical to their index
+		# hence, make index equal to entity name and append underscore to name
+		# (=the later column title) to preserve identical index names for both
+		# unconstrained supersets
+		if not labels:
+			labels = [name]
+			name = name+'_'
 
-    elif isinstance(entity, pyen.Param):
-        if entity.dim() > 1:
-            results = pd.DataFrame([v[0]+(v[1],) for v in entity.iteritems()])
-        else:
-            results = pd.DataFrame(entity.iteritems())
+	elif isinstance(entity, pyen.Param):
+		if entity.dim() > 1:
+			results = pd.DataFrame([v[0]+(v[1],) for v in entity.items()])
+		else:
+			results = pd.DataFrame(entity.items())
 
-    elif isinstance(entity, pyen.Constraint):
-        if entity.dim() > 1:
-            results = pd.DataFrame(
-                [v[0] + (instance.dual[v[1]],) for v in entity.iteritems()])
-        elif entity.dim() == 1:
-            results = pd.DataFrame(
-                [(v[0], instance.dual[v[1]]) for v in entity.iteritems()])
-        else:
-            results = pd.DataFrame(
-                [(v[0], instance.dual[v[1]]) for v in entity.iteritems()])
-            labels = ['None']
+	elif isinstance(entity, pyen.Constraint):
+		if entity.dim() > 1:
+			results = pd.DataFrame(
+				[v[0] + (instance.dual[v[1]],) for v in entity.items()])
+		elif entity.dim() == 1:
+			results = pd.DataFrame(
+				[(v[0], instance.dual[v[1]]) for v in entity.items()])
+		else:
+			results = pd.DataFrame(
+				[(v[0], instance.dual[v[1]]) for v in entity.items()])
+			labels = ['None']
 
-    else:
-        # create DataFrame
-        if entity.dim() > 1:
-            # concatenate index tuples with value if entity has
-            # multidimensional indices v[0]
-            results = pd.DataFrame(
-                [v[0]+(v[1].value,) for v in entity.iteritems()])
-        elif entity.dim() == 1:
-            # otherwise, create tuple from scalar index v[0]
-            results = pd.DataFrame(
-                [(v[0], v[1].value) for v in entity.iteritems()])
-        else:
-            # assert(entity.dim() == 0)
-            results = pd.DataFrame(
-                [(v[0], v[1].value) for v in entity.iteritems()])
-            labels = ['None']
+	else:
+		# create DataFrame
+		if entity.dim() > 1:
+			# concatenate index tuples with value if entity has
+			# multidimensional indices v[0]
+			results = pd.DataFrame(
+				[v[0]+(v[1].value,) for v in entity.items()])
+		elif entity.dim() == 1:
+			# otherwise, create tuple from scalar index v[0]
+			results = pd.DataFrame(
+				[(v[0], v[1].value) for v in entity.items()])
+		else:
+			# assert(entity.dim() == 0)
+			results = pd.DataFrame(
+				[(v[0], v[1].value) for v in entity.items()])
+			labels = ['None']
 
-    # check for duplicate onset names and append one to several "_" to make
-    # them unique, e.g. ['sit', 'sit', 'com'] becomes ['sit', 'sit_', 'com']
-    for k, label in enumerate(labels):
-        if label in labels[:k]:
-            labels[k] = labels[k] + "_"
+	# check for duplicate onset names and append one to several "_" to make
+	# them unique, e.g. ['sit', 'sit', 'com'] becomes ['sit', 'sit_', 'com']
+	for k, label in enumerate(labels):
+		if label in labels[:k]:
+			labels[k] = labels[k] + "_"
 
-    if not results.empty:
-        # name columns according to labels + entity name
-        results.columns = labels + [name]
-        results.set_index(labels, inplace=True)
+	if not results.empty:
+		# name columns according to labels + entity name
+		results.columns = labels + [name]
+		results.set_index(labels, inplace=True)
 
-        # convert to Series
-        results = results[name]
-    else:
-        # return empty Series
-        results = pd.Series(name=name)
-    return results
+		# convert to Series
+		results = results[name]
+	else:
+		# return empty Series
+		results = pd.Series(name=name)
+	return results
 
 
 def get_entities(instance, names):
-    """ Return one DataFrame with entities in columns and a common index.
-    Works only on entities that share a common domain (set or set_tuple), which
-    is used as index of the returned DataFrame.
-    Args:
-        instance: a Pyomo ConcreteModel instance
-        names: list of entity names (as returned by list_entities)
-    Returns:
-        a Pandas DataFrame with entities as columns and domains as index
-    """
+	""" Return one DataFrame with entities in columns and a common index.
+	Works only on entities that share a common domain (set or set_tuple), which
+	is used as index of the returned DataFrame.
+	Args:
+		instance: a Pyomo ConcreteModel instance
+		names: list of entity names (as returned by list_entities)
+	Returns:
+		a Pandas DataFrame with entities as columns and domains as index
+	"""
 
-    df = pd.DataFrame()
-    for name in names:
-        other = get_entity(instance, name)
+	df = pd.DataFrame()
+	for name in names:
+		other = get_entity(instance, name)
 
-        if df.empty:
-            df = other.to_frame()
-        else:
-            index_names_before = df.index.names
+		if df.empty:
+			df = other.to_frame()
+		else:
+			index_names_before = df.index.names
 
-            df = df.join(other, how='outer')
+			df = df.join(other, how='outer')
 
-            if index_names_before != df.index.names:
-                df.index.names = index_names_before
+			if index_names_before != df.index.names:
+				df.index.names = index_names_before
 
-    return df
+	return df
 
 
 def list_entities(instance, entity_type):
-    """ Return list of sets, params, variables, constraints or objectives
-    Args:
-        instance: a Pyomo ConcreteModel object
-        entity_type: "set", "par", "var", "con" or "obj"
-    Returns:
-        DataFrame of entities
-    Example:
-        >>> data = read_excel('mimo-example.xlsx')
-        >>> model = create_model(data, range(1,25))
-        >>> list_entities(model, 'obj')  #doctest: +NORMALIZE_WHITESPACE
-                                         Description Domain
-        Name
-        obj   minimize(cost = sum of all cost types)     []
-    """
+	""" Return list of sets, params, variables, constraints or objectives
+	Args:
+		instance: a Pyomo ConcreteModel object
+		entity_type: "set", "par", "var", "con" or "obj"
+	Returns:
+		DataFrame of entities
+	Example:
+		>>> data = read_excel('mimo-example.xlsx')
+		>>> model = create_model(data, range(1,25))
+		>>> list_entities(model, 'obj')  #doctest: +NORMALIZE_WHITESPACE
+										 Description Domain
+		Name
+		obj   minimize(cost = sum of all cost types)     []
+	"""
 
-    # helper function to discern entities by type
-    def filter_by_type(entity, entity_type):
-        if entity_type == 'set':
-            return isinstance(entity, pyen.Set) and not entity.virtual
-        elif entity_type == 'par':
-            return isinstance(entity, pyen.Param)
-        elif entity_type == 'var':
-            return isinstance(entity, pyen.Var)
-        elif entity_type == 'con':
-            return isinstance(entity, pyen.Constraint)
-        elif entity_type == 'obj':
-            return isinstance(entity, pyen.Objective)
-        else:
-            raise ValueError("Unknown entity_type '{}'".format(entity_type))
+	# helper function to discern entities by type
+	def filter_by_type(entity, entity_type):
+		if entity_type == 'set':
+			return isinstance(entity, pyen.Set) and not entity.virtual
+		elif entity_type == 'par':
+			return isinstance(entity, pyen.Param)
+		elif entity_type == 'var':
+			return isinstance(entity, pyen.Var)
+		elif entity_type == 'con':
+			return isinstance(entity, pyen.Constraint)
+		elif entity_type == 'obj':
+			return isinstance(entity, pyen.Objective)
+		else:
+			raise ValueError("Unknown entity_type '{}'".format(entity_type))
 
-    # create entity iterator, using a python 2 and 3 compatible idiom:
-    # http://python3porting.com/differences.html#index-6
-    try:
-        iter_entities = instance.__dict__.iteritems()  # Python 2 compat
-    except AttributeError:
-        iter_entities = instance.__dict__.items()  # Python way
+	# create entity iterator, using a python 2 and 3 compatible idiom:
+	# http://python3porting.com/differences.html#index-6
+	try:
+		iter_entities = instance.__dict__.items()  # Python 2 compat
+	except AttributeError:
+		iter_entities = instance.__dict__.items()  # Python way
 
-    # now iterate over all entties and keep only those whose type matches
-    entities = sorted(
-        (name, entity.doc, _get_onset_names(entity))
-        for (name, entity) in iter_entities
-        if filter_by_type(entity, entity_type))
+	# now iterate over all entties and keep only those whose type matches
+	entities = sorted(
+		(name, entity.doc, _get_onset_names(entity))
+		for (name, entity) in iter_entities
+		if filter_by_type(entity, entity_type))
 
-    # if something was found, wrap tuples in DataFrame, otherwise return empty
-    if entities:
-        entities = pd.DataFrame(entities,
-                                columns=['Name', 'Description', 'Domain'])
-        entities.set_index('Name', inplace=True)
-    else:
-        entities = pd.DataFrame()
-    return entities
+	# if something was found, wrap tuples in DataFrame, otherwise return empty
+	if entities:
+		entities = pd.DataFrame(entities,
+								columns=['Name', 'Description', 'Domain'])
+		entities.set_index('Name', inplace=True)
+	else:
+		entities = pd.DataFrame()
+	return entities
 
 
 def _get_onset_names(entity):
-    """ Return a list of domain set names for a given model entity
-    Args:
-        entity: a member entity (i.e. a Set, Param, Var, Objective, Constraint)
-                of a Pyomo ConcreteModel object
-    Returns:
-        list of domain set names for that entity
-    Example:
-        >>> data = read_excel('mimo-example.xlsx')
-        >>> model = create_model(data, range(1,25))
-        >>> _get_onset_names(model.e_co_stock)
-        ['t', 'sit', 'com', 'com_type']
-    """
-    # get column titles for entities from domain set names
-    labels = []
+	""" Return a list of domain set names for a given model entity
+	Args:
+		entity: a member entity (i.e. a Set, Param, Var, Objective, Constraint)
+				of a Pyomo ConcreteModel object
+	Returns:
+		list of domain set names for that entity
+	Example:
+		>>> data = read_excel('mimo-example.xlsx')
+		>>> model = create_model(data, range(1,25))
+		>>> _get_onset_names(model.e_co_stock)
+		['t', 'sit', 'com', 'com_type']
+	"""
+	# get column titles for entities from domain set names
+	labels = []
+	#  change
+	if isinstance(entity, pyen.Set):
+		if entity.dimen > 1:
+			# N-dimensional set tuples, possibly with nested set tuples within
+			if entity.domain:
+				# retreive list of domain sets, which itself could be nested
+				domains = entity.domain.subsets()
+			else:
+				try:
+					# if no domain attribute exists, some
+					domains = entity.subsets()
+				except AttributeError:
+					# if that fails, too, a constructed (union, difference,
+					# intersection, ...) set exists. In that case, the
+					# attribute _setA holds the domain for the base set
+					domains = entity._setA.domain.subsets()
 
-    if isinstance(entity, pyen.Set):
-        if entity.dimen > 1:
-            # N-dimensional set tuples, possibly with nested set tuples within
-            if entity.domain:
-                # retreive list of domain sets, which itself could be nested
-                domains = entity.domain.set_tuple
-            else:
-                try:
-                    # if no domain attribute exists, some
-                    domains = entity.set_tuple
-                except AttributeError:
-                    # if that fails, too, a constructed (union, difference,
-                    # intersection, ...) set exists. In that case, the
-                    # attribute _setA holds the domain for the base set
-                    domains = entity._setA.domain.set_tuple
+			for domain_set in domains:
+				labels.extend(_get_onset_names(domain_set))
 
-            for domain_set in domains:
-                labels.extend(_get_onset_names(domain_set))
+		elif entity.dimen == 1:
+			if entity.domain.name != 'Any': #change
+				# 1D subset; add domain name
+				labels.append(entity.domain.name)
+			else:
+				# unrestricted set; add entity name
+				labels.append(entity.name)
+		else:
+			# no domain, so no labels needed
+			pass
 
-        elif entity.dimen == 1:
-            if entity.domain:
-                # 1D subset; add domain name
-                labels.append(entity.domain.name)
-            else:
-                # unrestricted set; add entity name
-                labels.append(entity.name)
-        else:
-            # no domain, so no labels needed
-            pass
+	elif isinstance(entity, (pyen.Param, pyen.Var, pyen.Constraint,
+					pyen.Objective)):
+		if entity.dim() > 0 and entity._index:
+			labels = _get_onset_names(entity._index)
+		else:
+			# zero dimensions, so no onset labels
+			pass
 
-    elif isinstance(entity, (pyen.Param, pyen.Var, pyen.Constraint,
-                    pyen.Objective)):
-        if entity.dim() > 0 and entity._index:
-            labels = _get_onset_names(entity._index)
-        else:
-            # zero dimensions, so no onset labels
-            pass
+	else:
+		raise ValueError("Unknown entity type!")
 
-    else:
-        raise ValueError("Unknown entity type!")
-
-    return labels
+	return labels
 	
 def get_constants(prob):
 	"""Return summary DataFrames for important variables
@@ -1599,13 +1606,13 @@ def get_constants(prob):
 	cpro = get_entities(prob, ['pro_cap', 'pro_cap_new'])
 	csto = get_entities(prob, ['sto_cap_p', 'sto_cap_p_new','sto_cap_e', 'sto_cap_e_new'])
    
-    # better labels
+	# better labels
 	# if not cpro.empty:
 		# cpro.columns = ['Total', 'New']
 	# if not csto.empty:
 		# csto.columns = ['C Total', 'C New', 'P Total', 'P New']
 
-    
+	
 	return costs, cpro, csto
 
 def get_timeseries(prob, timesteps=None):
@@ -1625,26 +1632,26 @@ def get_timeseries(prob, timesteps=None):
 		sto: timeseries of all stotage inputs, outputs and energy contents
 	"""
 	if timesteps is None:
-        # default to all simulated timesteps
+		# default to all simulated timesteps
 		timesteps = sorted(get_entity(prob, 't').index)
-        
-    # DEMAND
+		
+	# DEMAND
 	demand = prob.demand.loc[timesteps]
 	demand.name = 'Demand'
-    
-    # EXT
+	
+	# EXT
 	ext = get_entities(prob, ['ext_p_in','ext_p_out'])
 	ext.name = 'Ext'
 
-    # PROCESS
+	# PROCESS
 	pro = get_entities(prob, ['pro_p_in', 'pro_p_out'])
 
-    # STORAGE
+	# STORAGE
 	sto = get_entities(prob, ['sto_e_cont','sto_p_in', 'sto_p_out'])
-    
+	
 	return demand, ext, pro, sto
 
-############################################################################################	
+############################################################################################    
 #SAVE RESULTS
 ############################################################################################
 
@@ -1732,13 +1739,13 @@ def result_figures(dir, prob = None, resultfile = None, timesteps = None, fontsi
 		
 	"""
 	import matplotlib.pyplot as plt
-	import matplotlib as mpl	
+	import matplotlib as mpl    
 	plt.ion()
 	
 	#Get demand commodities from instance or resultfile
 	if prob:
 		if resultfile:
-			raise NotImplementedError('please specify EITHER "prob" or "resultfile"!')	
+			raise NotImplementedError('please specify EITHER "prob" or "resultfile"!')  
 		else:
 			commodities = prob.demand.columns
 	elif resultfile:
@@ -1749,53 +1756,57 @@ def result_figures(dir, prob = None, resultfile = None, timesteps = None, fontsi
 	
 	for co in commodities:
 		#plot and save timeseries for every commodity in demand
-		fig = plot_timeseries(	co,\
+		fig = plot_timeseries(  co,\
 								prob = prob, resultfile = resultfile,\
 								timesteps=timesteps,fontsize=fontsize,show=show)
-		fig.savefig(dir + '\\'+co+'-timeseries.png')
+		name = os.path.join(dir, f'{co}-timeseries.png')
+		fig.savefig(name)
 		if not show:
 			plt.close(fig)
 		
 		#plot and save energy balance for every commodity in demand
-		fig = plot_energy(	co,\
+		fig = plot_energy(  co,\
 								prob = prob, resultfile = resultfile,\
 								timesteps=timesteps,fontsize=fontsize,show=show)
-		fig.savefig(dir + '\\'+co+'-energy.png')
+		name = os.path.join(dir, f'{co}-energy.png')
+		fig.savefig(name)
 		if not show:
 			plt.close(fig)
 	
 	#plot and save installed and new capacities of processes and storages
 	fig = plot_cap(prob = prob, resultfile = resultfile, fontsize=fontsize,show=show)
-	fig.savefig(dir + '\\capacities.png')
+	name = os.path.join(dir, f'{co}-capacities.png')
+	fig.savefig(name)
 	if not show:
 		plt.close(fig)
 	
 	#plot and save costs
 	fig = plot_costs(prob = prob, resultfile = resultfile, fontsize=fontsize,show=show)
-	fig.savefig(dir + '\\costs.png')
+	name = os.path.join(dir, f'{co}-costs.png')
+	fig.savefig(name)
 	if not show:
 		plt.close(fig)
 	
-	return 
+	return
 
-############################################################################################	
-#PLOT	
+############################################################################################    
+#PLOT   
 ############################################################################################
 
 COLOURS = {
-    0: 'lightsteelblue',
-    1: 'cornflowerblue',
-    2: 'royalblue',
-    3: 'lightgreen',   
-    4: 'salmon',
-    5: 'mediumseagreen',
-    6: 'orchid', 
-    7: 'burlywood',
-    8: 'palegoldenrod', 
-    9: 'darkkhaki', 
-    10: 'lightskyblue', 
-    11: 'firebrick',
-    12: 'blue',
+	0: 'lightsteelblue',
+	1: 'cornflowerblue',
+	2: 'royalblue',
+	3: 'lightgreen',   
+	4: 'salmon',
+	5: 'mediumseagreen',
+	6: 'orchid', 
+	7: 'burlywood',
+	8: 'palegoldenrod', 
+	9: 'darkkhaki', 
+	10: 'lightskyblue', 
+	11: 'firebrick',
+	12: 'blue',
 	13: 'darkgreen'}
 
 	
@@ -1827,14 +1838,14 @@ def get_plot_data(co, prob, resultfile, timesteps):
 		raise NotImplementedError('please specify either "prob" or "resultfile"!')
 	elif (prob is not None) and (resultfile is not None):
 		#either prob or resultfile must be given
-		raise NotImplementedError('please specify EITHER "prob" or "resultfile"!')	
+		raise NotImplementedError('please specify EITHER "prob" or "resultfile"!')  
 	elif resultfile is None:
 		# prob is given, get timeseries from prob
 		if timesteps is None:
 		# default to all simulated timesteps
 			timesteps = sorted(get_entity(prob, 't').index)
 		demand, ext, pro, sto = get_timeseries(prob,timesteps)
-		tb = prob.tb		
+		tb = prob.tb        
 	else:
 		# resultfile is given, get timeseries from resultfile
 		xls = pd.ExcelFile(resultfile) # read resultfile
@@ -1870,7 +1881,7 @@ def get_plot_data(co, prob, resultfile, timesteps):
 		tb = xls.parse('Info', index_col = [0]).loc['timebase'].values[0]
 	
 	##Prepare Data##
-	##############		
+	##############      
 	
 	timesteps = np.array(timesteps) # make array for xticks
 		
@@ -1891,11 +1902,11 @@ def get_plot_data(co, prob, resultfile, timesteps):
 		pro_names = pro.index.levels[0]
 	except ValueError:
 		pro_names = pd.Index([''])
-	prosto_names = pro_names|sto_names
+	prosto_names = pro_names.union(sto_names)
 
 	
 	#Timeseries of all created/consumed/storage
-	try:		
+	try:        
 		created = pd.DataFrame(ext.xs(co, level='commodity')['ext_p_in'])
 		created.rename(columns={'ext_p_in':'Import'}, inplace=True)
 	except (KeyError, AttributeError):
@@ -1910,7 +1921,7 @@ def get_plot_data(co, prob, resultfile, timesteps):
 		created = created
 
 	#Timeseries of all consumed/exported/stored 
-	try:		
+	try:        
 		consumed = pd.DataFrame(ext.xs(co, level='commodity')['ext_p_out'])
 		consumed.rename(columns={'ext_p_out':'Export'}, inplace=True)
 	except (KeyError, AttributeError):
@@ -1950,9 +1961,9 @@ def get_plot_data(co, prob, resultfile, timesteps):
 	##ASSIGN COLOR##
 	##############
 	colours = {
-    'Demand': COLOURS[0],
-    'Import' : COLOURS[1],
-    'Export' : COLOURS[2],
+	'Demand': COLOURS[0],
+	'Import' : COLOURS[1],
+	'Export' : COLOURS[2],
 	'edgecolor': 'slategray'}
 	
 	for i,name in enumerate(prosto_names):
@@ -2003,14 +2014,14 @@ def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=
 
 	
 	##PLOT##
-	##############		
+	##############      
 	# FIGURE
-	fig = plt.figure(figsize=(11,7))	
+	fig = plt.figure(figsize=(11,7))    
 	if storage.empty:
 		gs = mpl.gridspec.GridSpec(1, 2, width_ratios = [5,1])
 	else:
 		gs = mpl.gridspec.GridSpec(2, 2, height_ratios=[2, 1], width_ratios = [5,1])
-	ax0 = plt.subplot(gs[0])	
+	ax0 = plt.subplot(gs[0])    
 	
 	# Unfortunately, stackplot does not support multi-colored legends by itself.
 	# Therefore, a so-called proxy artist - invisible objects that have the 
@@ -2025,21 +2036,22 @@ def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=
 	proxy_artists.append(mpl.lines.Line2D([0,0], [0,0], linewidth=2, color='k')) 
 	legend_entries = ['Demand']
 	
+	#change
 	# PLOT CREATED
 	if not created.empty:
-		sp_crtd = ax0.stackplot(step_edit_x(created.index), step_edit_y(created.as_matrix().T), linewidth=0.15)		
+		sp_crtd = ax0.stackplot(step_edit_x(created.index), step_edit_y(created.to_numpy().T), linewidth=0.15)      
 		for k, pro_sto in enumerate(created.columns):
-			this_color = to_color(pro_sto,colours) #get color for pro or sto 			
+			this_color = to_color(pro_sto,colours) #get color for pro or sto            
 			sp_crtd[k].set_facecolor(this_color) #set color of stackplot
 			sp_crtd[k].set_edgecolor((.5,.5,.5))
-			legend_entries.append(pro_sto)			
+			legend_entries.append(pro_sto)          
 			proxy_artists.append(mpl.patches.Rectangle((0,0), 0,0, facecolor=this_color)) #add proxy artist for legend
 
 	# PLOT CONSUMED
 	if not consumed.empty:
-		sp_csmd = ax0.stackplot(step_edit_x(consumed.index), step_edit_y(-consumed.as_matrix().T), linewidth=0.15)
+		sp_csmd = ax0.stackplot(step_edit_x(consumed.index), step_edit_y(-consumed.to_numpy().T), linewidth=0.15)
 		for k, pro_sto in enumerate(consumed.columns):
-			this_color = to_color(pro_sto,colours) #get color for pro or sto 			
+			this_color = to_color(pro_sto,colours) #get color for pro or sto            
 			sp_csmd[k].set_facecolor(this_color) #set color of stackplot
 			sp_csmd[k].set_edgecolor((.5,.5,.5))
 			if pro_sto not in (legend_entries):
@@ -2050,12 +2062,12 @@ def plot_timeseries(co, prob = None, resultfile = None, timesteps=None,fontsize=
 	# PLOT STORAGE
 	if not storage.empty:
 		ax1 = plt.subplot(gs[2], sharex=ax0)
-		sp_sto = ax1.stackplot(step_edit_x(storage.index), step_edit_y(storage.as_matrix().T), linewidth=0.15)
+		sp_sto = ax1.stackplot(step_edit_x(storage.index), step_edit_y(storage.to_numpy().T), linewidth=0.15)
 		#color
 		for k, sto in enumerate(storage.columns):
-			this_color = to_color(sto,colours) #get color for sto 			
+			this_color = to_color(sto,colours) #get color for sto           
 			sp_sto[k].set_facecolor(this_color) #set color of stackplot
-			sp_sto[k].set_edgecolor((.5,.5,.5))	
+			sp_sto[k].set_edgecolor((.5,.5,.5)) 
 
 		# labels
 		ax1.set_ylabel('Energy (kWh)',fontsize=fontsize)
@@ -2151,13 +2163,13 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,s
 	#remove empty objects from storage losses
 	sto_loss = sto_loss[sto_loss>1e-1]
 	
-	#add storage losses to consumed	
+	#add storage losses to consumed 
 	consumed_e = pd.concat([consumed_e,sto_loss])
 	
 	
 	
 	##PLOT##
-	##############		
+	##############      
 	# FIGURE
 	fig = plt.figure(figsize=(11,7))
 	gs = mpl.gridspec.GridSpec(2, 2, height_ratios=[0.01,10])
@@ -2170,7 +2182,7 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,s
 		ax0.bar(1,created_e[idx],color=colours[idx],bottom = bottom, label = idx,align='center')
 		bottom += created_e[idx] 
 	ax0.set_xlabel('produced/imported Energy', fontsize=fontsize)
-	ax0.legend(	loc="upper right",
+	ax0.legend( loc="upper right",
 				fontsize=fontsize-2,
 				numpoints = 1)
 	handles, labels = ax0.get_legend_handles_labels()
@@ -2178,13 +2190,13 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,s
 	ax0.set_ylabel('Energy (kWh)', fontsize=fontsize)
 	
 	#PLOT CONSUMED
-	ax1 = plt.subplot(gs[3],sharey=ax0)	
+	ax1 = plt.subplot(gs[3],sharey=ax0) 
 	bottom=0
 	for i,idx in enumerate(consumed_e.index):
 		ax1.bar(1,consumed_e[idx],color=colours[idx],bottom = bottom,label = idx,align='center')
 		bottom += consumed_e[idx]
 	ax1.set_xlabel('consumed/exported Energy',fontsize=fontsize)
-	ax1.legend(	loc="upper right",
+	ax1.legend( loc="upper right",
 				fontsize=fontsize-2,
 				numpoints = 1)
 	handles, labels = ax1.get_legend_handles_labels()
@@ -2193,7 +2205,7 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,s
 
 
 	##AXES Properties##
-	##############	
+	##############  
 	axes = [ax0, ax1]
 	for ax in axes:
 		ax.grid(axis='y')
@@ -2213,7 +2225,7 @@ def plot_energy(co, prob = None, resultfile = None, timesteps=None,fontsize=16,s
 			plt.show(block=False)
 		except TypeError:
 			plt.show()
-	return fig	
+	return fig  
 		
 def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 	"""Process and storage capacities
@@ -2242,7 +2254,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 		raise NotImplementedError('please specify either "prob" or "resultfile"!')
 	elif (prob is not None) and (resultfile is not None):
 		#either prob or resultfile must be given
-		raise NotImplementedError('please specify EITHER "prob" or "resultfile"!')	
+		raise NotImplementedError('please specify EITHER "prob" or "resultfile"!')  
 	elif resultfile is None:
 		# prob is given, get timeseries from prob
 		costs, cpro, csto = get_constants(prob)
@@ -2253,7 +2265,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 		csto = xls.parse('Storage caps', index_col=[0,1,2])
 
 	
-	#delete index with zero capacity	
+	#delete index with zero capacity    
 	try:
 		csto = csto.groupby(level=['storage_name']).sum()
 		csto = csto[csto['sto_cap_e'] > 1e-1]
@@ -2267,7 +2279,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 	
 
 	##PLOT##
-	##############		
+	##############      
 	# FIGURE
 	fig = plt.figure(figsize=(11,7))
 	if csto.empty and cpro.empty:
@@ -2326,7 +2338,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 				left=csto['sto_cap_e']-csto['sto_cap_e_new'],color=COLOURS[3],align='center')
 		ax3.set_yticks(yticks)
 		ax3.set_yticklabels([],visible=False)
-		ax3.set_xlabel('Energy Capacity (kWh)', fontsize=fontsize)		
+		ax3.set_xlabel('Energy Capacity (kWh)', fontsize=fontsize)      
 		ax3.set_xticks(ax3.get_xticks()[::2])
 		ax3.set_xlim(0,ax3.get_xlim()[1]*1.1)
 		axes.append(ax3)
@@ -2337,7 +2349,7 @@ def plot_cap(prob = None, resultfile = None,fontsize=16,show=True):
 
 		
 	##AXES Properties##
-	##############	
+	##############  
 	for ax in axes:
 		ax.grid()
 		ax.set_ylim(ax.get_yticks()[0]-0.5,ax.get_yticks()[-1]+0.5)
@@ -2397,7 +2409,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 	plt.ion()
 	
 	colours = {
-    'Import' : COLOURS[1],
+	'Import' : COLOURS[1],
 	'Export' : COLOURS[2],
 	'Demand charges' : COLOURS[10],
 	'Invest' : COLOURS[4],
@@ -2415,7 +2427,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 		raise NotImplementedError('please specify either "prob" or "resultfile"!')
 	elif (prob) and (resultfile):
 		#either prob or resultfile must be given
-		raise NotImplementedError('please specify EITHER "prob" or "resultfile"!')	
+		raise NotImplementedError('please specify EITHER "prob" or "resultfile"!')  
 	elif prob:
 		# prob is given, get timeseries from prob
 		costs, cpro, csto = get_constants(prob)
@@ -2424,12 +2436,12 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 		xls = pd.ExcelFile(resultfile) # read resultfile
 		costs = xls.parse('Costs', index_col=[0])
 	
-	#delete index with zero capacity	
+	#delete index with zero capacity    
 	costs = costs[costs!=0]
 	
 	
 	##PLOT##
-	##############		
+	##############      
 	# FIGURE
 	fig = plt.figure(figsize=(11,7))
 	gs = mpl.gridspec.GridSpec(2, 3, height_ratios=[0.01,10], width_ratios = [2,2,1])
@@ -2455,9 +2467,9 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 			ax1.bar(1,-costs[idx],color=colours[idx],bottom = bottom2, label = label,align='center')
 			bottom2 += -costs[idx]
 			
-	#Set ax0 properties and legend		
+	#Set ax0 properties and legend      
 	ax0.set_xlabel('expenses', fontsize=fontsize)
-	ax0.legend(	loc="upper right",
+	ax0.legend( loc="upper right",
 				fontsize=fontsize-2,
 				numpoints = 1)
 	handles, labels = ax0.get_legend_handles_labels()
@@ -2465,9 +2477,9 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 	ax0.set_ylabel('Costs (Euro/a)', fontsize=fontsize-2)
 	ax0.set_ylim(0,max(costs[costs>0].sum(),costs[costs<0].sum())*1.1)
 	
-	#Set ax1 properties and legend	
+	#Set ax1 properties and legend  
 	ax1.set_xlabel('revenues',fontsize=fontsize)
-	ax1.legend(	loc="upper right",
+	ax1.legend( loc="upper right",
 				fontsize=fontsize-2,
 				numpoints = 1)
 	handles, labels = ax1.get_legend_handles_labels()
@@ -2481,7 +2493,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 	plt.setp(ax2.get_yticklabels(), visible=False)
 	
 	##AXES Properties##
-	##############	
+	##############  
 	axes = [ax0, ax1, ax2]
 	for ax in axes:
 		ax.grid(axis='y')
@@ -2493,7 +2505,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 		group_thousands = mpl.ticker.FuncFormatter(
 			lambda x, pos: '{:0,d}'.format(int(x)))
 		ax.yaxis.set_major_formatter(group_thousands)
-	ax2.set_xlim(0.55,1.45)	
+	ax2.set_xlim(0.55,1.45) 
 
 	
 	fig.tight_layout()
@@ -2502,7 +2514,7 @@ def plot_costs(prob = None, resultfile = None, fontsize=16,show=True):
 			plt.show(block=False)
 		except TypeError:
 			plt.show()
-	return fig	
+	return fig  
 		
 	
 def to_color(obj,colors):
